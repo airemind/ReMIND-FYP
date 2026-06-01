@@ -1,0 +1,60 @@
+import axios from "axios";
+
+const adminAxiosInstance = axios.create({
+  baseURL: "http://127.0.0.1:8000",
+  timeout: 10000,
+});
+
+/* REQUEST INTERCEPTOR */
+
+adminAxiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("admin_token");
+
+    if (token) {
+      config.headers = config.headers || {};
+
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+
+  (error) => {
+    return Promise.reject(error);
+  },
+);
+
+/* RESPONSE INTERCEPTOR */
+
+adminAxiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+
+  (error) => {
+    if (!error.response) {
+      console.error("Network Error");
+    }
+
+    /* ADMIN UNAUTHORIZED */
+
+    if (error.response?.status === 401) {
+      localStorage.removeItem("admin_token");
+
+      localStorage.removeItem("admin_data");
+
+      if (window.location.pathname !== "/admin-portal") {
+        window.location.href = "/admin-portal";
+      }
+    }
+
+    if (error.response?.status === 500) {
+      console.error("Server Error");
+    }
+
+    return Promise.reject(error);
+  },
+);
+
+export default adminAxiosInstance;
