@@ -1,0 +1,207 @@
+2026-05-22 09:30:03,177 | ERROR | ERROR | Image orchestration failed: process_text() got an unexpected keyword argument 'security_answers'
+2026-05-22 10:11:40,681 | ERROR | ERROR | Voice orchestration failed: run_voice_pipeline() got an unexpected keyword argument 'response_text'
+2026-05-22 10:15:39,779 | ERROR | ERROR | Voice orchestration failed: run_voice_pipeline() got an unexpected keyword argument 'response_text'
+2026-05-22 10:27:10,060 | ERROR | ERROR | Text orchestration failed: sequence item 0: expected str instance, dict found
+2026-05-22 10:32:09,757 | ERROR | ERROR | Text orchestration failed: sequence item 0: expected str instance, dict found
+2026-05-22 10:32:45,023 | ERROR | ERROR | Text orchestration failed: sequence item 0: expected str instance, dict found
+2026-05-22 10:40:02,654 | ERROR | ERROR | Text orchestration failed: Object of type datetime is not JSON serializable
+2026-05-22 10:42:27,054 | ERROR | ERROR | Text orchestration failed: 'datetime.datetime' object has no attribute 'isofformat'
+2026-05-23 14:28:02,107 | ERROR | ERROR | POST /auth/register ERROR='admin_id' is an invalid keyword argument for User
+2026-05-23 14:47:06,036 | ERROR | ERROR | POST /auth/login ERROR='OAuth2PasswordRequestForm' object has no attribute 'email'
+2026-05-23 14:56:54,524 | ERROR | ERROR | POST /auth/register ERROR=Admin registration is not allowed
+2026-05-23 15:34:26,789 | ERROR | ERROR | GET /admin/analytics ERROR='sub_admin'
+2026-05-23 15:36:12,077 | ERROR | ERROR | GET /admin/analytics ERROR='Metric' object has no attribute 'ai_module'
+2026-05-23 16:19:45,660 | ERROR | ERROR | GET /admin/analytics ERROR=Could not determine join condition between parent/child tables on relationship Media.metrics - there are no foreign keys linking these tables.  Ensure that referencing columns are associated with a ForeignKey or ForeignKeyConstraint, or specify a 'primaryjoin' expression.
+2026-05-24 00:46:38,657 | ERROR | ERROR | POST /messages/5 ERROR='MessageCreate' object has no attribute 'message_type'
+2026-05-24 00:48:06,185 | ERROR | ERROR | POST /messages/5 ERROR='MessageCreate' object has no attribute 'message_type'
+2026-05-24 00:55:53,861 | ERROR | ERROR | Text orchestration failed: 'load_score' is an invalid keyword argument for Metric
+2026-05-24 01:31:20,328 | ERROR | ERROR | POST /image-processing/upload ERROR=[Errno 2] No such file or directory: 'temp_uploads/WhatsApp Image 2026-03-17 at 2.09.57 AM.jpeg'
+2026-05-24 01:31:48,524 | ERROR | ERROR | POST /image-processing/upload ERROR=[Errno 2] No such file or directory: 'temp_uploads/WhatsApp Image 2026-03-17 at 2.09.57 AM.jpeg'
+2026-05-24 01:33:14,075 | ERROR | ERROR | POST /voice-processing/upload ERROR=[Errno 2] No such file or directory: 'temp_audio_uploads/Sample.mp3'
+2026-05-24 02:42:33,675 | ERROR | ERROR | POST /auth/login ERROR=Mapper 'Mapper[User(users)]' has no property 'security_questions'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+2026-05-24 02:44:53,694 | ERROR | ERROR | POST /auth/login ERROR=One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[SecurityQuestion(security_questions)]'. Original exception was: Mapper 'Mapper[User(users)]' has no property 'security_questions'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+2026-05-24 02:47:42,002 | ERROR | ERROR | Image orchestration failed: process_text() got an unexpected keyword argument 'patient_profile'
+2026-05-24 02:49:17,748 | ERROR | ERROR | Image orchestration failed: Mapper 'Mapper[User(users)]' has no property 'security_questions'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+2026-05-24 02:51:20,749 | ERROR | ERROR | Voice orchestration failed: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[SecurityQuestion(security_questions)]'. Original exception was: Mapper 'Mapper[User(users)]' has no property 'security_questions'.  If this property was indicated from other mappers or configure events, ensure registry.configure() has been called.
+2026-05-24 03:00:57,339 | ERROR | ERROR | Image orchestration failed: 'load_score' is an invalid keyword argument for Metric
+2026-05-24 03:02:45,913 | ERROR | ERROR | Voice orchestration failed: 'load_score' is an invalid keyword argument for Metric
+2026-05-24 19:46:35,340 | ERROR | ERROR | POST /text-processing/chat ERROR=process_and_store_text() got an unexpected keyword argument 'profile'
+2026-05-24 19:52:35,654 | ERROR | ERROR | Multimodal orchestration failed: process_and_store_text() got an unexpected keyword argument 'profile'
+2026-05-24 20:09:55,547 | ERROR | ERROR | POST /text-processing/chat ERROR=Object of type bytes is not JSON serializable
+2026-05-24 20:09:59,807 | ERROR | ERROR | POST /text-processing/chat ERROR=process_and_store_text() got an unexpected keyword argument 'profile'
+2026-05-24 20:11:01,106 | ERROR | ERROR | Multimodal orchestration failed: process_and_store_text() got an unexpected keyword argument 'profile'
+2026-05-24 20:22:36,898 | ERROR | ERROR | Text orchestration failed: process_text() got an unexpected keyword argument 'patient_profile'
+2026-05-24 20:25:07,417 | ERROR | ERROR | Multimodal orchestration failed: process_and_store_text() got an unexpected keyword argument 'profile'
+2026-05-24 20:26:40,448 | ERROR | ERROR | Text orchestration failed: process_text() got an unexpected keyword argument 'patient_profile'
+2026-05-25 19:14:23,549 | ERROR | ERROR | PATCH /chats/23 ERROR=(psycopg2.errors.NotNullViolation) null value in column "title" of relation "chats" violates not-null constraint
+DETAIL:  Failing row contains (23, 19, null, 0, 2026-05-25 19:00:14.558656+05, 2026-05-25 19:14:23.539211+05, null, 2026-05-25 19:14:23.539211+05).
+
+[SQL: UPDATE chats SET title=%(title)s, last_activity=now(), updated_at=now() WHERE chats.id = %(chats_id)s]
+[parameters: {'title': None, 'chats_id': 23}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-05-25 21:07:37,921 | ERROR | ERROR | PUT /admin/users/11 ERROR=Object of type bytes is not JSON serializable
+2026-05-25 21:52:57,771 | ERROR | ERROR | DELETE /admin/chats/1 ERROR=(psycopg2.errors.ForeignKeyViolation) update or delete on table "chats" violates foreign key constraint "messages_chat_id_fkey" on table "messages"
+DETAIL:  Key (id)=(1) is still referenced from table "messages".
+
+[SQL: DELETE FROM chats WHERE chats.id = %(id_1)s]
+[parameters: {'id_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-05-25 21:53:04,285 | ERROR | ERROR | DELETE /admin/chats/5 ERROR=(psycopg2.errors.ForeignKeyViolation) update or delete on table "chats" violates foreign key constraint "messages_chat_id_fkey" on table "messages"
+DETAIL:  Key (id)=(5) is still referenced from table "messages".
+
+[SQL: DELETE FROM chats WHERE chats.id = %(id_1)s]
+[parameters: {'id_1': 5}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-05-25 21:53:07,255 | ERROR | ERROR | DELETE /admin/chats/1 ERROR=(psycopg2.errors.ForeignKeyViolation) update or delete on table "chats" violates foreign key constraint "messages_chat_id_fkey" on table "messages"
+DETAIL:  Key (id)=(1) is still referenced from table "messages".
+
+[SQL: DELETE FROM chats WHERE chats.id = %(id_1)s]
+[parameters: {'id_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-05-25 21:53:14,314 | ERROR | ERROR | DELETE /admin/chats/1 ERROR=(psycopg2.errors.ForeignKeyViolation) update or delete on table "chats" violates foreign key constraint "messages_chat_id_fkey" on table "messages"
+DETAIL:  Key (id)=(1) is still referenced from table "messages".
+
+[SQL: DELETE FROM chats WHERE chats.id = %(id_1)s]
+[parameters: {'id_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-05-25 21:55:58,362 | ERROR | ERROR | DELETE /admin/chats/1 ERROR=(psycopg2.errors.ForeignKeyViolation) update or delete on table "chats" violates foreign key constraint "messages_chat_id_fkey" on table "messages"
+DETAIL:  Key (id)=(1) is still referenced from table "messages".
+
+[SQL: DELETE FROM chats WHERE chats.id = %(id_1)s]
+[parameters: {'id_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-05-25 22:00:42,347 | ERROR | ERROR | DELETE /admin/chats/5 ERROR=(psycopg2.errors.ForeignKeyViolation) update or delete on table "chats" violates foreign key constraint "messages_chat_id_fkey" on table "messages"
+DETAIL:  Key (id)=(5) is still referenced from table "messages".
+
+[SQL: DELETE FROM chats WHERE chats.id = %(id_1)s]
+[parameters: {'id_1': 5}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-05-26 11:29:08,783 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:17:00,400 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:17:11,091 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:17:11,691 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:17:12,058 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:17:12,397 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:23:32,161 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:23:35,274 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:23:35,655 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:23:35,953 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:23:36,249 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:23:36,464 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:23:36,758 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:23:37,106 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:25:20,789 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:25:21,637 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:25:22,067 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:25:22,398 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:25:22,691 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:27:57,063 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:27:57,681 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:27:58,102 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:27:58,448 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:27:58,903 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 13:42:37,507 | ERROR | ERROR | POST /auth/register ERROR=Relationship required
+2026-05-26 13:47:36,187 | ERROR | ERROR | POST /auth/register ERROR=Object of type bytes is not JSON serializable
+2026-05-26 14:24:49,935 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 14:25:02,234 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 14:25:03,018 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 14:25:03,319 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 14:25:03,807 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 14:25:04,341 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 14:25:04,626 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 14:25:04,942 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 14:25:05,188 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 14:25:05,479 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 14:25:05,779 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 14:31:49,114 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 14:31:52,237 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 15:39:48,810 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 15:45:57,118 | ERROR | ERROR | POST /auth/register ERROR=Object of type bytes is not JSON serializable
+2026-05-26 16:03:35,522 | ERROR | ERROR | GET /admin/users ERROR='User' object has no attribute 'patient_id'
+2026-05-26 16:03:35,597 | ERROR | ERROR | GET /admin/users ERROR='User' object has no attribute 'patient_id'
+2026-05-26 16:03:41,139 | ERROR | ERROR | GET /admin/users ERROR='User' object has no attribute 'patient_id'
+2026-05-26 16:03:41,168 | ERROR | ERROR | GET /admin/users ERROR='User' object has no attribute 'patient_id'
+2026-05-26 16:53:51,046 | ERROR | ERROR | POST /profiles/setup ERROR=time data '2026-05-06' does not match format '%d/%m/%Y'
+2026-05-26 16:55:29,000 | ERROR | ERROR | POST /profiles/setup ERROR=time data '2026-05-06' does not match format '%d/%m/%Y'
+2026-05-26 17:08:40,089 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 17:15:51,665 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 17:17:59,439 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-26 17:19:10,008 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-05-27 23:18:34,227 | ERROR | ERROR | POST /auth/logout ERROR=Signature has expired.
+2026-05-28 00:39:31,758 | ERROR | ERROR | POST /auth/google ERROR=google_authenticate() takes 2 positional arguments but 5 were given
+2026-05-28 00:40:22,239 | ERROR | ERROR | POST /auth/google ERROR=google_authenticate() takes 2 positional arguments but 5 were given
+2026-05-28 00:44:48,477 | ERROR | ERROR | POST /auth/google ERROR=create_access_token() takes 1 positional argument but 3 were given
+2026-05-28 00:48:51,601 | ERROR | ERROR | POST /auth/google ERROR=too many values to unpack (expected 2)
+2026-05-28 00:51:29,728 | ERROR | ERROR | POST /auth/google ERROR=create_session() missing 1 required positional argument: 'session_id'
+2026-05-28 00:52:39,225 | ERROR | ERROR | POST /auth/google ERROR=create_session() missing 1 required positional argument: 'session_id'
+2026-05-28 00:52:43,408 | ERROR | ERROR | POST /auth/google ERROR=create_session() missing 1 required positional argument: 'session_id'
+2026-05-28 00:52:45,331 | ERROR | ERROR | POST /auth/google ERROR=create_session() missing 1 required positional argument: 'session_id'
+2026-05-28 00:59:20,767 | ERROR | ERROR | POST /auth/google ERROR='int' object has no attribute 'copy'
+2026-05-28 00:59:26,359 | ERROR | ERROR | POST /auth/google ERROR='int' object has no attribute 'copy'
+2026-05-28 00:59:39,386 | ERROR | ERROR | POST /auth/google ERROR='int' object has no attribute 'copy'
+2026-05-28 01:09:39,416 | ERROR | ERROR | POST /auth/google ERROR=create_session() missing 1 required positional argument: 'session_id'
+2026-05-28 01:29:38,779 | ERROR | ERROR | POST /auth/login ERROR='tuple' object has no attribute 'rsplit'
+2026-05-28 01:30:21,152 | ERROR | ERROR | POST /auth/login ERROR='tuple' object has no attribute 'rsplit'
+2026-05-28 01:37:04,277 | ERROR | ERROR | POST /auth/google ERROR=too many values to unpack (expected 2)
+2026-05-28 01:47:31,970 | ERROR | ERROR | POST /auth/google ERROR=too many values to unpack (expected 2)
+2026-05-28 01:47:35,317 | ERROR | ERROR | POST /auth/google ERROR=too many values to unpack (expected 2)
+2026-05-28 01:57:36,922 | ERROR | ERROR | GET /admin/users ERROR='User' object has no attribute 'patient_id'
+2026-05-28 01:57:36,942 | ERROR | ERROR | GET /admin/users ERROR='User' object has no attribute 'patient_id'
+2026-05-28 14:40:35,542 | ERROR | ERROR | DELETE /chats/58 ERROR=(psycopg2.errors.ForeignKeyViolation) update or delete on table "chats" violates foreign key constraint "text_conversations_chat_id_fkey" on table "text_conversations"
+DETAIL:  Key (id)=(58) is still referenced from table "text_conversations".
+
+[SQL: DELETE FROM chats WHERE chats.id = %(id)s]
+[parameters: {'id': 58}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-05-28 15:06:48,066 | ERROR | ERROR | DELETE /chats/58 ERROR=(psycopg2.errors.ForeignKeyViolation) update or delete on table "chats" violates foreign key constraint "text_conversations_chat_id_fkey" on table "text_conversations"
+DETAIL:  Key (id)=(58) is still referenced from table "text_conversations".
+
+[SQL: DELETE FROM chats WHERE chats.id = %(id)s]
+[parameters: {'id': 58}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-05-28 15:13:48,164 | ERROR | ERROR | DELETE /chats/62 ERROR=(psycopg2.errors.ForeignKeyViolation) update or delete on table "chats" violates foreign key constraint "text_conversations_chat_id_fkey" on table "text_conversations"
+DETAIL:  Key (id)=(62) is still referenced from table "text_conversations".
+
+[SQL: DELETE FROM chats WHERE chats.id = %(id)s]
+[parameters: {'id': 62}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-05-28 15:24:33,269 | ERROR | ERROR | Text orchestration failed: local variable 'response' referenced before assignment
+2026-05-28 15:24:36,961 | ERROR | ERROR | Text orchestration failed: local variable 'response' referenced before assignment
+2026-05-28 15:24:42,542 | ERROR | ERROR | Text orchestration failed: local variable 'response' referenced before assignment
+2026-05-28 15:38:40,079 | ERROR | ERROR | Text orchestration failed: process_text() got an unexpected keyword argument 'document'
+2026-05-28 15:38:48,556 | ERROR | ERROR | Text orchestration failed: process_text() got an unexpected keyword argument 'document'
+2026-05-28 15:39:02,314 | ERROR | ERROR | Text orchestration failed: process_text() got an unexpected keyword argument 'document'
+2026-05-28 15:42:59,384 | ERROR | ERROR | Text orchestration failed: 'TextConversation' object is not subscriptable
+2026-05-28 15:43:11,124 | ERROR | ERROR | Text orchestration failed: 'TextConversation' object is not subscriptable
+2026-05-28 17:00:39,235 | ERROR | ERROR | POST /image-ai/enhance ERROR=[TypeError("'coroutine' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2026-05-28 17:01:44,877 | ERROR | ERROR | POST /image-ai/enhance ERROR=[TypeError("'coroutine' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2026-05-28 17:16:53,418 | ERROR | ERROR | POST /image-ai/enhance ERROR=[Errno 2] No such file or directory: 'temp_uploads/Screenshot from 2026-05-28 15-39-13.png'
+2026-05-28 17:17:02,197 | ERROR | ERROR | POST /image-ai/enhance ERROR=[Errno 2] No such file or directory: 'temp_uploads/Screenshot from 2026-05-28 15-39-13.png'
+2026-05-29 01:00:10,575 | ERROR | ERROR | DELETE /chats/76 ERROR=(psycopg2.errors.ForeignKeyViolation) update or delete on table "chats" violates foreign key constraint "text_conversations_chat_id_fkey" on table "text_conversations"
+DETAIL:  Key (id)=(76) is still referenced from table "text_conversations".
+
+[SQL: DELETE FROM chats WHERE chats.id = %(id)s]
+[parameters: {'id': 76}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-05-29 01:16:41,341 | ERROR | ERROR | GET /admin/users ERROR='User' object has no attribute 'patient_id'
+2026-05-29 01:16:41,413 | ERROR | ERROR | GET /admin/users ERROR='User' object has no attribute 'patient_id'
+2026-05-29 01:19:41,348 | ERROR | ERROR | GET /admin/users ERROR='User' object has no attribute 'patient_id'
+2026-05-29 01:22:41,643 | ERROR | ERROR | GET /admin/users ERROR='User' object has no attribute 'patient_id'
+2026-05-29 01:25:41,817 | ERROR | ERROR | GET /admin/users ERROR='User' object has no attribute 'patient_id'
+2026-05-29 01:28:42,149 | ERROR | ERROR | GET /admin/users ERROR='User' object has no attribute 'patient_id'
+2026-05-29 01:31:42,243 | ERROR | ERROR | GET /admin/users ERROR='User' object has no attribute 'patient_id'
+2026-06-01 16:17:54,231 | ERROR | ERROR | POST /memory/process ERROR=[Errno 2] No such file or directory: '/home/hassan/Desktop/remind/backend_final/temp_uploads/96a81ee8-5f1e-4a0f-a47f-cbebdda6d9f3.jpg'
+2026-06-01 16:18:14,050 | ERROR | ERROR | POST /memory/process ERROR=[Errno 2] No such file or directory: '/home/hassan/Desktop/remind/backend_final/temp_uploads/eb77d3d7-7f9d-4859-9e26-7d61cddb26eb.jpg'
+2026-06-01 16:18:33,326 | ERROR | ERROR | POST /memory/process ERROR=[Errno 2] No such file or directory: '/home/hassan/Desktop/remind/backend_final/temp_uploads/3f3f2c9b-12db-43cc-8763-645b9dca04f0.jpg'
+2026-06-01 16:37:21,754 | ERROR | ERROR | Multimodal orchestration failed: (psycopg2.errors.NotNullViolation) null value in column "chat_id" of relation "messages" violates not-null constraint
+DETAIL:  Failing row contains (149, null, user, [Image Uploaded], memory, 2026-06-01 16:37:21.753585+05, null, null, null, null, null, null, null).
+
+[SQL: INSERT INTO messages (chat_id, sender, content, message_type, caption, enhanced_image, generated_audio, transcript, emotion) VALUES (%(chat_id)s, %(sender)s, %(content)s, %(message_type)s, %(caption)s, %(enhanced_image)s, %(generated_audio)s, %(transcript)s, %(emotion)s) RETURNING messages.id, messages.created_at]
+[parameters: {'chat_id': None, 'sender': 'user', 'content': '[Image Uploaded]', 'message_type': 'memory', 'caption': None, 'enhanced_image': None, 'generated_audio': None, 'transcript': None, 'emotion': None}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-06-01 16:38:19,774 | ERROR | ERROR | Multimodal orchestration failed: (psycopg2.errors.NotNullViolation) null value in column "chat_id" of relation "messages" violates not-null constraint
+DETAIL:  Failing row contains (150, null, user, hi, memory, 2026-06-01 16:38:19.772928+05, null, null, null, null, null, null, null).
+
+[SQL: INSERT INTO messages (chat_id, sender, content, message_type, caption, enhanced_image, generated_audio, transcript, emotion) VALUES (%(chat_id)s, %(sender)s, %(content)s, %(message_type)s, %(caption)s, %(enhanced_image)s, %(generated_audio)s, %(transcript)s, %(emotion)s) RETURNING messages.id, messages.created_at]
+[parameters: {'chat_id': None, 'sender': 'user', 'content': 'hi', 'message_type': 'memory', 'caption': None, 'enhanced_image': None, 'generated_audio': None, 'transcript': None, 'emotion': None}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
