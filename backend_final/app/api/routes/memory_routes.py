@@ -60,6 +60,12 @@ async def process_memory(
 
 ):
 
+
+    os.makedirs(
+        TEMP_DIR,
+        exist_ok=True
+    )
+
     image_path = None
     audio_path = None
 
