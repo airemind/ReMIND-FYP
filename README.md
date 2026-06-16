@@ -71,7 +71,7 @@ To explore the future of technology-assisted memory support systems and contribu
 
 ReMIND was created with the belief that technology can play a meaningful role in addressing real-world challenges that affect individuals, families, and communities.
 
-The project aims to contribute to ongoing discussions surrounding cognitive healthcare, memory assistance technologies, human-computer interaction, and accessible digital support systems. While the current implementation serves as a proof-of-concept, the underlying ideas have potential applications in healthcare, assisted living environments, memory preservation systems, and future digital therapeutic platforms.
+The project aims to contribute to ongoing discussions surrounding cognitive healthcare, memory assistance technologies, human-computer interaction, and accessible digital support systems. While current implementation serves as a proof-of-concept, the underlying ideas have potential applications in healthcare, assisted living environments, memory preservation systems, and future digital therapeutic platforms.
 
 The ReMIND team hopes that researchers, developers, healthcare professionals, and innovators continue exploring this area and expand upon these concepts to create solutions that positively impact society and improve quality of life.
 
