@@ -102,6 +102,28 @@ body.dark .terms-warning .highlight {
   color: #c7d2fe;
 }
 
+body.dark .help-modal {
+  background: #111827;
+}
+
+body.dark .help-modal-header {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark .help-modal-header h3,
+.dark .help-modal-content {
+  color: #f3f4f6;
+}
+
+body.dark .close-help {
+  color: #d1d5db;
+}
+
+body.dark .support-email {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
 /* DARK MODE FOR Sidebar.jsx */
 
 body.dark .sidebar {

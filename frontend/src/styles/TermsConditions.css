@@ -228,3 +228,131 @@ body,
     font-size: 16px;
   }
 }
+
+/* help button */
+
+.blur-active .content,
+.blur-active .header,
+.blur-active .help-button {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.help-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.help-modal {
+  width: 100%;
+  max-width: 700px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: modalFade 0.25s ease;
+}
+
+.help-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 26px;
+  border-bottom: 1px solid #ececec;
+}
+
+.help-modal-header h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.close-help {
+  border: none;
+  background: transparent;
+  font-size: 28px;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.help-modal-content {
+  padding: 26px;
+  color: #374151;
+}
+
+.help-modal-content p {
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.help-modal-content h4 {
+  margin-top: 20px;
+  margin-bottom: 12px;
+  color: #4f46e5;
+  font-size: 18px;
+}
+
+.help-modal-content ul {
+  padding-left: 20px;
+}
+
+.help-modal-content li {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.support-email {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(79, 70, 229, 0.08);
+  border: 1px solid rgba(79, 70, 229, 0.15);
+  text-align: center;
+  font-weight: 600;
+  color: #4f46e5;
+}
+
+.help-footer-text {
+  margin-top: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  .help-modal {
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .help-modal-header h3 {
+    font-size: 20px;
+  }
+
+  .help-modal-content {
+    padding: 20px;
+  }
+}
