@@ -1,39 +1,28 @@
 import { useState } from 'react';
-import { FiMoon, FiSun } from 'react-icons/fi';
+import { FiMoon, FiSun, FiEye, FiEyeOff } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/images/logo-light.png';
 import { saveProfileSetup } from '../middleware/profileMiddleware';
-
 import ProfileSetup from '../components/ProfileSetup';
-
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-
 import { signupUser } from '../middleware/authMiddleware';
-
 import '../styles/Signup.css';
 
 const Signup = () => {
   const navigate = useNavigate();
-
   const { theme, toggleTheme } = useTheme();
-
   const { login } = useAuth();
 
   /* STATES */
 
   const [pendingPatientData, setPendingPatientData] = useState(null);
-
   const [showProfileSetup, setShowProfileSetup] = useState(false);
-
   const [username, setUsername] = useState('');
-
   const [email, setEmail] = useState('');
-
   const [password, setPassword] = useState('');
-
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState('');
 
   /* SIGNUP */
@@ -45,24 +34,17 @@ const Signup = () => {
 
     if (!username.trim() || !email.trim() || !password.trim()) {
       setError('Please fill all required fields.');
-
       return;
     }
-
     try {
       setLoading(true);
-
       setError('');
 
       /* USER DATA */
-
       const userData = {
         username: username.trim(),
-
         email: email.trim().toLowerCase(),
-
         password: password.trim(),
-
         role: 'patient'
       };
 
@@ -83,7 +65,6 @@ const Signup = () => {
       setShowProfileSetup(true);
     } catch (error) {
       console.error(error);
-
       setError(
         error?.response?.data?.error ||
           error?.response?.data?.detail ||
@@ -142,13 +123,22 @@ const Signup = () => {
 
             {/* PASSWORD */}
 
-            <input
-              type="password"
-              placeholder="Password"
-              className="signup-input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="password-input-wrapper">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Password"
+                className="signup-input password-input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </button>
+            </div>
 
             {/* PASSWORD REQUIREMENTS */}
 
@@ -196,26 +186,21 @@ const Signup = () => {
               /* NORMAL SIGNUP */
 
               await signupUser(pendingPatientData);
-
               await login({
                 username: pendingPatientData.email,
                 password: pendingPatientData.password
               });
 
               /* NOW SAVE PROFILE */
-
               await saveProfileSetup(profileData);
 
               /* CLOSE POPUP */
-
               setShowProfileSetup(false);
 
               /* CLEAR DATA */
-
               setPendingPatientData(null);
 
               /* REDIRECT */
-
               navigate('/dashboard', {
                 replace: true
               });
@@ -236,7 +221,6 @@ const Signup = () => {
             localStorage.removeItem('token');
 
             setShowProfileSetup(false);
-
             setPendingPatientData(null);
           }}
         />
