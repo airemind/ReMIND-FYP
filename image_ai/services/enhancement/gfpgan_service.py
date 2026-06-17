@@ -10,7 +10,7 @@ def run_gfpgan(input_folder="inputs", output_folder="results"):
     script_path = os.path.join(BASE_DIR, "inference_gfpgan.py")
 
     command = [
-        "sys.executable,
+        sys.executable,
         script_path,
         "-i", input_folder,
         "-o", output_folder,
