@@ -1,4 +1,3 @@
-import { GoogleLogin } from '@react-oauth/google';
 import { useState } from 'react';
 import { FiMoon, FiSun } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +18,7 @@ const Signup = () => {
 
   const { theme, toggleTheme } = useTheme();
 
-  const { login, loginWithGoogle } = useAuth();
+  const { login } = useAuth();
 
   /* STATES */
 
@@ -175,46 +174,6 @@ const Signup = () => {
             </button>
           </form>
 
-          {/* DIVIDER */}
-
-          <div className="signup-divider">
-            <span></span>
-          </div>
-
-          {/* GOOGLE */}
-
-          <div className="signup-google-btn">
-            <GoogleLogin
-              onSuccess={async (credentialResponse) => {
-                try {
-                  setLoading(true);
-
-                  setError('');
-
-                  /* SAVE GOOGLE DATA TEMPORARILY */
-
-                  setPendingPatientData({
-                    googleToken: credentialResponse.credential,
-
-                    isGoogleSignup: true
-                  });
-
-                  /* OPEN PROFILE SETUP */
-
-                  setShowProfileSetup(true);
-                } catch (error) {
-                  console.error(error);
-
-                  setError(error?.response?.data?.error || 'Google signup failed.');
-                } finally {
-                  setLoading(false);
-                }
-              }}
-              onError={() => {
-                setError('Google signup failed.');
-              }}
-            />
-          </div>
           {/* FOOTER */}
 
           <p className="signup-footer">
@@ -236,27 +195,12 @@ const Signup = () => {
 
               /* NORMAL SIGNUP */
 
-              if (!pendingPatientData?.isGoogleSignup) {
-                /* CREATE ACCOUNT */
+              await signupUser(pendingPatientData);
 
-                await signupUser(pendingPatientData);
-
-                /* LOGIN */
-
-                await login({
-                  username: pendingPatientData.email,
-                  password: pendingPatientData.password
-                });
-              } else {
-                /* GOOGLE SIGNUP */
-
-                const response = await loginWithGoogle({
-                  token: pendingPatientData.googleToken,
-                  role: 'patient'
-                });
-
-                localStorage.setItem('token', response.access_token);
-              }
+              await login({
+                username: pendingPatientData.email,
+                password: pendingPatientData.password
+              });
 
               /* NOW SAVE PROFILE */
 

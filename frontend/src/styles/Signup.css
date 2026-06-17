@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   background: radial-gradient(circle at top, #f3f0ff, #f7f7fb);
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   padding: 20px 20px;
   box-sizing: border-box;
 }
@@ -89,25 +89,6 @@
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-}
-
-/* divider */
-.signup-divider {
-  margin: 22px 0;
-}
-
-.signup-divider span {
-  display: block;
-  height: 1px;
-  background-color: #e6e6ef;
-}
-
-/* google oauth wrapper */
-
-.signup-google-btn {
-  display: flex;
-  justify-content: center;
-  margin-top: 4px;
 }
 
 /* footer */
