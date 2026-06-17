@@ -1,5 +1,6 @@
 import subprocess
 import os
+import sys
 
 def run_gfpgan(input_folder="inputs", output_folder="results"):
     
@@ -9,7 +10,7 @@ def run_gfpgan(input_folder="inputs", output_folder="results"):
     script_path = os.path.join(BASE_DIR, "inference_gfpgan.py")
 
     command = [
-        "python3",
+        "sys.executable,
         script_path,
         "-i", input_folder,
         "-o", output_folder,
