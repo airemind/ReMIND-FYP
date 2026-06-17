@@ -1,18 +1,18 @@
-import { GoogleLogin } from "@react-oauth/google";
-import { useState } from "react";
-import { FiMoon, FiSun } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
-import logo from "../assets/images/logo-light.png";
-import { saveProfileSetup } from "../middleware/profileMiddleware";
+import { GoogleLogin } from '@react-oauth/google';
+import { useState } from 'react';
+import { FiMoon, FiSun } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
+import logo from '../assets/images/logo-light.png';
+import { saveProfileSetup } from '../middleware/profileMiddleware';
 
-import ProfileSetup from "../components/ProfileSetup";
+import ProfileSetup from '../components/ProfileSetup';
 
-import { useAuth } from "../context/AuthContext";
-import { useTheme } from "../context/ThemeContext";
+import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
-import { signupUser } from "../middleware/authMiddleware";
+import { signupUser } from '../middleware/authMiddleware';
 
-import "../styles/Signup.css";
+import '../styles/Signup.css';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -27,15 +27,15 @@ const Signup = () => {
 
   const [showProfileSetup, setShowProfileSetup] = useState(false);
 
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState('');
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
 
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
 
   const [loading, setLoading] = useState(false);
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   /* SIGNUP */
 
@@ -45,7 +45,7 @@ const Signup = () => {
     /* VALIDATION */
 
     if (!username.trim() || !email.trim() || !password.trim()) {
-      setError("Please fill all required fields.");
+      setError('Please fill all required fields.');
 
       return;
     }
@@ -53,7 +53,7 @@ const Signup = () => {
     try {
       setLoading(true);
 
-      setError("");
+      setError('');
 
       /* USER DATA */
 
@@ -64,9 +64,17 @@ const Signup = () => {
 
         password: password.trim(),
 
-        role: "patient",
+        role: 'patient'
       };
 
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
+      if (!passwordRegex.test(password)) {
+        setError(
+          'Password must be at least 8 characters long and contain an uppercase letter, lowercase letter, number, and special character.'
+        );
+        return;
+      }
       /* SAVE TEMPORARILY */
 
       setPendingPatientData(userData);
@@ -81,7 +89,7 @@ const Signup = () => {
         error?.response?.data?.error ||
           error?.response?.data?.detail ||
           error?.message ||
-          "Signup failed.",
+          'Signup failed.'
       );
     } finally {
       setLoading(false);
@@ -94,7 +102,7 @@ const Signup = () => {
         {/* THEME TOGGLE */}
 
         <div className="signup-theme-toggle" onClick={toggleTheme}>
-          {theme === "light" ? (
+          {theme === 'light' ? (
             <FiMoon className="signup-theme-icon" />
           ) : (
             <FiSun className="signup-theme-icon sun" />
@@ -149,12 +157,8 @@ const Signup = () => {
 
             {/* BUTTON */}
 
-            <button
-              type="submit"
-              className="signup-primary-btn"
-              disabled={loading}
-            >
-              {loading ? "Creating Account..." : "Sign Up"}
+            <button type="submit" className="signup-primary-btn" disabled={loading}>
+              {loading ? 'Creating Account...' : 'Sign Up'}
             </button>
           </form>
 
@@ -172,14 +176,14 @@ const Signup = () => {
                 try {
                   setLoading(true);
 
-                  setError("");
+                  setError('');
 
                   /* SAVE GOOGLE DATA TEMPORARILY */
 
                   setPendingPatientData({
                     googleToken: credentialResponse.credential,
 
-                    isGoogleSignup: true,
+                    isGoogleSignup: true
                   });
 
                   /* OPEN PROFILE SETUP */
@@ -188,23 +192,21 @@ const Signup = () => {
                 } catch (error) {
                   console.error(error);
 
-                  setError(
-                    error?.response?.data?.error || "Google signup failed.",
-                  );
+                  setError(error?.response?.data?.error || 'Google signup failed.');
                 } finally {
                   setLoading(false);
                 }
               }}
               onError={() => {
-                setError("Google signup failed.");
+                setError('Google signup failed.');
               }}
             />
           </div>
           {/* FOOTER */}
 
           <p className="signup-footer">
-            Already have an account?{" "}
-            <span className="signup-link" onClick={() => navigate("/login")}>
+            Already have an account?{' '}
+            <span className="signup-link" onClick={() => navigate('/login')}>
               <u>Login</u>
             </span>
           </p>
@@ -230,17 +232,17 @@ const Signup = () => {
 
                 await login({
                   username: pendingPatientData.email,
-                  password: pendingPatientData.password,
+                  password: pendingPatientData.password
                 });
               } else {
                 /* GOOGLE SIGNUP */
 
                 const response = await loginWithGoogle({
                   token: pendingPatientData.googleToken,
-                  role: "patient",
+                  role: 'patient'
                 });
 
-                localStorage.setItem("token", response.access_token);
+                localStorage.setItem('token', response.access_token);
               }
 
               /* NOW SAVE PROFILE */
@@ -257,8 +259,8 @@ const Signup = () => {
 
               /* REDIRECT */
 
-              navigate("/dashboard", {
-                replace: true,
+              navigate('/dashboard', {
+                replace: true
               });
             } catch (error) {
               console.error(error);
@@ -267,14 +269,14 @@ const Signup = () => {
                 error?.response?.data?.error ||
                   error?.response?.data?.detail ||
                   error?.message ||
-                  "Failed to create account.",
+                  'Failed to create account.'
               );
             } finally {
               setLoading(false);
             }
           }}
           onClose={() => {
-            localStorage.removeItem("token");
+            localStorage.removeItem('token');
 
             setShowProfileSetup(false);
 
