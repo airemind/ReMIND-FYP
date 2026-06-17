@@ -1,5 +1,6 @@
 import subprocess
 import os
+import sys
 
 def run_realesrgan(input_folder="inputs", output_folder="results"):
     
@@ -9,7 +10,7 @@ def run_realesrgan(input_folder="inputs", output_folder="results"):
     script_path = os.path.join(BASE_DIR, "inference_realesrgan.py")
 
     command = [
-        "python3",
+        sys.executable,
         script_path,
         "-n", "RealESRGAN_x2plus",
         "-i", input_folder,
