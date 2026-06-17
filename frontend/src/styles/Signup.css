@@ -117,6 +117,36 @@
   color: #7a7a8c;
 }
 
+/* PASSWORD REQUIREMENTS */
+
+.password-requirements {
+  background: rgba(91, 62, 166, 0.06);
+  border: 1px solid rgba(91, 62, 166, 0.15);
+  border-radius: 12px;
+  padding: 12px 14px;
+  text-align: left;
+  margin-top: 2px;
+}
+
+.password-requirements-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b3ea6;
+  margin-bottom: 8px;
+}
+
+.password-requirements ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.password-requirements li {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 2px;
+}
+
 @media (max-width: 480px) {
   .signup-card {
     width: 100%;

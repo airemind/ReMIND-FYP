@@ -151,6 +151,19 @@ const Signup = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
 
+            {/* PASSWORD REQUIREMENTS */}
+
+            <div className="password-requirements">
+              <div className="password-requirements-title">Password Requirements</div>
+
+              <ul>
+                <li>Minimum 8 characters</li>
+                <li>At least 1 uppercase letter (A-Z)</li>
+                <li>At least 1 lowercase letter (a-z)</li>
+                <li>At least 1 number (0-9)</li>
+                <li>At least 1 special character (!@#$%^&*)</li>
+              </ul>
+            </div>
             {/* ERROR */}
 
             {error && <p className="signup-error">{error}</p>}
