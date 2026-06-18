@@ -1,14 +1,14 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import { ThemeProvider } from "./context/ThemeContext";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminPortal from "./pages/AdminPortal";
-import Dashboard from "./pages/Dashboard";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import TermsConditions from "./pages/TermsConditions";
-import ProtectedRoute from "./routes/ProtectedRoute";
-import PublicRoute from "./routes/PublicRoute";
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminPortal from './pages/AdminPortal';
+import Dashboard from './pages/Dashboard';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import TermsConditions from './pages/TermsConditions';
+import ProtectedRoute from './routes/ProtectedRoute';
+import PublicRoute from './routes/PublicRoute';
 
 function App() {
   return (
@@ -17,9 +17,7 @@ function App() {
         <Router>
           <Routes>
             {/* PUBLIC ROUTES */}
-
             <Route path="/" element={<TermsConditions />} />
-
             <Route
               path="/login"
               element={
@@ -28,7 +26,6 @@ function App() {
                 </PublicRoute>
               }
             />
-
             <Route
               path="/signup"
               element={
@@ -37,7 +34,6 @@ function App() {
                 </PublicRoute>
               }
             />
-
             <Route
               path="/admin-portal"
               element={
@@ -48,7 +44,6 @@ function App() {
             />
 
             {/* PROTECTED ROUTES */}
-
             <Route
               path="/dashboard/*"
               element={

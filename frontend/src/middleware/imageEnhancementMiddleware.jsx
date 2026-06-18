@@ -1,17 +1,17 @@
-import api from "./axiosInstance";
+import api from './axiosInstance';
 
 export const enhanceImage = async (imageFile) => {
   try {
     const formData = new FormData();
 
-    formData.append("file", imageFile);
+    formData.append('file', imageFile);
 
-    const response = await api.post("/image-ai/enhance", formData, {
+    const response = await api.post('/image-ai/enhance', formData, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data'
       },
 
-      timeout: 0,
+      timeout: 0
     });
 
     return response.data;

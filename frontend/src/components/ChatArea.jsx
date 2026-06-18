@@ -1,112 +1,84 @@
-import { useEffect, useRef } from "react";
-
-import { useTheme } from "../context/ThemeContext";
-
-import logoDark from "../assets/images/logo-dark.png";
-import logoLight from "../assets/images/logo-light.png";
-
-import "../styles/ChatArea.css";
+import { useEffect, useRef } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import logoDark from '../assets/images/logo-dark.png';
+import logoLight from '../assets/images/logo-light.png';
+import '../styles/ChatArea.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
 const ChatArea = ({ activeChat, isThinking, handleEnhanceImage }) => {
   const { theme } = useTheme();
-
-  const logo = theme === "dark" ? logoDark : logoLight;
-
+  const logo = theme === 'dark' ? logoDark : logoLight;
   const messagesEndRef = useRef(null);
-
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
-      behavior: "smooth",
+      behavior: 'smooth'
     });
   }, [activeChat?.messages, isThinking]);
 
-  /* =========================
-     FILE DOWNLOAD
-  ========================= */
+  /* file download*/
 
   const handleFileDownload = async (fileId, fileName) => {
     try {
-      const token = localStorage.getItem("token");
-
-      const response = await fetch(
-        `${API_BASE_URL}/files/${fileId}/download`,
-
-        {
-          method: "GET",
-
-          headers: {
-            ...(token && {
-              Authorization: `Bearer ${token}`,
-            }),
-          },
-        },
-      );
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_BASE_URL}/files/${fileId}/download`, {
+        method: 'GET',
+        headers: {
+          ...(token && {
+            Authorization: `Bearer ${token}`
+          })
+        }
+      });
 
       /* 401 */
 
       if (response.status === 401) {
-        localStorage.removeItem("token");
-
-        window.location.href = "/login";
+        localStorage.removeItem('token');
+        window.location.href = '/login';
 
         return;
       }
 
       if (!response.ok) {
-        throw new Error("Download failed");
+        throw new Error('Download failed');
       }
 
       const blob = await response.blob();
-
       const url = window.URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
+      const a = document.createElement('a');
 
       a.href = url;
-
-      a.download = fileName || "download";
-
+      a.download = fileName || 'download';
       document.body.appendChild(a);
 
       a.click();
-
       a.remove();
-
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error(error);
 
-      alert("File download failed.");
+      alert('File download failed.');
     }
   };
 
-  /* =========================
-     EMPTY CHAT
-  ========================= */
+  /* empty chat */
 
   if (!activeChat && !isThinking) {
     return (
       <div className="chat-area">
         <div className="chat-center">
           <img src={logo} alt="ReMIND Logo" className="chat-logo" />
-
           <h2>Hi! I am ReMIND, How can I help You?</h2>
-
           <p>
-            ReMIND helps you preserve memories, recall important moments, manage
-            conversations, and stay connected through intelligent AI assistance
-            via text, images, and audio. Start a new chat.
+            ReMIND helps you preserve memories, recall important moments, manage conversations, and
+            stay connected through intelligent AI assistance via text, images, and audio. Start a
+            new chat.
           </p>
         </div>
       </div>
     );
   }
 
-  /* =========================
-     MAIN CHAT
-  ========================= */
+  /* main chat */
 
   return (
     <div className="chat-area">
@@ -114,43 +86,29 @@ const ChatArea = ({ activeChat, isThinking, handleEnhanceImage }) => {
         {activeChat.messages.map((msg, index) => (
           <div
             key={msg.id || index}
-            className={`message-bubble ${
-              msg.role === "user" ? "user" : "assistant"
-            }`}
+            className={`message-bubble ${msg.role === 'user' ? 'user' : 'assistant'}`}
           >
-            {/* =====================
-                 TEXT
-              ===================== */}
+            {/* text */}
 
-            {msg.type === "text" && (
-              <div className="message-text">{msg.content}</div>
-            )}
+            {msg.type === 'text' && <div className="message-text">{msg.content}</div>}
 
-            {/* =====================
-                 MEMORY
-              ===================== */}
+            {/* memory */}
 
-            {msg.type === "memory" && (
+            {msg.type === 'memory' && (
               <div className="memory-card">
                 {/* RESPONSE */}
 
-                {msg.content && (
-                  <div className="memory-response">{msg.content}</div>
-                )}
+                {msg.content && <div className="memory-response">{msg.content}</div>}
 
                 {/* IMAGE */}
 
                 {msg.enhancedImage && (
                   <div className="memory-image">
-                    <img
-                      src={msg.enhancedImage}
-                      alt="Memory"
-                      className="memory-preview-image"
-                    />
+                    <img src={msg.enhancedImage} alt="Memory" className="memory-preview-image" />
 
                     {/* IMAGE ACTIONS */}
 
-                    {msg.role === "assistant" && (
+                    {msg.role === 'assistant' && (
                       <div className="image-actions">
                         {/* ENHANCE */}
 
@@ -161,7 +119,7 @@ const ChatArea = ({ activeChat, isThinking, handleEnhanceImage }) => {
                             title="Enhance image quality"
                             onClick={() => handleEnhanceImage(msg.id)}
                           >
-                            {msg.isEnhancing ? "Enhancing..." : "Enhance Image"}
+                            {msg.isEnhancing ? 'Enhancing...' : 'Enhance Image'}
                           </button>
                         )}
 
@@ -194,7 +152,6 @@ const ChatArea = ({ activeChat, isThinking, handleEnhanceImage }) => {
                 {msg.transcript && (
                   <div className="memory-section">
                     <h4>Transcript</h4>
-
                     <p>{msg.transcript}</p>
                   </div>
                 )}
@@ -204,7 +161,6 @@ const ChatArea = ({ activeChat, isThinking, handleEnhanceImage }) => {
                 {msg.caption && (
                   <div className="memory-section">
                     <h4>Image Understanding</h4>
-
                     <p>{msg.caption}</p>
                   </div>
                 )}
@@ -214,7 +170,6 @@ const ChatArea = ({ activeChat, isThinking, handleEnhanceImage }) => {
                 {msg.emotion && (
                   <div className="memory-section">
                     <h4>Detected Emotion</h4>
-
                     <p>{msg.emotion}</p>
                   </div>
                 )}
@@ -224,7 +179,6 @@ const ChatArea = ({ activeChat, isThinking, handleEnhanceImage }) => {
                 {msg.tones?.length > 0 && (
                   <div className="memory-section">
                     <h4>Detected Tones</h4>
-
                     <div className="tones-container">
                       {msg.tones.map((tone, index) => (
                         <span key={index} className="tone-badge">
@@ -240,7 +194,6 @@ const ChatArea = ({ activeChat, isThinking, handleEnhanceImage }) => {
                 {msg.retrievedContext?.length > 0 && (
                   <div className="memory-section">
                     <h4>Retrieved Memories</h4>
-
                     <ul className="retrieved-context-list">
                       {msg.retrievedContext.map((memory, index) => (
                         <li key={index}>{memory}</li>
@@ -251,15 +204,13 @@ const ChatArea = ({ activeChat, isThinking, handleEnhanceImage }) => {
               </div>
             )}
 
-            {/* =====================
-                 FILE
-              ===================== */}
+            {/* FILE */}
 
-            {msg.type === "file" && (
+            {msg.type === 'file' && (
               <div className="file-message">
                 {/* IMAGE */}
 
-                {msg.fileType === "image" && (
+                {msg.fileType === 'image' && (
                   <button
                     className="file-open"
                     onClick={() => handleFileDownload(msg.fileId, msg.fileName)}
@@ -270,7 +221,7 @@ const ChatArea = ({ activeChat, isThinking, handleEnhanceImage }) => {
 
                 {/* AUDIO */}
 
-                {msg.fileType === "audio" && (
+                {msg.fileType === 'audio' && (
                   <button
                     className="file-open"
                     onClick={() => handleFileDownload(msg.fileId, msg.fileName)}
@@ -286,11 +237,8 @@ const ChatArea = ({ activeChat, isThinking, handleEnhanceImage }) => {
         {/* THINKING */}
 
         {isThinking && (
-          <div className="thinking-indicator">
-            ReMIND is understanding the context...
-          </div>
+          <div className="thinking-indicator">ReMIND is understanding the context...</div>
         )}
-
         <div ref={messagesEndRef}></div>
       </div>
     </div>

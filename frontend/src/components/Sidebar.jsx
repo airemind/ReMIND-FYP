@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState } from 'react';
 
 import {
   FiChevronLeft,
@@ -8,10 +8,10 @@ import {
   FiPlus,
   FiSearch,
   FiTrash2,
-  FiX,
-} from "react-icons/fi";
+  FiX
+} from 'react-icons/fi';
 
-import "../styles/Sidebar.css";
+import '../styles/Sidebar.css';
 
 const Sidebar = ({
   chats,
@@ -28,32 +28,28 @@ const Sidebar = ({
   /* MOBILE */
   isMobileOpen = false,
   closeMobileSidebar = () => {},
-  toggleMobileSidebar = () => {},
+  toggleMobileSidebar = () => {}
 }) => {
   const [editingId, setEditingId] = useState(null);
-  const [tempTitle, setTempTitle] = useState("");
+  const [tempTitle, setTempTitle] = useState('');
   const [chatToDelete, setChatToDelete] = useState(null);
 
   const filteredChats = useMemo(() => {
-    const validChats = chats.filter((chat) => chat && typeof chat === "object");
-
+    const validChats = chats.filter((chat) => chat && typeof chat === 'object');
     if (!searchTerm) return validChats;
-
     return validChats.filter((chat) =>
-      (chat.title || "").toLowerCase().includes(searchTerm.toLowerCase()),
+      (chat.title || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [chats, searchTerm]);
 
   const handleRename = (id) => {
     if (!tempTitle.trim()) return;
-
     renameChat(id, tempTitle.trim());
     setEditingId(null);
   };
 
   const handleChatSelect = (chatId) => {
     setActiveChatId(chatId);
-
     if (window.innerWidth <= 768) {
       closeMobileSidebar();
     }
@@ -61,7 +57,6 @@ const Sidebar = ({
 
   const handleCreateChat = () => {
     createNewChat();
-
     if (window.innerWidth <= 768) {
       closeMobileSidebar();
     }
@@ -78,9 +73,7 @@ const Sidebar = ({
       {/* SIDEBAR */}
 
       <div
-        className={`sidebar ${
-          isCollapsed ? "collapsed" : ""
-        } ${isMobileOpen ? "mobile-open" : ""}`}
+        className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isMobileOpen ? 'mobile-open' : ''}`}
       >
         {/* TOGGLE BUTTON */}
 
@@ -111,10 +104,7 @@ const Sidebar = ({
 
         {isCollapsed && window.innerWidth > 768 ? (
           <div className="sidebar-collapsed-icons">
-            <div
-              className="sidebar-icon tooltip-wrapper"
-              onClick={handleCreateChat}
-            >
+            <div className="sidebar-icon tooltip-wrapper" onClick={handleCreateChat}>
               <FiPlus />
             </div>
           </div>
@@ -128,7 +118,6 @@ const Sidebar = ({
 
             <div className="search-box">
               <FiSearch />
-
               <input
                 placeholder="Search chats"
                 value={searchTerm}
@@ -149,9 +138,7 @@ const Sidebar = ({
               {filteredChats.map((chat) => (
                 <div
                   key={chat.id}
-                  className={`chat-item ${
-                    activeChatId === chat.id ? "active" : ""
-                  }`}
+                  className={`chat-item ${activeChatId === chat.id ? 'active' : ''}`}
                   onClick={() => handleChatSelect(chat.id)}
                 >
                   {editingId === chat.id ? (
@@ -161,32 +148,26 @@ const Sidebar = ({
                       onChange={(e) => setTempTitle(e.target.value)}
                       onBlur={() => handleRename(chat.id)}
                       onKeyDown={(e) => {
-                        if (e.key === "Enter") {
+                        if (e.key === 'Enter') {
                           handleRename(chat.id);
                         }
                       }}
                     />
                   ) : (
                     <>
-                      <span className="chat-title">
-                        {chat.title || "New Chat"}
-                      </span>
-
+                      <span className="chat-title">{chat.title || 'New Chat'}</span>
                       <div className="chat-actions">
                         <FiEdit2
                           onClick={(e) => {
                             e.stopPropagation();
-
                             setEditingId(chat.id);
                             setTempTitle(chat.title);
                           }}
                         />
-
                         <FiTrash2
                           className="delete-icon"
                           onClick={(e) => {
                             e.stopPropagation();
-
                             setChatToDelete(chat.id);
                           }}
                         />
@@ -203,31 +184,19 @@ const Sidebar = ({
       {/* DELETE MODAL */}
 
       {chatToDelete && (
-        <div
-          className="delete-modal-overlay"
-          onClick={() => setChatToDelete(null)}
-        >
+        <div className="delete-modal-overlay" onClick={() => setChatToDelete(null)}>
           <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
             <div className="delete-modal-header">
               <h3>Delete Chat</h3>
             </div>
-
             <div className="delete-modal-body">
               <p>Are you sure you want to delete this chat?</p>
-
-              <span className="delete-warning">
-                This action cannot be undone.
-              </span>
+              <span className="delete-warning">This action cannot be undone.</span>
             </div>
-
             <div className="delete-modal-actions">
-              <button
-                className="cancel-btn"
-                onClick={() => setChatToDelete(null)}
-              >
+              <button className="cancel-btn" onClick={() => setChatToDelete(null)}>
                 Cancel
               </button>
-
               <button
                 className="confirm-delete-btn"
                 onClick={() => {
@@ -244,5 +213,4 @@ const Sidebar = ({
     </>
   );
 };
-
 export default Sidebar;

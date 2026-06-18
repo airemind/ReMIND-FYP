@@ -1,14 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import { FiMenu, FiMoon, FiSun, FiUser } from "react-icons/fi";
-import { useTheme } from "../context/ThemeContext";
-import "../styles/Topbar.css";
-import ProfileDropdown from "./ProfileDropdown";
+import { useEffect, useRef, useState } from 'react';
+import { FiMenu, FiMoon, FiSun, FiUser } from 'react-icons/fi';
+import { useTheme } from '../context/ThemeContext';
+import '../styles/Topbar.css';
+import ProfileDropdown from './ProfileDropdown';
 
 const Topbar = ({ toggleMobileSidebar }) => {
   const { theme, toggleTheme } = useTheme();
-
   const [open, setOpen] = useState(false);
-
   const profileRef = useRef();
 
   useEffect(() => {
@@ -18,10 +16,9 @@ const Topbar = ({ toggleMobileSidebar }) => {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -30,17 +27,14 @@ const Topbar = ({ toggleMobileSidebar }) => {
       <div className="topbar-right">
         {/* MOBILE MENU */}
 
-        <div
-          className="topbar-icon-wrapper mobile-menu-btn"
-          onClick={toggleMobileSidebar}
-        >
+        <div className="topbar-icon-wrapper mobile-menu-btn" onClick={toggleMobileSidebar}>
           <FiMenu className="topbar-icon" />
         </div>
 
         {/* THEME */}
 
         <div className="topbar-icon-wrapper" onClick={toggleTheme}>
-          {theme === "light" ? (
+          {theme === 'light' ? (
             <FiMoon className="topbar-icon" />
           ) : (
             <FiSun className="topbar-icon sun" />
@@ -53,12 +47,10 @@ const Topbar = ({ toggleMobileSidebar }) => {
           <div className="topbar-icon-wrapper" onClick={() => setOpen(!open)}>
             <FiUser className="topbar-icon" />
           </div>
-
           {open && <ProfileDropdown />}
         </div>
       </div>
     </div>
   );
 };
-
 export default Topbar;

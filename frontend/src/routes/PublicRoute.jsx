@@ -15,8 +15,6 @@ const PublicRoute = ({ children }) => {
   }
 
   /* ALLOW ACCESS */
-
   return children;
 };
-
 export default PublicRoute;

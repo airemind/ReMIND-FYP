@@ -1,67 +1,35 @@
-import { useEffect, useRef, useState } from "react";
-
-import {
-  FiImage,
-  FiMic,
-  FiMusic,
-  FiPaperclip,
-  FiSend,
-  FiX,
-} from "react-icons/fi";
-
-import "../styles/MessageInput.css";
-
+import { useEffect, useRef, useState } from 'react';
+import { FiImage, FiMic, FiMusic, FiPaperclip, FiSend, FiX } from 'react-icons/fi';
+import '../styles/MessageInput.css';
 const MessageInput = ({ sendMessage, activeChat }) => {
   const hasActiveChat = Boolean(activeChat);
-
-  const [text, setText] = useState("");
-
+  const [text, setText] = useState('');
   const [showMenu, setShowMenu] = useState(false);
-
   const [isRecording, setIsRecording] = useState(false);
-
   const [speechSupported, setSpeechSupported] = useState(false);
-
-  /* MULTIPLE FILES */
   const [pendingFiles, setPendingFiles] = useState([]);
-
   const menuRef = useRef(null);
-
   const textareaRef = useRef(null);
-
   const recognitionRef = useRef(null);
-
   const imageInputRef = useRef(null);
-
   const audioInputRef = useRef(null);
 
   /* SPEECH RECOGNITION */
-
   useEffect(() => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       setSpeechSupported(true);
-
       const recognition = new SpeechRecognition();
-
       recognition.continuous = false;
-
       recognition.interimResults = false;
-
-      recognition.lang = "en-US";
-
+      recognition.lang = 'en-US';
       recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
-
-        setText((prev) => prev + " " + transcript);
+        setText((prev) => prev + ' ' + transcript);
       };
-
       recognition.onend = () => {
         setIsRecording(false);
       };
-
       recognitionRef.current = recognition;
     } else {
       setSpeechSupported(false);
@@ -72,23 +40,16 @@ const MessageInput = ({ sendMessage, activeChat }) => {
 
   useEffect(() => {
     const textarea = textareaRef.current;
-
     if (!textarea) return;
-
-    textarea.style.height = "auto";
-
+    textarea.style.height = 'auto';
     const maxHeight = 120;
-
     const scrollHeight = textarea.scrollHeight;
-
     if (scrollHeight <= maxHeight) {
-      textarea.style.height = scrollHeight + "px";
-
-      textarea.style.overflowY = "hidden";
+      textarea.style.height = scrollHeight + 'px';
+      textarea.style.overflowY = 'hidden';
     } else {
-      textarea.style.height = maxHeight + "px";
-
-      textarea.style.overflowY = "auto";
+      textarea.style.height = maxHeight + 'px';
+      textarea.style.overflowY = 'auto';
     }
   }, [text]);
 
@@ -98,7 +59,7 @@ const MessageInput = ({ sendMessage, activeChat }) => {
     if (!hasActiveChat) return;
 
     if (!recognitionRef.current) {
-      alert("Speech Recognition not supported in this browser.");
+      alert('Speech Recognition not supported in this browser.');
 
       return;
     }
@@ -117,9 +78,8 @@ const MessageInput = ({ sendMessage, activeChat }) => {
   /* FILE VALIDATION */
 
   const allowedTypes = {
-    image: ["image/jpeg", "image/png"],
-
-    audio: ["audio/mpeg", "audio/mp3", "audio/wav"],
+    image: ['image/jpeg', 'image/png'],
+    audio: ['audio/mpeg', 'audio/mp3', 'audio/wav']
   };
 
   /* FILE CHANGE */
@@ -128,46 +88,37 @@ const MessageInput = ({ sendMessage, activeChat }) => {
     if (!hasActiveChat) return;
 
     const file = event.target.files[0];
-
     if (!file) return;
 
     const maxSizeMB = 10;
-
     const maxSizeBytes = maxSizeMB * 1024 * 1024;
 
     if (file.size > maxSizeBytes) {
       alert(`File size exceeds ${maxSizeMB}MB limit.`);
 
-      event.target.value = "";
-
+      event.target.value = '';
       return;
     }
 
     if (!allowedTypes[type].includes(file.type)) {
       alert(`Invalid ${type} file type.`);
-
-      event.target.value = "";
-
+      event.target.value = '';
       return;
     }
 
-    /* ADD FILE INSTEAD OF OVERWRITING */
+    /* ADD MULTPLE FILES */
 
     setPendingFiles((prev) => [
       ...prev,
       {
         id: Date.now(),
-
         file,
-
         fileName: file.name,
-
-        fileType: type,
-      },
+        fileType: type
+      }
     ]);
 
-    event.target.value = "";
-
+    event.target.value = '';
     setShowMenu(false);
   };
 
@@ -175,19 +126,14 @@ const MessageInput = ({ sendMessage, activeChat }) => {
 
   const handleSend = () => {
     if (!hasActiveChat) return;
-
     if (!text.trim() && pendingFiles.length === 0) return;
-
     const messagePayload = {
       text: text.trim(),
-
-      files: pendingFiles,
+      files: pendingFiles
     };
 
     sendMessage(messagePayload);
-
-    setText("");
-
+    setText('');
     setPendingFiles([]);
   };
 
@@ -199,11 +145,9 @@ const MessageInput = ({ sendMessage, activeChat }) => {
         setShowMenu(false);
       }
     };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -217,9 +161,7 @@ const MessageInput = ({ sendMessage, activeChat }) => {
         {/* WARNING */}
 
         {!hasActiveChat && (
-          <div className="disabled-chat-warning">
-            Please create a new chat to start messaging.
-          </div>
+          <div className="disabled-chat-warning">Please create a new chat to start messaging.</div>
         )}
 
         {/* FILE PREVIEW */}
@@ -229,9 +171,9 @@ const MessageInput = ({ sendMessage, activeChat }) => {
             {pendingFiles.map((fileItem) => (
               <div className="pending-file" key={fileItem.id}>
                 <div className="pending-file-left">
-                  {fileItem.fileType === "image" && <FiImage />}
+                  {fileItem.fileType === 'image' && <FiImage />}
 
-                  {fileItem.fileType === "audio" && <FiMusic />}
+                  {fileItem.fileType === 'audio' && <FiMusic />}
 
                   <span className="pending-file-name">{fileItem.fileName}</span>
                 </div>
@@ -239,9 +181,7 @@ const MessageInput = ({ sendMessage, activeChat }) => {
                 <FiX
                   className="remove-file"
                   onClick={() =>
-                    setPendingFiles((prev) =>
-                      prev.filter((f) => f.id !== fileItem.id),
-                    )
+                    setPendingFiles((prev) => prev.filter((f) => f.id !== fileItem.id))
                   }
                 />
               </div>
@@ -254,43 +194,31 @@ const MessageInput = ({ sendMessage, activeChat }) => {
 
           <div className="attachment-wrapper" ref={menuRef}>
             <FiPaperclip
-              className={`attachment-icon ${!hasActiveChat ? "disabled-icon" : ""}`}
+              className={`attachment-icon ${!hasActiveChat ? 'disabled-icon' : ''}`}
               onClick={() => hasActiveChat && setShowMenu((prev) => !prev)}
-              title={
-                !hasActiveChat
-                  ? "Create a chat to attach files"
-                  : "Attach files"
-              }
+              title={!hasActiveChat ? 'Create a chat to attach files' : 'Attach files'}
             />
 
             {showMenu && hasActiveChat && (
               <div className="attachment-menu">
                 {/* IMAGE */}
 
-                <div
-                  className="attachment-item"
-                  onClick={() => imageInputRef.current.click()}
-                >
+                <div className="attachment-item" onClick={() => imageInputRef.current.click()}>
                   <FiImage className="attachment-item-icon" />
 
                   <div>
                     <div>Image</div>
-
                     <small>JPG, PNG • Max 50MB</small>
                   </div>
                 </div>
 
                 {/* AUDIO */}
 
-                <div
-                  className="attachment-item"
-                  onClick={() => audioInputRef.current.click()}
-                >
+                <div className="attachment-item" onClick={() => audioInputRef.current.click()}>
                   <FiMusic className="attachment-item-icon" />
 
                   <div>
                     <div>Audio</div>
-
                     <small>MP3, WAV • Max 50MB</small>
                   </div>
                 </div>
@@ -304,9 +232,8 @@ const MessageInput = ({ sendMessage, activeChat }) => {
               ref={imageInputRef}
               hidden
               accept=".jpg,.jpeg,.png"
-              onChange={(e) => handleFileChange(e, "image")}
+              onChange={(e) => handleFileChange(e, 'image')}
             />
-
             {/* AUDIO INPUT */}
 
             <input
@@ -314,7 +241,7 @@ const MessageInput = ({ sendMessage, activeChat }) => {
               ref={audioInputRef}
               hidden
               accept=".mp3,.wav"
-              onChange={(e) => handleFileChange(e, "audio")}
+              onChange={(e) => handleFileChange(e, 'audio')}
             />
           </div>
 
@@ -325,14 +252,11 @@ const MessageInput = ({ sendMessage, activeChat }) => {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder={
-              hasActiveChat
-                ? "Message ReMIND..."
-                : "Create a new chat to start typing..."
+              hasActiveChat ? 'Message ReMIND...' : 'Create a new chat to start typing...'
             }
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
+              if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-
                 handleSend();
               }
             }}
@@ -344,14 +268,10 @@ const MessageInput = ({ sendMessage, activeChat }) => {
           {/* MIC */}
 
           <button
-            className={`mic-btn ${isRecording ? "recording" : ""}`}
+            className={`mic-btn ${isRecording ? 'recording' : ''}`}
             onClick={handleMicClick}
             disabled={!hasActiveChat || !speechSupported}
-            title={
-              !speechSupported
-                ? "Voice recognition unsupported in this browser"
-                : ""
-            }
+            title={!speechSupported ? 'Voice recognition unsupported in this browser' : ''}
           >
             <FiMic />
           </button>
@@ -361,14 +281,8 @@ const MessageInput = ({ sendMessage, activeChat }) => {
           <button
             className="send-btn"
             onClick={handleSend}
-            disabled={
-              !hasActiveChat || (!text.trim() && pendingFiles.length === 0)
-            }
-            title={
-              !hasActiveChat
-                ? "You should have some text or files to send"
-                : "Send Message"
-            }
+            disabled={!hasActiveChat || (!text.trim() && pendingFiles.length === 0)}
+            title={!hasActiveChat ? 'You should have some text or files to send' : 'Send Message'}
           >
             <FiSend />
           </button>

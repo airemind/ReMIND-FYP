@@ -239,7 +239,7 @@ body.dark .auto-textarea:-ms-input-placeholder {
   color: #9ca3af;
 }
 
-/* DARK MODE FOR Buttons (Send & Mic) */
+/* DARK MODE FOR Buttons Send & Mic */
 
 body.dark .send-btn.disabled {
   background: #2a2a2a;

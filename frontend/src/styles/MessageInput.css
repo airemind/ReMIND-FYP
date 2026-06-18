@@ -1,17 +1,9 @@
-/* =========================================
-   CONTAINER
-========================================= */
-
 .message-input-container {
   padding: 20px;
   border-top: 1px solid #e5e7eb;
   display: flex;
   justify-content: center;
 }
-
-/* =========================================
-   MAIN WRAPPER
-========================================= */
 
 .message-input {
   width: 100%;
@@ -24,10 +16,6 @@
   gap: 10px;
 }
 
-/* =========================================
-   MULTIPLE FILES WRAPPER
-========================================= */
-
 .pending-files {
   display: flex;
   flex-direction: column;
@@ -36,8 +24,6 @@
   overflow-y: auto;
   padding-right: 4px;
 }
-
-/* custom scrollbar */
 
 .pending-files::-webkit-scrollbar {
   width: 6px;
@@ -51,10 +37,6 @@
 .pending-files::-webkit-scrollbar-thumb:hover {
   background: #a1a1aa;
 }
-
-/* =========================================
-   SINGLE FILE PREVIEW
-========================================= */
 
 .pending-file {
   display: flex;
@@ -87,10 +69,6 @@
   font-weight: 500;
 }
 
-/* =========================================
-   REMOVE FILE
-========================================= */
-
 .remove-file {
   cursor: pointer;
   color: #ef4444;
@@ -103,19 +81,11 @@
   transform: scale(1.1);
 }
 
-/* =========================================
-   INPUT ROW
-========================================= */
-
 .input-row {
   display: flex;
   align-items: flex-end;
   gap: 12px;
 }
-
-/* =========================================
-   TEXTAREA
-========================================= */
 
 .input-row textarea {
   flex: 1;
@@ -129,10 +99,6 @@
   max-height: 120px;
 }
 
-/* =========================================
-   ATTACHMENT
-========================================= */
-
 .attachment-wrapper {
   position: relative;
   display: flex;
@@ -145,11 +111,9 @@
   padding: 10px;
   border-radius: 10px;
   transition: all 0.2s ease;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   min-width: 42px;
   min-height: 42px;
 }
@@ -157,10 +121,6 @@
 .attachment-icon:hover {
   background: #e4e4e7;
 }
-
-/* =========================================
-   ATTACHMENT DROPDOWN
-========================================= */
 
 .attachment-menu {
   position: absolute;
@@ -208,10 +168,6 @@
   margin-top: 2px;
 }
 
-/* =========================================
-   MICROPHONE
-========================================= */
-
 .mic-btn {
   width: 42px;
   height: 42px;
@@ -231,16 +187,12 @@
   background: #d1d5db;
 }
 
-/* disabled */
-
 .mic-btn:disabled {
   background: #e5e7eb;
   color: #9ca3af;
   cursor: not-allowed;
   opacity: 0.7;
 }
-
-/* keep tooltip working */
 
 .mic-btn:disabled:hover {
   background: #e5e7eb;
@@ -250,8 +202,6 @@
 .mic-btn svg {
   font-size: 18px;
 }
-
-/* recording animation */
 
 .mic-btn.recording {
   background: #ef4444;
@@ -273,10 +223,6 @@
   }
 }
 
-/* =========================================
-   SEND BUTTON
-========================================= */
-
 .send-btn {
   width: 42px;
   height: 42px;
@@ -289,15 +235,11 @@
   flex-shrink: 0;
 }
 
-/* disabled */
-
 .send-btn:disabled {
   background: #e5e7eb;
   color: #9ca3af;
   cursor: not-allowed;
 }
-
-/* active */
 
 .send-btn:not(:disabled) {
   background: linear-gradient(135deg, #6366f1, #7c3aed);
@@ -318,20 +260,12 @@
   font-size: 18px;
 }
 
-/* =========================================
-   WARNING
-========================================= */
-
 .disabled-chat-warning {
   font-size: 13px;
   color: #9ca3af;
   text-align: center;
   margin-bottom: 6px;
 }
-
-/* =========================================
-   DISABLED
-========================================= */
 
 .disabled-icon {
   opacity: 0.5;
@@ -342,10 +276,6 @@
   cursor: not-allowed;
   opacity: 0.6;
 }
-
-/* =========================================
-   AUTO TEXTAREA
-========================================= */
 
 .auto-textarea {
   flex: 1;
@@ -378,10 +308,6 @@
   background: #a1a1aa;
 }
 
-/* =========================================
-   FADE ANIMATION
-========================================= */
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -393,10 +319,6 @@
     transform: translateY(0);
   }
 }
-
-/* =========================================
-   MOBILE RESPONSIVE
-========================================= */
 
 @media (max-width: 768px) {
   .message-input-container {

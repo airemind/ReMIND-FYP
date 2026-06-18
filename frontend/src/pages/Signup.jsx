@@ -14,8 +14,6 @@ const Signup = () => {
   const { theme, toggleTheme } = useTheme();
   const { login } = useAuth();
 
-  /* STATES */
-
   const [pendingPatientData, setPendingPatientData] = useState(null);
   const [showProfileSetup, setShowProfileSetup] = useState(false);
   const [username, setUsername] = useState('');
@@ -26,12 +24,10 @@ const Signup = () => {
   const [error, setError] = useState('');
 
   /* SIGNUP */
-
   const handleSignup = async (e) => {
     e.preventDefault();
 
     /* VALIDATION */
-
     if (!username.trim() || !email.trim() || !password.trim()) {
       setError('Please fill all required fields.');
       return;
@@ -56,12 +52,11 @@ const Signup = () => {
         );
         return;
       }
-      /* SAVE TEMPORARILY */
 
+      /* SAVE TEMPORARILY */
       setPendingPatientData(userData);
 
       /* OPEN PROFILE SETUP */
-
       setShowProfileSetup(true);
     } catch (error) {
       console.error(error);
@@ -80,7 +75,6 @@ const Signup = () => {
     <>
       <div className="signup-page">
         {/* THEME TOGGLE */}
-
         <div className="signup-theme-toggle" onClick={toggleTheme}>
           {theme === 'light' ? (
             <FiMoon className="signup-theme-icon" />
@@ -90,19 +84,15 @@ const Signup = () => {
         </div>
 
         {/* CARD */}
-
         <div className="signup-card">
           {/* LOGO */}
-
           <div className="signup-logo">
             <img src={logo} alt="ReMIND Logo" />
           </div>
 
           {/* FORM */}
-
           <form className="signup-form" onSubmit={handleSignup}>
             {/* USERNAME */}
-
             <input
               type="text"
               placeholder="Username"
@@ -112,7 +102,6 @@ const Signup = () => {
             />
 
             {/* EMAIL */}
-
             <input
               type="email"
               placeholder="Email"
@@ -122,7 +111,6 @@ const Signup = () => {
             />
 
             {/* PASSWORD */}
-
             <div className="password-input-wrapper">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -141,10 +129,8 @@ const Signup = () => {
             </div>
 
             {/* PASSWORD REQUIREMENTS */}
-
             <div className="password-requirements">
               <div className="password-requirements-title">Password Requirements</div>
-
               <ul>
                 <li>Minimum 8 characters</li>
                 <li>At least 1 uppercase letter (A-Z)</li>
@@ -153,19 +139,17 @@ const Signup = () => {
                 <li>At least 1 special character (!@#$%^&*)</li>
               </ul>
             </div>
-            {/* ERROR */}
 
+            {/* ERROR */}
             {error && <p className="signup-error">{error}</p>}
 
             {/* BUTTON */}
-
             <button type="submit" className="signup-primary-btn" disabled={loading}>
               {loading ? 'Creating Account...' : 'Sign Up'}
             </button>
           </form>
 
           {/* FOOTER */}
-
           <p className="signup-footer">
             Already have an account?{' '}
             <span className="signup-link" onClick={() => navigate('/login')}>
@@ -176,7 +160,6 @@ const Signup = () => {
       </div>
 
       {/* PROFILE SETUP */}
-
       {showProfileSetup && (
         <ProfileSetup
           onComplete={async (profileData) => {
@@ -184,7 +167,6 @@ const Signup = () => {
               setLoading(true);
 
               /* NORMAL SIGNUP */
-
               await signupUser(pendingPatientData);
               await login({
                 username: pendingPatientData.email,
@@ -228,5 +210,4 @@ const Signup = () => {
     </>
   );
 };
-
 export default Signup;
