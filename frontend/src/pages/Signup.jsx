@@ -13,7 +13,6 @@ const Signup = () => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const { login } = useAuth();
-
   const [pendingPatientData, setPendingPatientData] = useState(null);
   const [showProfileSetup, setShowProfileSetup] = useState(false);
   const [username, setUsername] = useState('');
