@@ -1,3 +1,1 @@
-ALLOWED_ADMIN_IDS = [
-    "admin"
-]
+ALLOWED_ADMIN_IDS = ["admin"]

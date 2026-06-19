@@ -1,54 +1,23 @@
 import os
 import sys
-
 from app.config.settings import settings
 
 AI_IMAGE_PATH = settings.AI_IMAGE_PATH
+PROJECT_ROOT = os.path.dirname(AI_IMAGE_PATH)
+sys.path.append(PROJECT_ROOT)
 
-PROJECT_ROOT = os.path.dirname(
-    AI_IMAGE_PATH
-)
+# Fast Realtime Pipeline
+from image_ai.pipeline.caption_pipeline import caption_image
 
-sys.path.append(
-    PROJECT_ROOT
-)
+# Heavy Enhancement Pipeline
+from image_ai.pipeline.enhancement_pipeline import enhance_image
 
-# =========================
-# FAST REALTIME PIPELINE
-# =========================
 
-from image_ai.pipeline.caption_pipeline import (
-    caption_image
-)
+# Realtime Chat Image AI
+def process_image(image_path: str):
+    return caption_image(image_path)
 
-# =========================
-# HEAVY ENHANCEMENT PIPELINE
-# =========================
 
-from image_ai.pipeline.enhancement_pipeline import (
-    enhance_image
-)
-
-# =========================
-# REALTIME CHAT IMAGE AI
-# =========================
-
-def process_image(
-    image_path: str
-):
-
-    return caption_image(
-        image_path
-    )
-
-# =========================
-# OPTIONAL ENHANCEMENT
-# =========================
-
-def enhance_uploaded_image(
-    image_path: str
-):
-
-    return enhance_image(
-        image_path
-    )
+# Optional Enhancement
+def enhance_uploaded_image(image_path: str):
+    return enhance_image(image_path)

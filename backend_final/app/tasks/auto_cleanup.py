@@ -2,6 +2,7 @@ from app.services.clear.auto_clean import run_auto_cleanup
 from app.logs.ai_logger import ai_logger
 from app.logs.error_logger import error_logger
 
+
 def cleanup_temp_files():
     try:
         run_auto_cleanup()

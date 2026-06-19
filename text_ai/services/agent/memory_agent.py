@@ -1,17 +1,10 @@
 class MemoryAgent:
     def __init__(self):
         self.history = []
-        self.known_entities = {
-            "names": set(),
-            "places": set(),
-            "events": set()
-        }
+        self.known_entities = {"names": set(), "places": set(), "events": set()}
 
     def update_history(self, user_input, response):
-        self.history.append({
-            "user": user_input,
-            "assistant": response
-        })
+        self.history.append({"user": user_input, "assistant": response})
 
     def update_entities(self, entities):
         for key in self.known_entities:
@@ -20,7 +13,7 @@ class MemoryAgent:
     def get_context(self):
         recent_history = self.history[-3:]  # last 3 interactions
         return recent_history, self.known_entities
-    
+
     def get_memory_timeline(self):
         timeline = []
 

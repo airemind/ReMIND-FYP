@@ -2,23 +2,31 @@ import subprocess
 import os
 import sys
 
+
 def run_realesrgan(input_folder="inputs", output_folder="results"):
-    
+
     # Absolute path to realesrgan directory
-    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../ai_models/realesrgan"))
+    BASE_DIR = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "../../ai_models/realesrgan")
+    )
 
     script_path = os.path.join(BASE_DIR, "inference_realesrgan.py")
-
     command = [
         sys.executable,
         script_path,
-        "-n", "RealESRGAN_x2plus",
-        "-i", input_folder,
-        "-o", output_folder,
-        "--outscale", "2",
+        "-n",
+        "RealESRGAN_x2plus",
+        "-i",
+        input_folder,
+        "-o",
+        output_folder,
+        "--outscale",
+        "2",
         "--fp32",
-        "--tile", "400",
-        "--tile_pad", "10"
+        "--tile",
+        "400",
+        "--tile_pad",
+        "10",
     ]
 
     try:
@@ -27,12 +35,9 @@ def run_realesrgan(input_folder="inputs", output_folder="results"):
         print("Enhancement Completed")
 
     except subprocess.CalledProcessError as e:
+        print("Error running RealESRGAN:", e)
+        raise Exception("RealESRGAN enhancement failed")
 
-       print("Error running RealESRGAN:", e)
 
-       raise Exception(
-           "RealESRGAN enhancement failed"
-        )
-    
 if __name__ == "__main__":
     run_realesrgan()

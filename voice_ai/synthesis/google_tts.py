@@ -17,10 +17,8 @@ def generate_speech(text: str, output_path: str) -> str:
         raise ValueError("Empty text for TTS")
 
     logger.info("Generating speech using gTTS")
-
     tts = gTTS(text=text, lang="en")
     tts.save(output_path)
-
     logger.info("Audio generated successfully (gTTS)")
 
     return output_path

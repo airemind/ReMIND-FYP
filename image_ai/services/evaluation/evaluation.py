@@ -7,6 +7,7 @@ from image_ai.config import EVALUATION_DIR
 
 os.makedirs(EVALUATION_DIR, exist_ok=True)
 
+
 # saves evaluation data
 def save_evaluation(data, session_id):
     evaluation_file = os.path.join(EVALUATION_DIR, f"{session_id}.json")

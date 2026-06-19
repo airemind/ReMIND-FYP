@@ -1,12 +1,8 @@
 import re
 
+
 def extract_entities(text: str):
-    entities = {
-        "names": [],
-        "places": [],
-        "dates": [],
-        "events": []
-    }
+    entities = {"names": [], "places": [], "dates": [], "events": []}
 
     # Names (better heuristic)
     entities["names"] = list(set(re.findall(r"\b[A-Z][a-z]{2,}\b", text)))

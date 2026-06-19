@@ -1,4 +1,10 @@
-MEMORY_KEYWORDS = ["remember", "memory", "recall", "forgot", "forget",  "past",
+MEMORY_KEYWORDS = [
+    "remember",
+    "memory",
+    "recall",
+    "forgot",
+    "forget",
+    "past",
     "childhood",
     "family",
     "wedding",
@@ -7,17 +13,23 @@ MEMORY_KEYWORDS = ["remember", "memory", "recall", "forgot", "forget",  "past",
     "father",
     "event",
     "name",
-    "recognize"
+    "recognize",
 ]
 
-NON_MEMORY_KEYWORDS = ["assignment", "homework", "code", "programming", "math", "calculate",
+NON_MEMORY_KEYWORDS = [
+    "assignment",
+    "homework",
+    "code",
+    "programming",
+    "math",
+    "calculate",
     "essay",
     "project",
     "exam",
     "quiz",
     "python",
     "java",
-    "javascript"
+    "javascript",
 ]
 
 

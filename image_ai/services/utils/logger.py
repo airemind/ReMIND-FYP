@@ -32,12 +32,14 @@ if not logger.handlers:
     logger.addHandler(file_handler)
     logger.addHandler(console_handler)
 
+
 # Info logs
 def log_info(message, session_id=None):
     if session_id:
         logger.info(f"[Session: {session_id}] {message}")
     else:
         logger.info(message)
+
 
 # Warning logs
 def log_warning(message, session_id=None):
@@ -46,14 +48,18 @@ def log_warning(message, session_id=None):
     else:
         logger.warning(message)
 
+
 # Error logs
 def log_error(message, session_id=None):
     if session_id:
         logger.error(f"[Session: {session_id}] {message}")
     else:
         logger.error(message)
-        
+
+
 # Session separator
 def log_separator():
     with open(LOG_FILE_PATH, "a") as log_file:
-        log_file.write("\n---------------------------------------------------------------------------------------------\n")
+        log_file.write(
+            "\n---------------------------------------------------------------------------------------------\n"
+        )

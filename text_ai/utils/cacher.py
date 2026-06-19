@@ -1,5 +1,6 @@
 import hashlib
 
+
 class SimpleCache:
     def __init__(self):
         self.cache = {}

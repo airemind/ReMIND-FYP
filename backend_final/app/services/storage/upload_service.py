@@ -10,6 +10,7 @@ from app.repositories.media_repo import create_media
 UPLOAD_DIR = settings.UPLOAD_DIR
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+
 async def save_upload(db: Session, file: UploadFile, message_id: int = None):
     content = await file.read()
     file_size = len(content)
@@ -18,7 +19,7 @@ async def save_upload(db: Session, file: UploadFile, message_id: int = None):
     if not valid:
         return None
 
-    unique_name = (f"{uuid4()}_{file.filename}")
+    unique_name = f"{uuid4()}_{file.filename}"
     local_path = os.path.join(UPLOAD_DIR, unique_name)
 
     with open(local_path, "wb") as f:
@@ -32,7 +33,12 @@ async def save_upload(db: Session, file: UploadFile, message_id: int = None):
         cloud_result = upload_audio(local_path, folder="remind/audio")
         media_type = "audio"
 
-    media_data = {"user_id": 1, "chat_id": None, "media_type": media_type, "original_url": cloud_result["url"]}
+    media_data = {
+        "user_id": 1,
+        "chat_id": None,
+        "media_type": media_type,
+        "original_url": cloud_result["url"],
+    }
     media = create_media(db, media_data)
 
     os.remove(local_path)

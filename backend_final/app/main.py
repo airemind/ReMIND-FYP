@@ -3,7 +3,11 @@ from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException
 from app.config.settings import settings
 
-from app.core.exceptions import http_exception_handler, validation_exception_handler, global_exception_handler
+from app.core.exceptions import (
+    http_exception_handler,
+    validation_exception_handler,
+    global_exception_handler,
+)
 from app.tasks.scheduler import start_scheduler
 from app.api.routes.auth_routes import router as auth_router
 from app.api.routes.user_routes import router as user_router
@@ -26,7 +30,6 @@ from app.middleware.cors_middleware import setup_cors
 app = FastAPI(title=settings.APP_NAME)
 
 setup_cors(app)
-
 start_scheduler()
 
 request_logger.info("ReMIND backend started successfully")
@@ -36,7 +39,6 @@ app.add_middleware(RequestLoggingMiddleware)
 app.add_exception_handler(HTTPException, http_exception_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(Exception, global_exception_handler)
-
 app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(admin_router)
@@ -48,6 +50,7 @@ app.include_router(image_processing_router)
 app.include_router(text_processing_router)
 app.include_router(voice_processing_router)
 app.include_router(memory_router)
+
 
 @app.get("/")
 def root():

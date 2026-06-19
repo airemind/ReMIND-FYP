@@ -4,13 +4,18 @@ from app.auth.jwt_manager import verify_access_token
 from app.auth.password_manager import hash_password, verify_password
 from app.auth.jwt_manager import create_access_token
 from app.auth.session_manager import create_session
-from app.repositories.user_repo import get_user_by_email, get_user_by_username, create_user
+from app.repositories.user_repo import (
+    get_user_by_email,
+    get_user_by_username,
+    create_user,
+)
+
 
 # REGISTER USER
 def register_user(db: Session, user_data):
 
     existing_user = get_user_by_email(db, user_data.email)
-    existing_username = get_user_by_username(db,user_data.username)
+    existing_username = get_user_by_username(db, user_data.username)
 
     if existing_user:
         raise HTTPException(status_code=409, detail="Email already exists")
@@ -26,7 +31,8 @@ def register_user(db: Session, user_data):
         "role": user_data.role,
     }
 
-    return create_user(db,user_dict)
+    return create_user(db, user_dict)
+
 
 # LOGIN USER
 def login_user(db: Session, identifier: str, password: str):
@@ -43,7 +49,9 @@ def login_user(db: Session, identifier: str, password: str):
 
     # BLOCK USER
     if not user.is_active:
-        raise HTTPException(status_code=403, detail="User account is blocked, Please contact Admin")
+        raise HTTPException(
+            status_code=403, detail="User account is blocked, Please contact Admin"
+        )
         return None
 
     # PASSWORD VERIFY
@@ -52,11 +60,7 @@ def login_user(db: Session, identifier: str, password: str):
 
     # JWT TOKEN
     token = create_access_token(
-        data={
-            "sub": str(user.id),
-            "role": user.role,
-            "email": user.email
-        }
+        data={"sub": str(user.id), "role": user.role, "email": user.email}
     )
 
     # EXTRACT SESSION ID
@@ -75,5 +79,5 @@ def login_user(db: Session, identifier: str, password: str):
             "id": user.id,
             "username": user.username,
             "email": user.email,
-        }
+        },
     }

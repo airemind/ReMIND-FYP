@@ -1,5 +1,6 @@
 import time
 
+
 def evaluate_response(response: str, start_time: float, context: list):
     end_time = time.time()
 
@@ -19,7 +20,7 @@ def evaluate_response(response: str, start_time: float, context: list):
         "response_length": length,
         "latency_seconds": latency,
         "context_usage_score": round(context_score, 2),
-        "readability_score": round(readability, 2)
+        "readability_score": round(readability, 2),
     }
 
     metadata = {
@@ -27,7 +28,7 @@ def evaluate_response(response: str, start_time: float, context: list):
         "language": "en",
         "intent_detected": True,
         "context_used": len(context),
-        "status": "success"
+        "status": "success",
     }
 
     return metrics, metadata

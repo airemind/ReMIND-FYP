@@ -1,6 +1,6 @@
 import os
 import hashlib
-from datetime import datetime,timezone
+from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 from app.models.chat import Chat
 from app.services.ai.image_adapter import process_image
@@ -13,6 +13,7 @@ from app.cache.redis_cache import get_cache, set_cache
 from app.utils.file_cleanup import delete_file, delete_directory
 from app.services.admin.metric_logger_service import store_metric
 
+
 def process_and_store_image(
     image_path: str,
     db: Session,
@@ -20,267 +21,107 @@ def process_and_store_image(
     chat_id: int = None,
     profile=None,
     patient_profile=None,
-    session_id: str = "unknown"
+    session_id: str = "unknown",
 ):
-
     try:
         ai_logger.info("Image orchestration started")
+        filename = os.path.basename(image_path)
 
-        filename = os.path.basename(
-            image_path
-        )
-
-        # =========================
-        # HASH FOR CACHE
-        # =========================
+        # Hash for cache
         with open(image_path, "rb") as f:
-
-            file_hash = hashlib.md5(
-                f.read()
-            ).hexdigest()
-
+            file_hash = hashlib.md5(f.read()).hexdigest()
         cache_key = f"image:{file_hash}"
 
-        # =========================
-        # CACHE CHECK
-        # =========================
-        cached_response = get_cache(
-            cache_key
-        )
-
+        # Cache check
+        cached_response = get_cache(cache_key)
         if cached_response:
-
-            ai_logger.info(
-                "Image cache hit"
-            )
-
+            ai_logger.info("Image cache hit")
             return cached_response
 
-        # =========================
-        # IMAGE AI PROCESSING
-        # =========================
-        image_result = process_image(
-            image_path
-        )
-
+        # Image AI processing
+        image_result = process_image(image_path)
         if not image_result["success"]:
-
             return image_result
 
-        # =========================
-        # TEXT AI MEMORY REBUILD
-        # =========================
+        # Text AI memory rebuild
         text_result = process_text(
-
-            user_input=(
-                image_result["caption"]
-            ),
-
-            image={
-
-                "caption": (
-                    image_result["caption"]
-                )
-            },
-
-            profile=profile
+            user_input=(image_result["caption"]),
+            image={"caption": (image_result["caption"])},
+            profile=profile,
         )
+        memory_response = text_result.get("response", image_result["caption"])
 
-        memory_response = text_result.get(
-
-            "response",
-
-            image_result["caption"]
-        )
-
-        # =========================
-        # CLOUDINARY UPLOADS
-        # =========================
-        original_upload = upload_image(
-            image_path,
-            folder="remind/original"
-        )
-
+        # Cloudinary uploads
+        original_upload = upload_image(image_path, folder="remind/original")
         enhanced_upload = upload_image(
-            image_result["enhanced_image"],
-            folder="remind/enhanced"
+            image_result["enhanced_image"], folder="remind/enhanced"
         )
 
-        # =========================
-        # SAVE MEDIA
-        # =========================
+        # Save media
         media = Media(
-
             user_id=user_id,
-
             chat_id=chat_id,
-
             media_type="image",
-
-            original_url=(
-                original_upload["url"]
-            ),
-
-            enhanced_url=(
-                enhanced_upload["url"]
-            ),
-
-            caption=memory_response
+            original_url=(original_upload["url"]),
+            enhanced_url=(enhanced_upload["url"]),
+            caption=memory_response,
         )
-
         db.add(media)
-
         db.commit()
-
         db.refresh(media)
 
-        # =========================
-        # UPDATE CHAT ACTIVITY
-        # =========================
+        # Update chat activity
         if chat_id:
-
-            chat = db.query(Chat).filter(
-                Chat.id == chat_id
-            ).first()
-
+            chat = db.query(Chat).filter(Chat.id == chat_id).first()
             if chat:
-
-                chat.last_activity = (
-                    datetime.now(
-                        timezone.utc
-                    )
-                )
-
+                chat.last_activity = datetime.now(timezone.utc)
                 chat.message_count += 1
-
                 db.commit()
 
-        # =========================
-        # FINAL RESPONSE
-        # =========================
+        # Final response
         result = {
-
             "success": True,
-
             "media_id": media.id,
-
-            # IMAGE AI
-            "caption": (
-                image_result["caption"]
-            ),
-
-            # MEMORY AI
-            "memory_response": (
-                memory_response
-            ),
-
-            "intent": (
-                text_result["intent"]
-            ),
-
-            "entities": (
-                text_result["entities"]
-            ),
-
-            "retrieved_context": (
-                text_result[
-                    "retrieved_context"
-                ]
-            ),
-
-            # CLOUD
-            "original_url": (
-                original_upload["url"]
-            ),
-
-            "enhanced_url": (
-                enhanced_upload["url"]
-            ),
-
-            # METRICS
-            "metrics": (
-                image_result["metrics"]
-            ),
-
-            "pipeline_used": [
-                "IMAGE_AI",
-                "TEXT_AI"
-            ],
-
-            "cache_used": False
+            # Image AI
+            "caption": (image_result["caption"]),
+            # Memory AI
+            "memory_response": (memory_response),
+            "intent": (text_result["intent"]),
+            "entities": (text_result["entities"]),
+            "retrieved_context": (text_result["retrieved_context"]),
+            # Cloud
+            "original_url": (original_upload["url"]),
+            "enhanced_url": (enhanced_upload["url"]),
+            # Metrics
+            "metrics": (image_result["metrics"]),
+            "pipeline_used": ["IMAGE_AI", "TEXT_AI"],
+            "cache_used": False,
         }
 
-        # =========================
-        # STORE AI METRICS
-        # =========================
+        # Store AI metrics
         store_metric(
-
             db=db,
-
             user_id=user_id,
-
             session_id=session_id,
-
             ai_module="IMAGE_AI",
-
             pipeline_used="IMAGE_AI,TEXT_AI",
-
-            latency=(
-                image_result["metrics"][
-                    "processing_time"
-                ]
-            ),
-
+            latency=(image_result["metrics"]["processing_time"]),
             estimated_cost=0.0,
-
-            cache_used=(
-                result["cache_used"]
-            )
+            cache_used=(result["cache_used"]),
         )
 
-        # =========================
-        # SAVE CACHE
-        # =========================
-        set_cache(
-            cache_key,
-            result,
-            expiration=3600
-        )
+        # Save cache
+        set_cache(cache_key, result, expiration=3600)
 
-        # =========================
-        # LOCAL FILE CLEANUP
-        # =========================
-        delete_file(
-            image_path
-        )
+        # Local file cleanup
+        delete_file(image_path)
+        delete_file(image_result["enhanced_image"])
+        session_dir = os.path.dirname(image_result["enhanced_image"])
+        delete_directory(session_dir)
 
-        delete_file(
-            image_result["enhanced_image"]
-        )
-
-        session_dir = os.path.dirname(
-            image_result["enhanced_image"]
-        )
-
-        delete_directory(
-            session_dir
-        )
-
-        ai_logger.info(
-            "Image orchestration completed successfully"
-        )
-
+        ai_logger.info("Image orchestration completed successfully")
         return result
 
     except Exception as e:
-
-        error_logger.error(
-            f"Image orchestration failed: {str(e)}"
-        )
-
-        return {
-
-            "success": False,
-
-            "error": str(e)
-        }
+        error_logger.error(f"Image orchestration failed: {str(e)}")
+        return {"success": False, "error": str(e)}

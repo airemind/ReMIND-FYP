@@ -1,48 +1,17 @@
 def build_prompt(
-    user_input,
-    context,
-    intent,
-    entities,
-    history=None,
-    known_entities=None
+    user_input, context, intent, entities, history=None, known_entities=None
 ):
-
-    context_text = (
-        "\n".join(context)
-        if context
-        else "No retrieved memories."
-    )
-
+    context_text = "\n".join(context) if context else "No retrieved memories."
     history_text = ""
-
     if history:
-
         history_lines = []
-
         for h in history:
-
-            user_msg = h.get(
-                "user_input",
-                ""
-            )
-
-            ai_msg = h.get(
-                "ai_response",
-                ""
-            )
-
-            history_lines.append(
-                f"User: {user_msg}\nAssistant: {ai_msg}"
-            )
-
-        history_text = "\n".join(
-            history_lines[-8:]
-        )
-
+            user_msg = h.get("user_input", "")
+            ai_msg = h.get("ai_response", "")
+            history_lines.append(f"User: {user_msg}\nAssistant: {ai_msg}")
+        history_text = "\n".join(history_lines[-8:])
     lower_input = user_input.lower()
-
     reconstruction_keywords = [
-
         "remember",
         "memory",
         "reconstruct",
@@ -65,27 +34,19 @@ def build_prompt(
         "who is this",
         "help me remember",
         "memory reconstruction",
-        "rebuild memory"
+        "rebuild memory",
     ]
-
     reconstruction_mode = any(
-        keyword in lower_input
-        for keyword in reconstruction_keywords
+        keyword in lower_input for keyword in reconstruction_keywords
     )
-
     if reconstruction_mode:
-
         system_behavior = """
 You are ReMIND AI.
-
 You are NOT a generic chatbot.
-
 You are a Memory Reconstruction Assistant designed specifically for Alzheimer's and dementia patients.
 
 PRIMARY OBJECTIVE:
-
 Use available clues to reconstruct the most likely memory scene.
-
 Available clues may come from:
 
 - User descriptions
@@ -97,9 +58,7 @@ Available clues may come from:
 - Previously mentioned locations
 - Previously mentioned events
 
-=========================================================
 MEMORY RECONSTRUCTION STRATEGY
-=========================================================
 
 When reconstructing memories:
 
@@ -117,9 +76,9 @@ When reconstructing memories:
 
 7. Only ask a follow-up question if absolutely necessary.
 
-=========================================================
+
 IMPORTANT
-=========================================================
+
 
 DO NOT behave like a therapist.
 
@@ -133,9 +92,9 @@ DO NOT force the user to perform the reconstruction.
 
 YOU perform the reconstruction.
 
-=========================================================
+
 SCENE BUILDING RULES
-=========================================================
+
 
 Build a likely scene using evidence.
 
@@ -149,9 +108,9 @@ Bad example:
 
 Avoid excessive uncertainty language.
 
-=========================================================
+
 HALLUCINATION RULES
-=========================================================
+
 
 Never invent:
 
@@ -168,9 +127,9 @@ You may infer likely situations.
 
 You may NOT invent facts.
 
-=========================================================
+
 RESPONSE STYLE
-=========================================================
+
 
 Prefer:
 
@@ -192,9 +151,9 @@ Speak naturally.
 
 Write like a memory companion helping rebuild a forgotten moment.
 
-=========================================================
+
 OUTPUT STRUCTURE
-=========================================================
+
 
 When enough clues exist:
 
@@ -223,45 +182,31 @@ Do not force memory reconstruction unless the user is discussing memories.
     prompt = f"""
 {system_behavior}
 
-=========================================================
 CONVERSATION HISTORY
-=========================================================
 
 {history_text}
 
-=========================================================
 RETRIEVED MEMORY CONTEXT
-=========================================================
 
 {context_text}
 
-=========================================================
 DETECTED INTENT
-=========================================================
 
 {intent}
 
-=========================================================
 KNOWN ENTITIES
-=========================================================
 
 {known_entities}
 
-=========================================================
 EXTRACTED ENTITIES
-=========================================================
 
 {entities}
 
-=========================================================
 CURRENT USER INPUT
-=========================================================
 
 {user_input}
 
-=========================================================
 FINAL INSTRUCTION
-=========================================================
 
 Use all available evidence.
 

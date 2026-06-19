@@ -5,6 +5,7 @@ from app.logs.ai_logger import ai_logger
 
 scheduler = BackgroundScheduler()
 
+
 def start_scheduler():
     # DELETE OLD CHATS
     scheduler.add_job(delete_expired_chats, trigger="interval", hours=24)

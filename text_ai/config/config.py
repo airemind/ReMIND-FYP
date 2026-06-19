@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class Settings:
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
@@ -15,7 +16,7 @@ class Settings:
 
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     VECTOR_DB_PATH = os.path.join(BASE_DIR, "data", "vector_db")
-
     TOP_K = 3
+
 
 settings = Settings()
