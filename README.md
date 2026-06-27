@@ -397,7 +397,7 @@ Email: [zulkifl.hassan@ucp.edu.pk](mailto:zulkifl.hassan@ucp.edu.pk)
 - System Integration
 
 LinkedIn:
-https://www.linkedin.com/in/muhammad-hassan-a-0389a4363/
+[https://www.linkedin.com/in/muhammad-hassan-a-0389a4363/](https://www.linkedin.com/in/muhammad-hassan-ashraf0086/)
 
 ---
 
