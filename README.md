@@ -158,15 +158,14 @@ The ReMIND team hopes that researchers, developers, healthcare professionals, an
 
 ## Voice Processing
 
-- Whisper
-- ElevenLabs
+- ElevenLabs Speech-to-Text
 - Google Text-to-Speech
 
 ## Image Processing
 
 - Real-ESRGAN
 - GFPGAN
-- ViT-GPT2
+- BLIP Lightweight
 
 ## Storage
 
