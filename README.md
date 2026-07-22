@@ -22,7 +22,7 @@
 
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue)
 ![Status](https://img.shields.io/badge/Status-Completed-success)
-![Deployment](https://img.shields.io/badge/Deployment-Down-Failed-red)
+![Deployment](https://shields.io)
 
 </p>
 
