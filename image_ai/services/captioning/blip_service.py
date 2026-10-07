@@ -1,49 +1,107 @@
-from transformers import BlipProcessor, BlipForConditionalGeneration
+import base64
+import io
+import mimetypes
+import os
 from PIL import Image
-import torch
 
-# Device
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-
-processor = None
-model = None
+try:
+    from groq import Groq
+except ImportError:
+    Groq = None
 
 
-def get_model():
-    global processor, model
-    if processor is None or model is None:
-        try:
-            MODEL_NAME = "Salesforce/blip-image-captioning-base"
-            processor = BlipProcessor.from_pretrained(MODEL_NAME)
-            model = BlipForConditionalGeneration.from_pretrained(MODEL_NAME)
-            model.to(DEVICE)
-            model.eval()
-        except Exception as e:
-            print(f"Failed to load BLIP model: {e}")
-            return None, None
-    return processor, model
+def encode_image(image_path: str, max_size: int = 1024) -> tuple[str, str]:
+    """
+    Open image, resize to reasonable dimensions for API, and return base64 + mime_type.
+    """
+    mime_type, _ = mimetypes.guess_type(image_path)
+    if not mime_type or not mime_type.startswith("image/"):
+        mime_type = "image/jpeg"
 
-
-# Generate caption
-def generate_caption(image_path: str) -> str:
     try:
-        proc, mod = get_model()
-        if proc is None or mod is None:
-            return "A captured photo memory."
+        with Image.open(image_path) as img:
+            img = img.convert("RGB")
+            img.thumbnail((max_size, max_size), Image.Resampling.LANCZOS)
+            buffer = io.BytesIO()
+            img.save(buffer, format="JPEG", quality=85)
+            encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
+            return encoded, "image/jpeg"
+    except Exception:
+        with open(image_path, "rb") as f:
+            encoded = base64.b64encode(f.read()).decode("utf-8")
+            return encoded, mime_type
 
-        image = Image.open(image_path).convert("RGB")
-        inputs = proc(image, return_tensors="pt")
-        inputs = {k: v.to(DEVICE) for k, v in inputs.items()}
-        with torch.no_grad():
-            output_ids = mod.generate(
-                **inputs,
-                max_new_tokens=50,
-                num_beams=3,
-                early_stopping=True,
-                repetition_penalty=1.2,
-            )
-        caption = proc.decode(output_ids[0], skip_special_tokens=True)
-        return caption.strip()
+
+def generate_caption(image_path: str) -> str:
+    """
+    Generate an image caption using Groq Cloud Vision (zero RAM overhead)
+    with resilient fallbacks.
+    """
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key or not Groq:
+        return "A personal photograph from the user's memories."
+
+    try:
+        encoded_img, mime = encode_image(image_path)
+        client = Groq(api_key=api_key)
+
+        response = client.chat.completions.create(
+            model="llama-3.2-11b-vision-preview",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Describe this photo concisely in 1-2 clear sentences for an Alzheimer's memory reconstruction system:",
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:{mime};base64,{encoded_img}",
+                            },
+                        },
+                    ],
+                }
+            ],
+            max_tokens=150,
+            temperature=0.4,
+        )
+        caption = response.choices[0].message.content.strip()
+        if caption:
+            return caption
     except Exception as e:
-        print(f"Caption generation failed: {str(e)}")
-        return "A captured photo memory."
+        print(f"Primary Groq Vision failed: {e}")
+
+    try:
+        encoded_img, mime = encode_image(image_path)
+        client = Groq(api_key=api_key)
+        response = client.chat.completions.create(
+            model="llama-3.2-90b-vision-preview",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Describe this photo concisely in 1-2 sentences:",
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:{mime};base64,{encoded_img}",
+                            },
+                        },
+                    ],
+                }
+            ],
+            max_tokens=150,
+            temperature=0.4,
+        )
+        caption = response.choices[0].message.content.strip()
+        if caption:
+            return caption
+    except Exception as e2:
+        print(f"Secondary Groq Vision failed: {e2}")
+
+    return "A personal photograph containing people and familiar surroundings."
