@@ -68,6 +68,15 @@ app.mount(
 # Setup
 setup_cors(app)
 
+from app.database.db import engine, Base
+import app.database.base as _models
+
+try:
+    Base.metadata.create_all(bind=engine)
+    request_logger.info("Database tables verified/created successfully")
+except Exception as db_err:
+    request_logger.warning(f"Database table verification skipped/failed: {db_err}")
+
 start_scheduler()
 
 request_logger.info("ReMIND backend started successfully")
