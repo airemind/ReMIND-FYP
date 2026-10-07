@@ -29,10 +29,21 @@ from voice_ai.utils.logger import get_logger
 
 logger = get_logger("ToneClassifier")
 
-# Load model once
-tone_pipeline = pipeline(
-    "text-classification", model="SamLowe/roberta-base-go_emotions", top_k=None
-)
+tone_pipeline = None
+
+
+def get_tone_pipeline():
+    global tone_pipeline
+    if tone_pipeline is None:
+        try:
+            tone_pipeline = pipeline(
+                "text-classification", model="SamLowe/roberta-base-go_emotions", top_k=None
+            )
+        except Exception as e:
+            logger.warning(f"Could not load tone model: {e}")
+            return None
+    return tone_pipeline
+
 
 MAX_TEXT_LENGTH = 512
 
@@ -73,7 +84,14 @@ def classify_tone(text: str) -> dict:
 
         if len(text) > MAX_TEXT_LENGTH:
             text = text[:MAX_TEXT_LENGTH]
-        predictions = tone_pipeline(text)[0]
+        pipe = get_tone_pipeline()
+        if pipe is None:
+            return {
+                "tones": ["neutral"],
+                "primary_tone": "neutral",
+                "tone_strength": 0.0,
+            }
+        predictions = pipe(text)[0]
         predictions = sorted(predictions, key=lambda x: x["score"], reverse=True)
         tones = []
         for item in predictions[:5]:

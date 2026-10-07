@@ -1367,3 +1367,5 @@
 2026-10-08 01:30:02,815 | INFO | AI | Deleted old temp file: /home/talha/Desktop/ReMIND-FYP/backend_final/temp_uploads/01fbf746-f883-4f95-8afd-7f62fc00d54c.jpg
 2026-10-08 01:30:02,816 | INFO | AI | Deleted old temp file: /home/talha/Desktop/ReMIND-FYP/backend_final/temp_uploads/e79af82c-8f8c-4ceb-ac7c-f653644e2b97.jpg
 2026-10-08 01:30:02,816 | INFO | AI | Automatic cleanup completed
+2026-10-08 02:17:59,491 | INFO | AI | APScheduler started successfully
+2026-10-08 02:18:23,659 | INFO | AI | APScheduler started successfully

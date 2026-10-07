@@ -16,12 +16,23 @@ from voice_ai.utils.logger import get_logger
 
 logger = get_logger("EmotionDetector")
 
-# Load model once
-emotion_pipeline = pipeline(
-    "text-classification",
-    model="j-hartmann/emotion-english-distilroberta-base",
-    top_k=None,
-)
+emotion_pipeline = None
+
+
+def get_emotion_pipeline():
+    global emotion_pipeline
+    if emotion_pipeline is None:
+        try:
+            emotion_pipeline = pipeline(
+                "text-classification",
+                model="j-hartmann/emotion-english-distilroberta-base",
+                top_k=None,
+            )
+        except Exception as e:
+            logger.warning(f"Could not load emotion model: {e}")
+            return None
+    return emotion_pipeline
+
 
 # Config
 MAX_TEXT_LENGTH = 512
@@ -43,7 +54,15 @@ def detect_emotion(text: str) -> dict:
         if len(text) > MAX_TEXT_LENGTH:
             text = text[:MAX_TEXT_LENGTH]
 
-        predictions = emotion_pipeline(text)[0]
+        pipe = get_emotion_pipeline()
+        if pipe is None:
+            return {
+                "emotion": "neutral",
+                "emotion_confidence": 0.0,
+                "top_emotions": [{"label": "neutral", "confidence": 0.0}],
+            }
+
+        predictions = pipe(text)[0]
         predictions = sorted(predictions, key=lambda x: x["score"], reverse=True)
 
         primary = predictions[0]

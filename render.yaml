@@ -24,9 +24,9 @@ services:
       - key: REDIS_URL
         value: ""
       - key: REACT_BASE_URL
-        value: ""          # Fill in after frontend deploys
+        value: "https://remind-frontend.onrender.com"
       - key: REACT_BASE_URL_ALTERNATIVE
-        value: ""          # Fill in after frontend deploys
+        value: "http://localhost:3000"
       - key: GOOGLE_CLIENT_ID
         value: ""          # Add your Google client ID
       - key: GOOGLE_CLIENT_SECRET
