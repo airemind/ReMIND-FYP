@@ -2,7 +2,10 @@ import axios from 'axios';
 
 const adminAxiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,
-  timeout: 10000
+  timeout: 15000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
 
 /* REQUEST INTERCEPTOR */
@@ -10,46 +13,50 @@ const adminAxiosInstance = axios.create({
 adminAxiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('admin_token');
+
     if (token) {
-      config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 /* RESPONSE INTERCEPTOR */
 
 adminAxiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
 
   (error) => {
+    const status = error.response?.status;
+
     if (!error.response) {
       console.error('Network Error');
+      return Promise.reject(error);
     }
 
-    /* ADMIN UNAUTHORIZED */
+    switch (status) {
+      case 401:
+      case 403:
+        localStorage.removeItem('admin_token');
+        localStorage.removeItem('admin_data');
 
-    if (error.response?.status === 401) {
-      localStorage.removeItem('admin_token');
-      localStorage.removeItem('admin_data');
+        if (window.location.pathname !== '/admin-portal') {
+          window.location.replace('/admin-portal');
+        }
+        break;
 
-      if (window.location.pathname !== '/admin-portal') {
-        window.location.href = '/admin-portal';
-      }
-    }
+      case 500:
+        console.error('Internal Server Error');
+        break;
 
-    if (error.response?.status === 500) {
-      console.error('Server Error');
+      default:
+        break;
     }
 
     return Promise.reject(error);
   }
 );
+
 export default adminAxiosInstance;

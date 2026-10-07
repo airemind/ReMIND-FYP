@@ -1,23 +1,22 @@
-import api from './axiosInstance';
+import axiosInstance from './axiosInstance';
 
+// ENHANCE IMAGE
 export const enhanceImage = async (imageFile) => {
-  try {
-    const formData = new FormData();
+  const formData = new FormData();
 
-    formData.append('file', imageFile);
+  formData.append('file', imageFile);
 
-    const response = await api.post('/image-ai/enhance', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
+  const { data } = await axiosInstance.post('/image-ai/enhance', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    timeout: 0
+  });
 
-      timeout: 0
-    });
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-
-    throw error;
+  // Convert local backend path into a full URL
+  if (data.enhanced_url?.startsWith('/')) {
+    data.enhanced_url = `${process.env.REACT_APP_API_BASE_URL}${data.enhanced_url}`;
   }
+
+  return data;
 };

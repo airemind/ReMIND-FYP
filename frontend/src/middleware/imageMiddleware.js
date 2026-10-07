@@ -1,12 +1,13 @@
 import axiosInstance from './axiosInstance';
 
-/* IMAGE PROCESSING */
+/* UPLOAD IMAGE */
+
 export const uploadFile = async (formData) => {
-  const response = await axiosInstance.post('/image-processing/upload', formData, {
+  const { data } = await axiosInstance.post('/image-processing/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
   });
 
-  return response.data;
+  return data;
 };

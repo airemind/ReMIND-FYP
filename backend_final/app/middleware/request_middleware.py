@@ -7,9 +7,12 @@ from app.logs.error_logger import error_logger
 class RequestLoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
         start_time = time.time()
+
         try:
             response = await call_next(request)
+
             process_time = round(time.time() - start_time, 3)
+
             request_logger.info(
                 f"{request.method} "
                 f"{request.url.path} "
@@ -21,6 +24,8 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
 
         except Exception as e:
             error_logger.error(
-                f"{request.method} " f"{request.url.path} " f"ERROR={str(e)}"
+                f"{request.method} "
+                f"{request.url.path} "
+                f"ERROR={str(e)}"
             )
-            raise e
+            raise

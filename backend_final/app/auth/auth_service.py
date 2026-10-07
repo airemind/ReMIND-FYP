@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Relationship, Session
+from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.auth.jwt_manager import verify_access_token
 from app.auth.password_manager import hash_password, verify_password

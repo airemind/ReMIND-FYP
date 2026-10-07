@@ -1,25 +1,23 @@
 import axiosInstance from './axiosInstance';
 
-// GET CHATS
+/* CHATS */
+
 export const getChats = async () => {
-  const response = await axiosInstance.get('/chats/');
-  return response.data;
+  const { data } = await axiosInstance.get('/chats/');
+  return data;
 };
 
-// CREATE CHAT
-export const createChat = async (data = {}) => {
-  const response = await axiosInstance.post('/chats/', data);
-  return response.data;
+export const createChat = async (payload = {}) => {
+  const { data } = await axiosInstance.post('/chats/', payload);
+  return data;
 };
 
-// DELETE CHAT
 export const deleteChatById = async (chatId) => {
-  const response = await axiosInstance.delete(`/chats/${chatId}`);
-  return response.data;
+  const { data } = await axiosInstance.delete(`/chats/${chatId}`);
+  return data;
 };
 
-// RENAME CHAT
-export const renameChatById = async (chatId, data) => {
-  const response = await axiosInstance.patch(`/chats/${chatId}`, data);
-  return response.data;
+export const renameChatById = async (chatId, payload) => {
+  const { data } = await axiosInstance.patch(`/chats/${chatId}`, payload);
+  return data;
 };

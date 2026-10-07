@@ -1,98 +1,95 @@
 import adminAxiosInstance from './adminAxiosInstance';
 
-/* ADMIN LOGIN */
+/* LOGIN */
+
 export const adminLogin = async (data) => {
-  const response = await adminAxiosInstance.post('/admin/login', data);
-  return response.data;
+  const { data: response } = await adminAxiosInstance.post('/admin/login', data);
+  return response;
 };
 
-/* ADMIN LOGOUT */
+/* LOGOUT */
+
 export const adminLogout = async () => {
-  const response = await adminAxiosInstance.post('/admin/logout');
-  return response.data;
+  const { data } = await adminAxiosInstance.post('/admin/logout');
+  return data;
 };
 
 /* ANALYTICS */
+
 export const getAdminAnalytics = async () => {
-  const response = await adminAxiosInstance.get('/admin/analytics');
-  return response.data;
+  const { data } = await adminAxiosInstance.get('/admin/analytics');
+  return data;
 };
 
-/* ALL USERS */
+/* USERS */
+
 export const getAllUsers = async () => {
-  const response = await adminAxiosInstance.get('/admin/users');
-  return response.data;
+  const { data } = await adminAxiosInstance.get('/admin/users');
+  return data;
 };
 
-/* DISABLE USER */
-export const disableUser = async (userId) => {
-  const response = await adminAxiosInstance.patch(`/admin/users/${userId}/disable`);
-  return response.data;
+export const updateUser = async (userId, payload) => {
+  const { data } = await adminAxiosInstance.put(`/admin/users/${userId}`, payload);
+  return data;
 };
 
-/* ENABLE USER */
 export const enableUser = async (userId) => {
-  const response = await adminAxiosInstance.patch(`/admin/users/${userId}/enable`);
-  return response.data;
+  const { data } = await adminAxiosInstance.patch(`/admin/users/${userId}/enable`);
+  return data;
 };
 
-/* UPDATE USER */
-export const updateUser = async (userId, data) => {
-  const response = await adminAxiosInstance.put(`/admin/users/${userId}`, data);
-  return response.data;
+export const disableUser = async (userId) => {
+  const { data } = await adminAxiosInstance.patch(`/admin/users/${userId}/disable`);
+  return data;
 };
 
-/* DELETE USER */
 export const deleteUser = async (userId) => {
-  const response = await adminAxiosInstance.delete(`/admin/users/${userId}`);
-  return response.data;
+  const { data } = await adminAxiosInstance.delete(`/admin/users/${userId}`);
+  return data;
 };
 
-/* ALL MEMORIES */
+/* MEMORIES */
+
 export const getAllMemories = async () => {
-  const response = await adminAxiosInstance.get('/admin/memories');
-  return response.data;
+  const { data } = await adminAxiosInstance.get('/admin/memories');
+  return data;
 };
 
-/* DELETE CHAT */
 export const deleteChatAdmin = async (chatId) => {
-  const response = await adminAxiosInstance.delete(`/admin/chats/${chatId}`);
-  return response.data;
+  const { data } = await adminAxiosInstance.delete(`/admin/chats/${chatId}`);
+  return data;
 };
 
-/* DELETE MESSAGE */
 export const deleteMessageAdmin = async (messageId) => {
-  const response = await adminAxiosInstance.delete(`/admin/messages/${messageId}`);
-  return response.data;
+  const { data } = await adminAxiosInstance.delete(`/admin/messages/${messageId}`);
+  return data;
 };
 
-/* SYSTEM DATA */
+/* SYSTEM */
+
 export const getSystemData = async () => {
-  const response = await adminAxiosInstance.get('/admin/data');
-  return response.data;
+  const { data } = await adminAxiosInstance.get('/admin/data');
+  return data;
 };
 
-/* DELETE LOG */
 export const deleteLog = async (logId) => {
-  const response = await adminAxiosInstance.delete(`/admin/logs/${logId}`);
-  return response.data;
+  const { data } = await adminAxiosInstance.delete(`/admin/logs/${logId}`);
+  return data;
 };
 
-/* CLEAR CACHE */
 export const clearCache = async () => {
-  const response = await adminAxiosInstance.delete('/admin/cache/clear');
-  return response.data;
+  const { data } = await adminAxiosInstance.delete('/admin/cache/clear');
+  return data;
 };
 
-/* ALL MEDIA */
+/* MEDIA */
+
 export const getAllMedia = async () => {
-  const response = await adminAxiosInstance.get('/admin/media');
-  return response.data;
+  const { data } = await adminAxiosInstance.get('/admin/media');
+  return data;
 };
-
-/* DELETE MEDIA */
 
 export const deleteMedia = async (mediaId) => {
-  const response = await adminAxiosInstance.delete(`/admin/media/${mediaId}`);
-  return response.data;
+  const { data } = await adminAxiosInstance.delete(`/admin/media/${mediaId}`);
+  return data;
 };

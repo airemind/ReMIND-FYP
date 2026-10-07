@@ -1,17 +1,27 @@
 import { Navigate, useLocation } from 'react-router-dom';
+
 import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
+
   const location = useLocation();
 
-  /* LOADING */
+  /* -----------------------------
+      LOADING
+  ------------------------------ */
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  /* ADMIN ROUTES */
-  if (location.pathname.startsWith('/admin')) {
+  /* -----------------------------
+      ADMIN ROUTES
+  ------------------------------ */
+
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
+  if (isAdminRoute) {
     const adminToken = localStorage.getItem('admin_token');
 
     if (!adminToken) {
@@ -21,10 +31,15 @@ const ProtectedRoute = ({ children }) => {
     return children;
   }
 
-  /* NORMAL USER ROUTES */
+  /* -----------------------------
+      USER ROUTES
+  ------------------------------ */
+
   if (!user) {
     return <Navigate to="/login" replace />;
   }
+
   return children;
 };
+
 export default ProtectedRoute;

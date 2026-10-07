@@ -205,3 +205,263 @@ DETAIL:  Failing row contains (150, null, user, hi, memory, 2026-06-01 16:38:19.
 [SQL: INSERT INTO messages (chat_id, sender, content, message_type, caption, enhanced_image, generated_audio, transcript, emotion) VALUES (%(chat_id)s, %(sender)s, %(content)s, %(message_type)s, %(caption)s, %(enhanced_image)s, %(generated_audio)s, %(transcript)s, %(emotion)s) RETURNING messages.id, messages.created_at]
 [parameters: {'chat_id': None, 'sender': 'user', 'content': 'hi', 'message_type': 'memory', 'caption': None, 'enhanced_image': None, 'generated_audio': None, 'transcript': None, 'emotion': None}]
 (Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-07-17 15:51:18,158 | ERROR | ERROR | POST /auth/register ERROR=(psycopg2.OperationalError) connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-07-17 15:51:19,549 | ERROR | ERROR | POST /auth/register ERROR=(psycopg2.OperationalError) connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-07-17 16:02:33,326 | ERROR | ERROR | POST /auth/register ERROR=Object of type ValueError is not JSON serializable
+2026-07-17 16:05:20,141 | ERROR | ERROR | POST /auth/register ERROR=(psycopg2.OperationalError) connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-07-17 16:09:33,792 | ERROR | ERROR | POST /auth/register ERROR=(psycopg2.OperationalError) connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-07-17 16:15:27,034 | ERROR | ERROR | POST /auth/register ERROR=(psycopg2.errors.UndefinedTable) relation "users" does not exist
+LINE 2: FROM users 
+             ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.hashed_password AS users_hashed_password, users.role AS users_role, users.oauth_provider AS users_oauth_provider, users.google_id AS users_google_id, users.is_active AS users_is_active, users.is_verified AS users_is_verified, users.is_logged_in AS users_is_logged_in, users.last_login AS users_last_login, users.created_at AS users_created_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'email_1': 't@gmail.com', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-07-24 22:01:33,577 | ERROR | ERROR | POST /auth/register ERROR=(psycopg2.errors.UndefinedTable) relation "users" does not exist
+LINE 2: FROM users 
+             ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.hashed_password AS users_hashed_password, users.role AS users_role, users.oauth_provider AS users_oauth_provider, users.google_id AS users_google_id, users.is_active AS users_is_active, users.is_verified AS users_is_verified, users.is_logged_in AS users_is_logged_in, users.last_login AS users_last_login, users.created_at AS users_created_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'email_1': 'gugugaga@gmail.com', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-07-24 22:01:35,748 | ERROR | ERROR | POST /auth/register ERROR=(psycopg2.errors.UndefinedTable) relation "users" does not exist
+LINE 2: FROM users 
+             ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.hashed_password AS users_hashed_password, users.role AS users_role, users.oauth_provider AS users_oauth_provider, users.google_id AS users_google_id, users.is_active AS users_is_active, users.is_verified AS users_is_verified, users.is_logged_in AS users_is_logged_in, users.last_login AS users_last_login, users.created_at AS users_created_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'email_1': 'gugugaga@gmail.com', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-07-24 22:17:36,397 | ERROR | ERROR | Image orchestration failed: Error 111 connecting to localhost:6379. Connection refused.
+2026-07-24 22:17:49,817 | ERROR | ERROR | Image orchestration failed: Error 111 connecting to localhost:6379. Connection refused.
+2026-07-24 22:26:14,943 | ERROR | ERROR | Image orchestration failed: Error 111 connecting to localhost:6379. Connection refused.
+2026-08-15 16:42:38,058 | ERROR | ERROR | Image orchestration failed: Error 111 connecting to localhost:6379. Connection refused.
+2026-08-15 16:54:10,270 | ERROR | ERROR | Image orchestration failed: 'enhanced_image'
+2026-08-15 16:56:25,824 | ERROR | ERROR | Image orchestration failed: 'enhanced_image'
+2026-08-15 17:03:58,145 | ERROR | ERROR | Image orchestration failed: name 'none' is not defined
+2026-08-15 17:05:16,683 | ERROR | ERROR | Image orchestration failed: name 'none' is not defined
+2026-08-15 17:05:57,030 | ERROR | ERROR | Image orchestration failed: name 'none' is not defined
+2026-08-15 17:45:25,369 | ERROR | ERROR | GET /messages/4 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 4}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:27,366 | ERROR | ERROR | GET /messages/3 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 3}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:27,399 | ERROR | ERROR | GET /messages/4 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 4}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:27,402 | ERROR | ERROR | GET /messages/3 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 3}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:28,833 | ERROR | ERROR | GET /messages/4 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 4}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:28,849 | ERROR | ERROR | GET /messages/4 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 4}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:28,858 | ERROR | ERROR | GET /messages/3 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 3}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:30,628 | ERROR | ERROR | GET /messages/4 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 4}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:32,225 | ERROR | ERROR | GET /messages/4 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 4}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:35,685 | ERROR | ERROR | GET /messages/4 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 4}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:36,482 | ERROR | ERROR | GET /messages/3 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 3}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:36,497 | ERROR | ERROR | GET /messages/3 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 3}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:36,518 | ERROR | ERROR | GET /messages/4 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 4}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:39,076 | ERROR | ERROR | GET /messages/3 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 3}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:41,588 | ERROR | ERROR | Multimodal orchestration failed: (psycopg2.errors.UndefinedColumn) column "original_image" of relation "messages" does not exist
+LINE 1: ...(chat_id, sender, content, message_type, caption, original_i...
+                                                             ^
+
+[SQL: INSERT INTO messages (chat_id, sender, content, message_type, caption, original_image, enhanced_image, generated_audio, transcript, emotion) VALUES (%(chat_id)s, %(sender)s, %(content)s, %(message_type)s, %(caption)s, %(original_image)s, %(enhanced_image)s, %(generated_audio)s, %(transcript)s, %(emotion)s) RETURNING messages.id, messages.created_at]
+[parameters: {'chat_id': 3, 'sender': 'user', 'content': 'he', 'message_type': 'memory', 'caption': None, 'original_image': None, 'enhanced_image': None, 'generated_audio': None, 'transcript': None, 'emotion': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:44,855 | ERROR | ERROR | Multimodal orchestration failed: (psycopg2.errors.UndefinedColumn) column "original_image" of relation "messages" does not exist
+LINE 1: ...(chat_id, sender, content, message_type, caption, original_i...
+                                                             ^
+
+[SQL: INSERT INTO messages (chat_id, sender, content, message_type, caption, original_image, enhanced_image, generated_audio, transcript, emotion) VALUES (%(chat_id)s, %(sender)s, %(content)s, %(message_type)s, %(caption)s, %(original_image)s, %(enhanced_image)s, %(generated_audio)s, %(transcript)s, %(emotion)s) RETURNING messages.id, messages.created_at]
+[parameters: {'chat_id': 3, 'sender': 'user', 'content': 'hey', 'message_type': 'memory', 'caption': None, 'original_image': None, 'enhanced_image': None, 'generated_audio': None, 'transcript': None, 'emotion': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:47,064 | ERROR | ERROR | Multimodal orchestration failed: (psycopg2.errors.UndefinedColumn) column "original_image" of relation "messages" does not exist
+LINE 1: ...(chat_id, sender, content, message_type, caption, original_i...
+                                                             ^
+
+[SQL: INSERT INTO messages (chat_id, sender, content, message_type, caption, original_image, enhanced_image, generated_audio, transcript, emotion) VALUES (%(chat_id)s, %(sender)s, %(content)s, %(message_type)s, %(caption)s, %(original_image)s, %(enhanced_image)s, %(generated_audio)s, %(transcript)s, %(emotion)s) RETURNING messages.id, messages.created_at]
+[parameters: {'chat_id': 3, 'sender': 'user', 'content': 'hey', 'message_type': 'memory', 'caption': None, 'original_image': None, 'enhanced_image': None, 'generated_audio': None, 'transcript': None, 'emotion': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:48,761 | ERROR | ERROR | Multimodal orchestration failed: (psycopg2.errors.UndefinedColumn) column "original_image" of relation "messages" does not exist
+LINE 1: ...(chat_id, sender, content, message_type, caption, original_i...
+                                                             ^
+
+[SQL: INSERT INTO messages (chat_id, sender, content, message_type, caption, original_image, enhanced_image, generated_audio, transcript, emotion) VALUES (%(chat_id)s, %(sender)s, %(content)s, %(message_type)s, %(caption)s, %(original_image)s, %(enhanced_image)s, %(generated_audio)s, %(transcript)s, %(emotion)s) RETURNING messages.id, messages.created_at]
+[parameters: {'chat_id': 3, 'sender': 'user', 'content': 'hey', 'message_type': 'memory', 'caption': None, 'original_image': None, 'enhanced_image': None, 'generated_audio': None, 'transcript': None, 'emotion': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:45:49,590 | ERROR | ERROR | Multimodal orchestration failed: (psycopg2.errors.UndefinedColumn) column "original_image" of relation "messages" does not exist
+LINE 1: ...(chat_id, sender, content, message_type, caption, original_i...
+                                                             ^
+
+[SQL: INSERT INTO messages (chat_id, sender, content, message_type, caption, original_image, enhanced_image, generated_audio, transcript, emotion) VALUES (%(chat_id)s, %(sender)s, %(content)s, %(message_type)s, %(caption)s, %(original_image)s, %(enhanced_image)s, %(generated_audio)s, %(transcript)s, %(emotion)s) RETURNING messages.id, messages.created_at]
+[parameters: {'chat_id': 3, 'sender': 'user', 'content': 'ey', 'message_type': 'memory', 'caption': None, 'original_image': None, 'enhanced_image': None, 'generated_audio': None, 'transcript': None, 'emotion': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:52:11,747 | ERROR | ERROR | GET /messages/3 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 3}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:52:13,429 | ERROR | ERROR | GET /messages/4 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 4}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:52:13,473 | ERROR | ERROR | GET /messages/3 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 3}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:52:13,481 | ERROR | ERROR | GET /messages/4 ERROR=(psycopg2.errors.UndefinedColumn) column messages.original_image does not exist
+LINE 1: ...created_at, messages.caption AS messages_caption, messages.o...
+                                                             ^
+
+[SQL: SELECT messages.id AS messages_id, messages.chat_id AS messages_chat_id, messages.sender AS messages_sender, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.created_at AS messages_created_at, messages.caption AS messages_caption, messages.original_image AS messages_original_image, messages.enhanced_image AS messages_enhanced_image, messages.generated_audio AS messages_generated_audio, messages.transcript AS messages_transcript, messages.emotion AS messages_emotion, messages.tones AS messages_tones, messages.retrieved_context AS messages_retrieved_context 
+FROM messages 
+WHERE messages.chat_id = %(chat_id_1)s ORDER BY messages.created_at ASC]
+[parameters: {'chat_id_1': 4}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-08-15 17:52:37,999 | ERROR | ERROR | Multimodal orchestration failed: (psycopg2.errors.UndefinedColumn) column "original_image" of relation "messages" does not exist
+LINE 1: ...(chat_id, sender, content, message_type, caption, original_i...
+                                                             ^
+
+[SQL: INSERT INTO messages (chat_id, sender, content, message_type, caption, original_image, enhanced_image, generated_audio, transcript, emotion) VALUES (%(chat_id)s, %(sender)s, %(content)s, %(message_type)s, %(caption)s, %(original_image)s, %(enhanced_image)s, %(generated_audio)s, %(transcript)s, %(emotion)s) RETURNING messages.id, messages.created_at]
+[parameters: {'chat_id': 4, 'sender': 'user', 'content': 'he', 'message_type': 'memory', 'caption': None, 'original_image': None, 'enhanced_image': None, 'generated_audio': None, 'transcript': None, 'emotion': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)

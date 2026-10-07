@@ -26,11 +26,11 @@ async def save_upload(db: Session, file: UploadFile, message_id: int = None):
         f.write(content)
 
     if "image" in file.content_type:
-        cloud_result = upload_image(local_path, folder="remind/images")
+        cloud_result = upload_image(local_path)
         media_type = "image"
 
     else:
-        cloud_result = upload_audio(local_path, folder="remind/audio")
+        cloud_result = upload_audio(local_path)
         media_type = "audio"
 
     media_data = {

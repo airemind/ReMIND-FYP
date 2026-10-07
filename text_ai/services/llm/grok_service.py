@@ -1,11 +1,11 @@
 from openai import OpenAI
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
+from app.config.settings import settings
+
 
 client = OpenAI(
-    base_url="https://api.groq.com/openai/v1", api_key=os.getenv("GROQ_API_KEY")
+    base_url="https://api.groq.com/openai/v1",
+    api_key=settings.GROQ_API_KEY,
 )
 
 
@@ -87,10 +87,10 @@ Use uncertainty only when necessary.
 """
 
 
-def generate_text(prompt: str, temperature: float = 0.55, max_tokens: int = 1000):
-    """
-    Generate memory reconstruction response.
-    """
+def generate_text(prompt: str,
+                  temperature: float = 0.55,
+                  max_tokens: int = 1000):
+
     try:
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
@@ -100,15 +100,23 @@ def generate_text(prompt: str, temperature: float = 0.55, max_tokens: int = 1000
             frequency_penalty=0.2,
             presence_penalty=0.1,
             messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": prompt},
+                {
+                    "role": "system",
+                    "content": SYSTEM_PROMPT,
+                },
+                {
+                    "role": "user",
+                    "content": prompt,
+                },
             ],
         )
+
         return response.choices[0].message.content.strip()
+
     except Exception as e:
-        print(f"GROQ GENERATION ERROR: {str(e)}")
+        print("GROQ ERROR:", e)
+
         return (
-            "I am currently having difficulty "
-            "processing the memory reconstruction. "
-            "Please try again in a moment."
+            "I am currently having difficulty processing the memory reconstruction. "
+            "Please try again."
         )

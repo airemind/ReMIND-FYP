@@ -1,6 +1,7 @@
 from app.config.settings import settings
 from fastapi.middleware.cors import CORSMiddleware
 
+# FIXED: Now correctly pointing to your React frontend URL from your .env
 react_main_url = settings.REACT_BASE_URL
 react_alternative_url = settings.REACT_BASE_URL_ALTERNATIVE
 

@@ -7,8 +7,7 @@ from pathlib import Path
 from app.services.ai.image_adapter import (
     enhance_uploaded_image as run_image_enhancement,
 )
-from app.services.storage.cloudinary_service import upload_image
-from app.utils.file_cleanup import delete_file, delete_directory
+from app.utils.file_cleanup import delete_file
 
 router = APIRouter(prefix="/image-ai", tags=["Image AI"])
 
@@ -25,28 +24,25 @@ async def enhance_image_route(file: UploadFile = File(...)):
     safe_filename = f"{uuid.uuid4()}{file_extension}"
     temp_path = os.path.join(TEMP_DIR, safe_filename)
 
-    # Save temp file
-    with open(temp_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    try:
+        # Save uploaded file
+        with open(temp_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
 
-    # Run enhancement
-    result = run_image_enhancement(temp_path)
-    if not result["success"]:
-        return result
+        # Run enhancement
+        result = run_image_enhancement(temp_path)
 
-    # Cloudinary upload
-    enhanced_upload = upload_image(result["enhanced_image"], folder="remind/enhanced")
+        if not result["success"]:
+            return result
 
-    # Cleanup
-    delete_file(temp_path)
-    delete_file(result["enhanced_image"])
-    session_dir = os.path.dirname(result["enhanced_image"])
-    delete_directory(session_dir)
+        return {
+            "success": True,
+            "enhanced_url": result["enhanced_url"],
+            "metrics": result["metrics"],
+            "pipeline_used": result["pipeline_used"],
+        }
 
-    # Response
-    return {
-        "success": True,
-        "enhanced_url": (enhanced_upload["url"]),
-        "metrics": (result["metrics"]),
-        "pipeline_used": (result["pipeline_used"]),
-    }
+    finally:
+        # Always remove uploaded file
+        if os.path.exists(temp_path):
+            delete_file(temp_path)

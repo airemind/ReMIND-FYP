@@ -1,6 +1,5 @@
 import os
 import json
-from datetime import datetime
 
 # creates evaluation directory
 from image_ai.config import EVALUATION_DIR

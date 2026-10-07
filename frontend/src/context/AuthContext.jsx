@@ -1,96 +1,124 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { loginUser, logoutUser, saveToken, googleLogin } from '../middleware/authMiddleware';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState
+} from 'react';
+
+import {
+  googleLogin,
+  loginUser,
+  logoutUser,
+  saveToken
+} from '../middleware/authMiddleware';
+
 import { getCurrentUser } from '../middleware/userMiddleware';
-const AuthContext = createContext();
+
+const AuthContext = createContext(null);
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  /* LOAD USER ON REFRESH */
-  useEffect(() => {
-    const loadUser = async () => {
-      const token = localStorage.getItem('token');
+  /* ---------------- Load Current User ---------------- */
 
-      if (!token) {
-        setLoading(false);
+  const loadUser = useCallback(async () => {
+    const token = localStorage.getItem('token');
 
-        return;
-      }
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
-      try {
-        const userData = await getCurrentUser();
+    try {
+      const currentUser = await getCurrentUser();
+      setUser(currentUser);
+    } catch (error) {
+      console.error('Failed to load user:', error);
 
-        setUser(userData);
-      } catch (error) {
-        console.error(error);
-
-        localStorage.removeItem('token');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadUser();
+      localStorage.removeItem('token');
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  /* NORMAL LOGIN */
+  useEffect(() => {
+    loadUser();
+  }, [loadUser]);
 
-  const login = async (data) => {
+  /* ---------------- Login ---------------- */
+
+  const login = useCallback(async (credentials) => {
     try {
-      const response = await loginUser(data);
-      const token = response?.access_token || response?.token;
+      const response = await loginUser(credentials);
+
+      const token =
+        response?.access_token ||
+        response?.token;
 
       if (!token) {
-        throw new Error('Token not received.');
+        throw new Error('Authentication token not received.');
       }
 
       saveToken(token);
-      const userData = await getCurrentUser();
-      setUser(userData);
+
+      const currentUser = await getCurrentUser();
+
+      setUser(currentUser);
+
       return response;
     } catch (error) {
-      console.error(error);
+      console.error('Login failed:', error);
       throw error;
     }
-  };
+  }, []);
 
-  /* GOOGLE LOGIN */
+  /* ---------------- Google Login ---------------- */
 
-  const loginWithGoogle = async (data) => {
+  const loginWithGoogle = useCallback(async (googleData) => {
     try {
-      const response = await googleLogin(data);
-      const token = response?.access_token;
+      const response = await googleLogin(googleData);
+
+      const token =
+        response?.access_token ||
+        response?.token;
+
       if (!token) {
-        throw new Error('Token not received.');
+        throw new Error('Authentication token not received.');
       }
+
       saveToken(token);
-      const userData = await getCurrentUser();
-      setUser(userData);
+
+      const currentUser = await getCurrentUser();
+
+      setUser(currentUser);
+
       return response;
     } catch (error) {
-      console.error(error);
+      console.error('Google login failed:', error);
       throw error;
     }
-  };
+  }, []);
 
-  /* LOGOUT */
+  /* ---------------- Logout ---------------- */
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       await logoutUser();
     } catch (error) {
-      console.error(error);
+      console.error('Logout failed:', error);
     } finally {
       localStorage.removeItem('token');
       setUser(null);
     }
-  };
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        setUser,
         loading,
         login,
         loginWithGoogle,
@@ -102,4 +130,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
 export const useAuth = () => useContext(AuthContext);

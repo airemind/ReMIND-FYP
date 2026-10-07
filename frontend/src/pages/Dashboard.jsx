@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ChatArea from '../components/ChatArea';
 import MessageInput from '../components/MessageInput';
@@ -6,22 +6,16 @@ import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
 import { useAuth } from '../context/AuthContext';
 import { createChat, deleteChatById, getChats, renameChatById } from '../middleware/chatMiddleware';
-
-import { processMemory } from '../middleware/memoryMiddleware';
-
 import { getMessages } from '../middleware/messageMiddleware';
-
+import { processMemory } from '../middleware/memoryMiddleware';
 import { enhanceImage } from '../middleware/imageEnhancementMiddleware';
-
 import '../styles/Dashboard.css';
 
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const pathParts = location.pathname.split('/');
-  const routeChatId = pathParts[3] ? Number(pathParts[3]) : null;
-
+  const routeChatId = Number(location.pathname.split('/')[3]) || null;
   const [chats, setChats] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -31,69 +25,98 @@ const Dashboard = () => {
   const [chatsLoaded, setChatsLoaded] = useState(false);
   const [error, setError] = useState('');
   const [isThinking, setIsThinking] = useState(false);
+
+  /* -----------------------------
+      SIDEBAR
+  ------------------------------ */
+
   const toggleMobileSidebar = () => {
     setIsMobileSidebarOpen((prev) => !prev);
   };
 
-  /* NORMALIZE CHATS */
+  /* -----------------------------
+      HELPERS
+  ------------------------------ */
+
   const normalizeChat = (chat) => ({
     ...chat,
-    id: chat?.id || chat?.chat_id || chat?._id,
+    id: chat?.id ?? chat?.chat_id ?? chat?._id,
     messages: Array.isArray(chat?.messages) ? chat.messages : []
   });
 
-  /* NORMALIZE MESSAGE */
   const normalizeMessage = (message) => ({
     ...message,
-    id: message?.id || message?.message_id || message?._id,
-    content: message?.content || '',
-    sender: message?.sender || 'user',
-    role: message?.sender || 'user',
-    type: message?.message_type || 'text',
-    caption: message?.caption || '',
-    enhancedImage: message?.enhanced_image || '',
-    generatedAudio: message?.generated_audio || '',
-    transcript: message?.transcript || '',
-    emotion: message?.emotion || '',
-    tones: message?.tones || [],
-    retrievedContext: message?.retrieved_context || [],
+
+    id: message?.id ?? message?.message_id ?? message?._id,
+
+    content: message?.content ?? '',
+
+    sender: message?.sender ?? 'user',
+
+    role: message?.sender ?? 'user',
+
+    type: message?.message_type ?? 'text',
+
+    caption: message?.caption ?? '',
+
+    enhancedImage: message?.enhanced_image ?? '',
+
+    generatedAudio: message?.generated_audio ?? '',
+
+    transcript: message?.transcript ?? '',
+
+    emotion: message?.emotion ?? '',
+
+    tones: message?.tones ?? [],
+
+    retrievedContext: message?.retrieved_context ?? [],
+
     isEnhanced: !!message?.enhanced_image,
-    enhancedDownloadUrl: message?.enhanced_image || null
+
+    enhancedDownloadUrl: message?.enhanced_image ?? null
   });
 
-  /* Load chats on mount */
-  useEffect(() => {
-    const fetchChats = async () => {
-      try {
-        setLoading(true);
-        setError('');
+  /* -----------------------------
+      LOAD CHATS
+  ------------------------------ */
 
-        const data = await getChats();
-        const safeChats = Array.isArray(data) ? data : [];
-        const normalizedChats = safeChats.map(normalizeChat);
+  const fetchChats = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError('');
 
-        setChats(normalizedChats);
-        setChatsLoaded(true);
-        if (!routeChatId && normalizedChats.length > 0) {
-          const firstChatId = normalizedChats[0].id;
-          setActiveChatId(firstChatId);
+      const response = await getChats();
 
-          navigate(
-            `/dashboard/chat/${firstChatId}?name=${encodeURIComponent(
-              normalizedChats[0].title || 'Chat'
-            )}`
-          );
-        }
-      } catch (error) {
-        console.error(error);
-        setError('Failed to load chats.');
-      } finally {
-        setLoading(false);
+      const normalizedChats = (Array.isArray(response) ? response : []).map(normalizeChat);
+
+      setChats(normalizedChats);
+      setChatsLoaded(true);
+
+      if (!routeChatId && normalizedChats.length > 0) {
+        const firstChat = normalizedChats[0];
+
+        setActiveChatId(firstChat.id);
+
+        navigate(
+          `/dashboard/chat/${firstChat.id}?name=${encodeURIComponent(firstChat.title ?? 'Chat')}`
+        );
       }
-    };
+    } catch (error) {
+      console.error(error);
 
-    fetchChats();
+      setError('Failed to load chats.');
+    } finally {
+      setLoading(false);
+    }
   }, [navigate, routeChatId]);
+
+  useEffect(() => {
+    fetchChats();
+  }, [fetchChats]);
+
+  /* -----------------------------
+      ROUTE CHANGE
+  ------------------------------ */
 
   useEffect(() => {
     if (routeChatId && routeChatId !== activeChatId) {
@@ -101,21 +124,27 @@ const Dashboard = () => {
     }
   }, [routeChatId, activeChatId]);
 
+  /* -----------------------------
+      LOAD MESSAGES
+  ------------------------------ */
+
   useEffect(() => {
     const loadMessages = async () => {
-      if (!chatsLoaded) return;
-      if (!activeChatId) return;
+      if (!chatsLoaded || !activeChatId) {
+        return;
+      }
+
       try {
-        const data = await getMessages(activeChatId);
-        const safeMessages = Array.isArray(data) ? data : [];
-        const normalizedMessages = safeMessages.map(normalizeMessage);
+        const response = await getMessages(activeChatId);
+
+        const messages = (Array.isArray(response) ? response : []).map(normalizeMessage);
 
         setChats((prev) =>
           prev.map((chat) =>
             Number(chat.id) === Number(activeChatId)
               ? {
                   ...chat,
-                  messages: normalizedMessages
+                  messages
                 }
               : chat
           )
@@ -124,23 +153,31 @@ const Dashboard = () => {
         console.error('Failed to load messages:', error);
       }
     };
+
     loadMessages();
   }, [activeChatId, chatsLoaded]);
 
-  /* CREATE CHAT*/
+  /* -----------------------------
+      CREATE CHAT
+  ------------------------------ */
+
   const createNewChat = async () => {
     try {
-      const newChat = await createChat();
-      if (!newChat) {
+      const chat = await createChat();
+
+      if (!chat) {
         throw new Error('Invalid chat response.');
       }
-      const normalizedChat = normalizeChat(newChat);
 
-      setChats((prev) => [normalizedChat, ...prev]);
-      setActiveChatId(normalizedChat.id);
+      const normalized = normalizeChat(chat);
+
+      setChats((prev) => [normalized, ...prev]);
+
+      setActiveChatId(normalized.id);
+
       navigate(
-        `/dashboard/chat/${normalizedChat.id}?name=${encodeURIComponent(
-          normalizedChat.title || 'New Chat'
+        `/dashboard/chat/${normalized.id}?name=${encodeURIComponent(
+          normalized.title ?? 'New Chat'
         )}`
       );
     } catch (error) {
@@ -150,23 +187,33 @@ const Dashboard = () => {
     }
   };
 
-  /* DELETE CHAT*/
+  /* -----------------------------
+      DELETE CHAT
+  ------------------------------ */
 
   const deleteChat = async (id) => {
     try {
       await deleteChatById(id);
-      const updated = chats.filter((chat) => chat.id !== id);
-      setChats(updated);
-      if (updated.length > 0) {
-        setActiveChatId(updated[0].id);
 
-        navigate(
-          `/dashboard/chat/${updated[0].id}?name=${encodeURIComponent(updated[0].title || 'Chat')}`
-        );
-      } else {
+      const updatedChats = chats.filter((chat) => chat.id !== id);
+
+      setChats(updatedChats);
+
+      if (updatedChats.length === 0) {
         setActiveChatId(null);
+
         navigate('/dashboard');
+
+        return;
       }
+
+      const firstChat = updatedChats[0];
+
+      setActiveChatId(firstChat.id);
+
+      navigate(
+        `/dashboard/chat/${firstChat.id}?name=${encodeURIComponent(firstChat.title ?? 'Chat')}`
+      );
     } catch (error) {
       console.error(error);
 
@@ -174,14 +221,20 @@ const Dashboard = () => {
     }
   };
 
-  /* RENAME CHAT */
+  /* -----------------------------
+      RENAME CHAT
+  ------------------------------ */
 
   const renameChat = async (id, newTitle) => {
     try {
       const response = await renameChatById(id, {
         title: newTitle
       });
-      if (!response?.success) return;
+
+      if (!response?.success) {
+        return;
+      }
+
       setChats((prev) =>
         prev.map((chat) =>
           chat.id === id
@@ -198,87 +251,117 @@ const Dashboard = () => {
       alert('Failed to rename chat.');
     }
   };
-
-  /* SEND MESSAGE*/
+  /* -----------------------------
+      SEND MESSAGE
+  ------------------------------ */
 
   const sendMessage = async (payload) => {
     try {
       setIsThinking(true);
 
-      /* ATTACHMENTS */
-      const imageAttachment = payload.files?.find((f) => f.fileType === 'image');
-      const audioAttachment = payload.files?.find((f) => f.fileType === 'audio');
+      const imageAttachment = payload.files?.find((file) => file.fileType === 'image');
+
+      const audioAttachment = payload.files?.find((file) => file.fileType === 'audio');
 
       /* USER MESSAGE */
+
       const userMessage = {
         id: Date.now(),
         role: 'user',
         type: payload.files?.length > 0 ? 'memory' : 'text',
-        content: payload.text || '',
 
-        /* IMAGE */
-        ...(imageAttachment && {
-          enhancedImage: URL.createObjectURL(imageAttachment.file),
-          originalImageUrl: URL.createObjectURL(imageAttachment.file),
-          originalImageFile: imageAttachment.file,
-          isEnhancing: false,
-          isEnhanced: false,
-          enhancedDownloadUrl: null
-        }),
-
-        /* AUDIO */
-        ...(audioAttachment && {
-          generatedAudio: URL.createObjectURL(audioAttachment.file)
-        })
+        content: payload.text || ''
       };
 
+      /* IMAGE */
+
+      if (imageAttachment) {
+        const previewUrl = URL.createObjectURL(imageAttachment.file);
+
+        userMessage.enhancedImage = previewUrl;
+
+        userMessage.originalImageUrl = previewUrl;
+
+        userMessage.originalImageFile = imageAttachment.file;
+
+        userMessage.isEnhancing = false;
+
+        userMessage.isEnhanced = false;
+
+        userMessage.enhancedDownloadUrl = null;
+      }
+
+      /* AUDIO */
+
+      if (audioAttachment) {
+        userMessage.generatedAudio = URL.createObjectURL(audioAttachment.file);
+      }
+
       /* SHOW USER MESSAGE */
+
       setChats((prev) =>
         prev.map((chat) =>
           chat.id === activeChatId
             ? {
                 ...chat,
-                messages: [...(chat.messages || []), userMessage]
+                messages: [...(chat.messages ?? []), userMessage]
               }
             : chat
         )
       );
 
-      /* MEMORY API */
+      /* PROCESS MEMORY */
+
       const response = await processMemory({
         userId: user?.id,
         userPrompt: payload.text || '',
         chatId: activeChatId,
-        imageFile: imageAttachment?.file || null,
-        audioFile: audioAttachment?.file || null
+        imageFile: imageAttachment?.file ?? null,
+        audioFile: audioAttachment?.file ?? null
       });
 
-      /* ASSISTANT RESPONSE */
+      /* ASSISTANT MESSAGE */
+
       const assistantMessage = {
         id: Date.now() + 1,
+
         role: 'assistant',
+
         type: 'memory',
+
         content:
           response?.final_memory_response ||
           response?.text_ai?.response ||
           'Memory reconstructed successfully.',
 
         /* IMAGE */
+
         caption: response?.image_ai?.caption || '',
+
         enhancedImage: response?.image_ai?.enhanced_url || response?.image_ai?.original_url || '',
+
         originalImageUrl: response?.image_ai?.original_url || '',
-        originalImageFile: imageAttachment?.file || null,
+
+        originalImageFile: imageAttachment?.file ?? null,
+
         isEnhancing: false,
+
         isEnhanced: false,
+
         enhancedDownloadUrl: null,
 
         /* AUDIO */
+
         transcript: response?.voice_ai?.transcript || '',
+
         emotion: response?.voice_ai?.emotion || '',
+
         tones: response?.voice_ai?.tones || [],
+
         generatedAudio: response?.voice_ai?.generated_audio_url || '',
 
         /* MEMORY */
+
         retrievedContext:
           response?.text_ai?.retrieved_context ||
           response?.voice_ai?.retrieved_context ||
@@ -286,13 +369,14 @@ const Dashboard = () => {
           []
       };
 
-      /* ADD AI RESPONSE */
+      /* SHOW AI MESSAGE */
+
       setChats((prev) =>
         prev.map((chat) =>
           chat.id === activeChatId
             ? {
                 ...chat,
-                messages: [...(chat.messages || []), assistantMessage]
+                messages: [...(chat.messages ?? []), assistantMessage]
               }
             : chat
         )
@@ -311,72 +395,88 @@ const Dashboard = () => {
     }
   };
 
-  /* ENHANCE IMAGE */
+  /* -----------------------------
+      ENHANCE IMAGE
+  ------------------------------ */
 
   const handleEnhanceImage = async (messageId) => {
     try {
-      /* LOADING */
-      setChats((prev) =>
-        prev.map((chat) => ({
+      /* SHOW LOADING */
+
+      setChats((prevChats) =>
+        prevChats.map((chat) => ({
           ...chat,
-          messages: chat.messages.map((msg) =>
-            msg.id === messageId
+          messages: chat.messages.map((message) =>
+            message.id === messageId
               ? {
-                  ...msg,
+                  ...message,
                   isEnhancing: true
                 }
-              : msg
+              : message
           )
         }))
       );
 
-      /* FIND MESSAGE */
+      /* FIND CURRENT CHAT */
+
       const currentChat = chats.find((chat) => Number(chat.id) === Number(activeChatId));
-      const targetMessage = currentChat?.messages.find((msg) => msg.id === messageId);
-      if (!targetMessage?.originalImageFile) {
+
+      if (!currentChat) {
+        throw new Error('Chat not found.');
+      }
+
+      /* FIND TARGET MESSAGE */
+
+      const targetMessage = currentChat.messages.find((message) => message.id === messageId);
+
+      if (!targetMessage || !targetMessage.originalImageFile) {
         throw new Error('Original image not found.');
       }
 
-      /* API */
-      const result = await enhanceImage(targetMessage.originalImageFile);
-      console.log('Enhancement result:', result);
+      /* CALL IMAGE API */
 
-      /* UPDATE */
-      setChats((prev) =>
-        prev.map((chat) => ({
+      const response = await enhanceImage(targetMessage.originalImageFile);
+
+      /* UPDATE MESSAGE */
+
+      setChats((prevChats) =>
+        prevChats.map((chat) => ({
           ...chat,
-          messages: chat.messages.map((msg) =>
-            msg.id === messageId
-              ? {
-                  ...msg,
-                  isEnhancing: false,
-                  isEnhanced: true,
+          messages: chat.messages.map((message) => {
+            if (message.id !== messageId) {
+              return message;
+            }
 
-                  /* SHOW ENHANCED IMAGE IN CHAT */
-                  enhancedImage:
-                    result?.enhanced_url || result?.enhanced_image || msg.enhancedImage,
+            return {
+              ...message,
 
-                  /* DOWNLOAD ENHANCED IMAGE */
-                  enhancedDownloadUrl: result?.enhanced_url || result?.enhanced_image || null
-                }
-              : msg
-          )
+              isEnhancing: false,
+
+              isEnhanced: true,
+
+              enhancedImage:
+                response?.enhanced_url || response?.enhanced_image || message.enhancedImage,
+
+              enhancedDownloadUrl: response?.enhanced_url || response?.enhanced_image || null
+            };
+          })
         }))
       );
     } catch (error) {
       console.error(error);
 
-      /* RESET */
-      setChats((prev) =>
-        prev.map((chat) => ({
+      /* RESET LOADING */
+
+      setChats((prevChats) =>
+        prevChats.map((chat) => ({
           ...chat,
-          messages: chat.messages.map((msg) =>
-            msg.id === messageId
+          messages: chat.messages.map((message) =>
+            message.id === messageId
               ? {
-                  ...msg,
+                  ...message,
                   isEnhancing: false
                 }
-              : msg
+              : message
           )
         }))
       );
@@ -385,28 +485,40 @@ const Dashboard = () => {
     }
   };
 
-  /* CHAT SELECTION */
-  const handleChatSelect = (id) => {
-    if (id !== activeChatId) {
-      setActiveChatId(id);
-    }
-    const selectedChat = chats.find((chat) => chat.id === id);
+  /* -----------------------------
+      SELECT CHAT
+  ------------------------------ */
 
-    navigate(`/dashboard/chat/${id}?name=${encodeURIComponent(selectedChat?.title || 'Chat')}`);
+  const handleChatSelect = (chatId) => {
+    if (chatId !== activeChatId) {
+      setActiveChatId(chatId);
+    }
+
+    const selectedChat = chats.find((chat) => chat.id === chatId);
+
+    navigate(`/dashboard/chat/${chatId}?name=${encodeURIComponent(selectedChat?.title || 'Chat')}`);
   };
 
-  /* ACTIVE CHAT */
+  /* CURRENT ACTIVE CHAT */
+
   const activeChat = chats.find((chat) => Number(chat.id) === Number(activeChatId));
+
+  /* LOADING */
 
   if (loading) {
     return <div className="dashboard-loading">Loading chats...</div>;
   }
 
+  /* ERROR */
+
   if (error) {
     return <div className="dashboard-error">{error}</div>;
   }
 
-  /* MAIN UI */
+  /* -----------------------------
+      MAIN UI
+  ------------------------------ */
+
   return (
     <div className="dashboard">
       <Sidebar
@@ -424,14 +536,18 @@ const Dashboard = () => {
         closeMobileSidebar={() => setIsMobileSidebarOpen(false)}
         toggleMobileSidebar={toggleMobileSidebar}
       />
+
       <div className="main-area">
         <Topbar toggleMobileSidebar={toggleMobileSidebar} />
+
         <ChatArea
           activeChat={activeChat}
           isThinking={isThinking}
           handleEnhanceImage={handleEnhanceImage}
         />
+
         <MessageInput sendMessage={sendMessage} activeChat={activeChat} />
+
         <div className="dashboard-disclaimer">
           ReMIND can make mistakes. Verify important information and uploaded content before relying
           on AI-generated responses.

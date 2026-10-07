@@ -1,23 +1,27 @@
-import os
+from pathlib import Path
 import sys
-from app.config.settings import settings
 
-AI_IMAGE_PATH = settings.AI_IMAGE_PATH
-PROJECT_ROOT = os.path.dirname(AI_IMAGE_PATH)
-sys.path.append(PROJECT_ROOT)
+# Project root (ReMIND-FYP)
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
 
-# Fast Realtime Pipeline
+# Allow importing image_ai package from project root
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+# Local AI pipelines
 from image_ai.pipeline.caption_pipeline import caption_image
-
-# Heavy Enhancement Pipeline
 from image_ai.pipeline.enhancement_pipeline import enhance_image
 
 
-# Realtime Chat Image AI
 def process_image(image_path: str):
+    """
+    Generate an image caption using the local BLIP pipeline.
+    """
     return caption_image(image_path)
 
 
-# Optional Enhancement
 def enhance_uploaded_image(image_path: str):
+    """
+    Enhance an uploaded image using the local GFPGAN + RealESRGAN pipeline.
+    """
     return enhance_image(image_path)

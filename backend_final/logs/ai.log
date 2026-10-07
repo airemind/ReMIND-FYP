@@ -1044,3 +1044,157 @@
 2026-06-01 22:04:45,232 | INFO | AI | Automatic cleanup completed
 2026-06-01 22:09:45,232 | INFO | AI | Automatic cleanup completed
 2026-06-01 22:14:45,232 | INFO | AI | Automatic cleanup completed
+2026-07-15 17:04:28,821 | INFO | AI | APScheduler started successfully
+2026-07-17 15:01:46,882 | INFO | AI | APScheduler started successfully
+2026-07-17 15:06:46,886 | INFO | AI | Deleted old temp file: /home/talha/Desktop/ReMIND-FYP/backend_final/temp_uploads/8369c83a-56c1-4213-bd9c-84dd31ab84cf.jpg
+2026-07-17 15:06:46,887 | INFO | AI | Automatic cleanup completed
+2026-07-17 15:11:46,882 | INFO | AI | Automatic cleanup completed
+2026-07-17 15:16:46,882 | INFO | AI | Automatic cleanup completed
+2026-07-17 15:21:46,882 | INFO | AI | Automatic cleanup completed
+2026-07-17 15:26:46,882 | INFO | AI | Automatic cleanup completed
+2026-07-17 15:31:46,882 | INFO | AI | Automatic cleanup completed
+2026-07-17 15:36:46,882 | INFO | AI | Automatic cleanup completed
+2026-07-17 15:41:46,885 | INFO | AI | Automatic cleanup completed
+2026-07-17 15:46:46,882 | INFO | AI | Automatic cleanup completed
+2026-07-17 15:51:46,885 | INFO | AI | Automatic cleanup completed
+2026-07-17 16:01:40,411 | INFO | AI | APScheduler started successfully
+2026-07-17 16:04:47,296 | INFO | AI | APScheduler started successfully
+2026-07-17 16:09:17,659 | INFO | AI | APScheduler started successfully
+2026-07-17 16:14:48,621 | INFO | AI | APScheduler started successfully
+2026-07-17 16:19:48,621 | INFO | AI | Automatic cleanup completed
+2026-07-17 16:24:48,632 | INFO | AI | Automatic cleanup completed
+2026-07-24 19:35:16,434 | INFO | AI | APScheduler started successfully
+2026-07-24 19:40:16,438 | INFO | AI | Automatic cleanup completed
+2026-07-24 19:45:17,749 | INFO | AI | Automatic cleanup completed
+2026-07-24 20:29:10,329 | INFO | AI | APScheduler started successfully
+2026-07-24 21:59:54,376 | INFO | AI | APScheduler started successfully
+2026-07-24 22:04:54,390 | INFO | AI | Automatic cleanup completed
+2026-07-24 22:09:54,379 | INFO | AI | Automatic cleanup completed
+2026-07-24 22:14:54,376 | INFO | AI | Automatic cleanup completed
+2026-07-24 22:16:18,140 | INFO | AI | Multimodal orchestration started
+2026-07-24 22:16:18,149 | INFO | AI | Text orchestration started
+2026-07-24 22:16:21,061 | INFO | AI | Text processing completed successfully
+2026-07-24 22:16:21,069 | INFO | AI | Multimodal orchestration completed
+2026-07-24 22:17:36,391 | INFO | AI | Multimodal orchestration started
+2026-07-24 22:17:36,396 | INFO | AI | Image orchestration started
+2026-07-24 22:17:36,397 | INFO | AI | Text orchestration started
+2026-07-24 22:17:38,422 | INFO | AI | Text processing completed successfully
+2026-07-24 22:17:38,427 | INFO | AI | Multimodal orchestration completed
+2026-07-24 22:17:49,809 | INFO | AI | Multimodal orchestration started
+2026-07-24 22:17:49,816 | INFO | AI | Image orchestration started
+2026-07-24 22:17:49,818 | INFO | AI | Text orchestration started
+2026-07-24 22:17:51,024 | INFO | AI | Text processing completed successfully
+2026-07-24 22:17:51,029 | INFO | AI | Multimodal orchestration completed
+2026-07-24 22:19:47,872 | INFO | AI | Multimodal orchestration started
+2026-07-24 22:19:47,879 | INFO | AI | Text orchestration started
+2026-07-24 22:19:49,303 | INFO | AI | Text processing completed successfully
+2026-07-24 22:19:49,307 | INFO | AI | Multimodal orchestration completed
+2026-07-24 22:19:54,380 | INFO | AI | Automatic cleanup completed
+2026-07-24 22:24:54,376 | INFO | AI | Automatic cleanup completed
+2026-07-24 22:26:14,924 | INFO | AI | Multimodal orchestration started
+2026-07-24 22:26:14,941 | INFO | AI | Image orchestration started
+2026-07-24 22:26:14,943 | INFO | AI | Text orchestration started
+2026-07-24 22:26:17,608 | INFO | AI | Text processing completed successfully
+2026-07-24 22:26:17,613 | INFO | AI | Multimodal orchestration completed
+2026-07-24 22:29:54,379 | INFO | AI | Automatic cleanup completed
+2026-08-15 16:41:27,247 | INFO | AI | APScheduler started successfully
+2026-08-15 16:42:14,952 | INFO | AI | Multimodal orchestration started
+2026-08-15 16:42:14,962 | INFO | AI | Text orchestration started
+2026-08-15 16:42:16,441 | INFO | AI | Text processing completed successfully
+2026-08-15 16:42:16,447 | INFO | AI | Multimodal orchestration completed
+2026-08-15 16:42:38,052 | INFO | AI | Multimodal orchestration started
+2026-08-15 16:42:38,058 | INFO | AI | Image orchestration started
+2026-08-15 16:42:38,059 | INFO | AI | Text orchestration started
+2026-08-15 16:42:39,977 | INFO | AI | Text processing completed successfully
+2026-08-15 16:42:39,982 | INFO | AI | Multimodal orchestration completed
+2026-08-15 16:46:27,250 | INFO | AI | Deleted old temp file: /home/talha/Desktop/ReMIND-FYP/backend_final/temp_uploads/5cc233cd-665c-4da0-9ad0-d3e953ee66d0.png
+2026-08-15 16:46:27,251 | INFO | AI | Deleted old temp file: /home/talha/Desktop/ReMIND-FYP/backend_final/temp_uploads/4779b2d8-e63d-4298-a452-ec58a0979019.png
+2026-08-15 16:46:27,251 | INFO | AI | Deleted old temp file: /home/talha/Desktop/ReMIND-FYP/backend_final/temp_uploads/c78ae53c-aebe-4e53-b2b1-8681599273eb.jpg
+2026-08-15 16:46:27,251 | INFO | AI | Automatic cleanup completed
+2026-08-15 16:51:27,247 | INFO | AI | Automatic cleanup completed
+2026-08-15 16:53:13,004 | INFO | AI | APScheduler started successfully
+2026-08-15 16:53:37,619 | INFO | AI | Multimodal orchestration started
+2026-08-15 16:53:37,640 | INFO | AI | Image orchestration started
+2026-08-15 16:54:10,271 | INFO | AI | Text orchestration started
+2026-08-15 16:54:10,726 | INFO | AI | Text processing completed successfully
+2026-08-15 16:54:10,732 | INFO | AI | Multimodal orchestration completed
+2026-08-15 16:55:20,003 | INFO | AI | Multimodal orchestration started
+2026-08-15 16:55:20,010 | INFO | AI | Text orchestration started
+2026-08-15 16:55:21,943 | INFO | AI | Text processing completed successfully
+2026-08-15 16:55:21,949 | INFO | AI | Multimodal orchestration completed
+2026-08-15 16:55:53,942 | INFO | AI | Multimodal orchestration started
+2026-08-15 16:55:53,950 | INFO | AI | Image orchestration started
+2026-08-15 16:56:25,825 | INFO | AI | Text orchestration started
+2026-08-15 16:56:27,175 | INFO | AI | Text processing completed successfully
+2026-08-15 16:56:27,180 | INFO | AI | Multimodal orchestration completed
+2026-08-15 16:58:13,004 | INFO | AI | Automatic cleanup completed
+2026-08-15 17:02:11,909 | INFO | AI | APScheduler started successfully
+2026-08-15 17:03:08,355 | INFO | AI | APScheduler started successfully
+2026-08-15 17:03:24,003 | INFO | AI | Multimodal orchestration started
+2026-08-15 17:03:24,115 | INFO | AI | Image orchestration started
+2026-08-15 17:03:58,145 | INFO | AI | Text orchestration started
+2026-08-15 17:03:59,302 | INFO | AI | Text processing completed successfully
+2026-08-15 17:03:59,309 | INFO | AI | Multimodal orchestration completed
+2026-08-15 17:04:52,549 | INFO | AI | Multimodal orchestration started
+2026-08-15 17:04:52,557 | INFO | AI | Image orchestration started
+2026-08-15 17:05:16,683 | INFO | AI | Text orchestration started
+2026-08-15 17:05:18,035 | INFO | AI | Text processing completed successfully
+2026-08-15 17:05:18,041 | INFO | AI | Multimodal orchestration completed
+2026-08-15 17:05:33,405 | INFO | AI | Multimodal orchestration started
+2026-08-15 17:05:33,411 | INFO | AI | Image orchestration started
+2026-08-15 17:05:57,031 | INFO | AI | Text orchestration started
+2026-08-15 17:05:57,356 | INFO | AI | Text processing completed successfully
+2026-08-15 17:05:57,360 | INFO | AI | Multimodal orchestration completed
+2026-08-15 17:08:08,356 | INFO | AI | Automatic cleanup completed
+2026-08-15 17:22:24,177 | INFO | AI | APScheduler started successfully
+2026-08-15 17:26:25,074 | INFO | AI | APScheduler started successfully
+2026-08-15 17:31:25,078 | INFO | AI | Automatic cleanup completed
+2026-08-15 17:32:08,133 | INFO | AI | APScheduler started successfully
+2026-08-15 17:37:14,181 | INFO | AI | APScheduler started successfully
+2026-08-15 17:38:15,961 | INFO | AI | APScheduler started successfully
+2026-08-15 17:41:55,275 | INFO | AI | APScheduler started successfully
+2026-08-15 17:42:40,464 | INFO | AI | APScheduler started successfully
+2026-08-15 17:44:18,925 | INFO | AI | APScheduler started successfully
+2026-08-15 17:45:41,584 | INFO | AI | Multimodal orchestration started
+2026-08-15 17:45:44,852 | INFO | AI | Multimodal orchestration started
+2026-08-15 17:45:47,061 | INFO | AI | Multimodal orchestration started
+2026-08-15 17:45:48,757 | INFO | AI | Multimodal orchestration started
+2026-08-15 17:45:49,588 | INFO | AI | Multimodal orchestration started
+2026-08-15 17:48:52,707 | INFO | AI | APScheduler started successfully
+2026-08-15 17:51:31,520 | INFO | AI | APScheduler started successfully
+2026-08-15 17:51:52,618 | INFO | AI | APScheduler started successfully
+2026-08-15 17:52:37,992 | INFO | AI | Multimodal orchestration started
+2026-08-15 17:56:52,623 | INFO | AI | Deleted old temp file: /home/talha/Desktop/ReMIND-FYP/backend_final/temp_uploads/6696418b-2cc9-4e1e-96f0-a52ae393395e.jpg
+2026-08-15 17:56:52,624 | INFO | AI | Deleted old temp file: /home/talha/Desktop/ReMIND-FYP/backend_final/temp_uploads/2b87e795-29b9-48f4-9313-c7855bd809a4.jpg
+2026-08-15 17:56:52,624 | INFO | AI | Deleted old temp file: /home/talha/Desktop/ReMIND-FYP/backend_final/temp_uploads/58c86465-24b6-4678-b764-b002087ac8b3.jpg
+2026-08-15 17:56:52,624 | INFO | AI | Automatic cleanup completed
+2026-08-15 17:59:59,082 | INFO | AI | APScheduler started successfully
+2026-08-15 18:03:03,415 | INFO | AI | Multimodal orchestration started
+2026-08-15 18:03:03,435 | INFO | AI | Text orchestration started
+2026-08-15 18:03:05,783 | INFO | AI | Text processing completed successfully
+2026-08-15 18:03:05,789 | INFO | AI | Multimodal orchestration completed
+2026-09-08 02:46:23,026 | INFO | AI | APScheduler started successfully
+2026-09-08 02:47:54,964 | INFO | AI | Multimodal orchestration started
+2026-09-08 02:47:54,972 | INFO | AI | Text orchestration started
+2026-09-08 02:47:55,837 | INFO | AI | Text processing completed successfully
+2026-09-08 02:47:55,842 | INFO | AI | Multimodal orchestration completed
+2026-09-08 02:48:00,853 | INFO | AI | Multimodal orchestration started
+2026-09-08 02:48:00,858 | INFO | AI | Text orchestration started
+2026-09-08 02:48:01,039 | INFO | AI | Text processing completed successfully
+2026-09-08 02:48:01,044 | INFO | AI | Multimodal orchestration completed
+2026-09-08 02:48:03,734 | INFO | AI | Multimodal orchestration started
+2026-09-08 02:48:03,740 | INFO | AI | Text orchestration started
+2026-09-08 02:48:03,868 | INFO | AI | Text processing completed successfully
+2026-09-08 02:48:03,873 | INFO | AI | Multimodal orchestration completed
+2026-09-08 02:48:07,269 | INFO | AI | Multimodal orchestration started
+2026-09-08 02:48:07,276 | INFO | AI | Text orchestration started
+2026-09-08 02:48:07,422 | INFO | AI | Text processing completed successfully
+2026-09-08 02:48:07,428 | INFO | AI | Multimodal orchestration completed
+2026-09-08 02:48:23,079 | INFO | AI | Multimodal orchestration started
+2026-09-08 02:48:23,085 | INFO | AI | Text orchestration started
+2026-09-08 02:48:23,264 | INFO | AI | Text processing completed successfully
+2026-09-08 02:48:23,269 | INFO | AI | Multimodal orchestration completed
+2026-09-08 02:48:51,992 | INFO | AI | Multimodal orchestration started
+2026-09-08 02:48:51,998 | INFO | AI | Text orchestration started
+2026-09-08 02:48:52,191 | INFO | AI | Text processing completed successfully
+2026-09-08 02:48:52,196 | INFO | AI | Multimodal orchestration completed

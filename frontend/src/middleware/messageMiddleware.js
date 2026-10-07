@@ -1,13 +1,13 @@
 import axiosInstance from './axiosInstance';
 
-// GET MESSAGES
+/* MESSAGES */
+
 export const getMessages = async (chatId) => {
-  const response = await axiosInstance.get(`/messages/${chatId}`);
-  return response.data;
+  const { data } = await axiosInstance.get(`/messages/${chatId}`);
+  return data;
 };
 
-// SEND MESSAGE
-export const sendMessageApi = async (chatId, data) => {
-  const response = await axiosInstance.post(`/messages/${chatId}`, data);
-  return response.data;
+export const sendMessageApi = async (chatId, payload) => {
+  const { data } = await axiosInstance.post(`/messages/${chatId}`, payload);
+  return data;
 };

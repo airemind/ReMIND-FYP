@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Depends
 import os
 import shutil
+import uuid
 from sqlalchemy.orm import Session
 from app.core.dependencies import get_db
 from app.services.orchestration.voice_orchestrator import process_and_store_voice
@@ -15,7 +16,9 @@ os.makedirs(TEMP_DIR, exist_ok=True)
 async def upload_and_process_audio(
     user_id: int, file: UploadFile = File(...), db: Session = Depends(get_db)
 ):
-    temp_path = os.path.join(TEMP_DIR, file.filename)
+    extention = os.path.splitext(file.filename)[1]
+    filename = f"{uuid.uuid4()}{extention}"
+    temp_path = os.path.join(TEMP_DIR, filename)
     os.makedirs(os.path.dirname(temp_path), exist_ok=True)
     with open(temp_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)

@@ -1,12 +1,15 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+
 import AdminDashboard from './pages/AdminDashboard';
 import AdminPortal from './pages/AdminPortal';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import TermsConditions from './pages/TermsConditions';
+
 import ProtectedRoute from './routes/ProtectedRoute';
 import PublicRoute from './routes/PublicRoute';
 
@@ -16,8 +19,9 @@ function App() {
       <AuthProvider>
         <Router>
           <Routes>
-            {/* PUBLIC ROUTES */}
+            {/* Public */}
             <Route path="/" element={<TermsConditions />} />
+
             <Route
               path="/login"
               element={
@@ -26,6 +30,7 @@ function App() {
                 </PublicRoute>
               }
             />
+
             <Route
               path="/signup"
               element={
@@ -34,6 +39,7 @@ function App() {
                 </PublicRoute>
               }
             />
+
             <Route
               path="/admin-portal"
               element={
@@ -43,7 +49,7 @@ function App() {
               }
             />
 
-            {/* PROTECTED ROUTES */}
+            {/* Protected */}
             <Route
               path="/dashboard/*"
               element={
@@ -61,6 +67,9 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            {/* 404 */}
+            <Route path="*" element={<TermsConditions />} />
           </Routes>
         </Router>
       </AuthProvider>

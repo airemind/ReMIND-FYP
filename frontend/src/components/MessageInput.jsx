@@ -1,112 +1,150 @@
 import { useEffect, useRef, useState } from 'react';
-import { FiImage, FiMic, FiMusic, FiPaperclip, FiSend, FiX } from 'react-icons/fi';
+import {
+  FiImage,
+  FiMic,
+  FiMusic,
+  FiPaperclip,
+  FiSend,
+  FiX
+} from 'react-icons/fi';
+
 import '../styles/MessageInput.css';
+
+const MAX_FILE_SIZE_MB = 50;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
+const ALLOWED_TYPES = {
+  image: ['image/jpeg', 'image/png'],
+  audio: ['audio/mpeg', 'audio/mp3', 'audio/wav']
+};
+
 const MessageInput = ({ sendMessage, activeChat }) => {
   const hasActiveChat = Boolean(activeChat);
+
   const [text, setText] = useState('');
   const [showMenu, setShowMenu] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
   const [pendingFiles, setPendingFiles] = useState([]);
+
   const menuRef = useRef(null);
   const textareaRef = useRef(null);
   const recognitionRef = useRef(null);
   const imageInputRef = useRef(null);
   const audioInputRef = useRef(null);
 
-  /* SPEECH RECOGNITION */
+  /* ---------------- Speech Recognition ---------------- */
+
   useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      setSpeechSupported(true);
-      const recognition = new SpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = 'en-US';
-      recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        setText((prev) => prev + ' ' + transcript);
-      };
-      recognition.onend = () => {
-        setIsRecording(false);
-      };
-      recognitionRef.current = recognition;
-    } else {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
       setSpeechSupported(false);
+      return;
     }
+
+    setSpeechSupported(true);
+
+    const recognition = new SpeechRecognition();
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setText((prev) => `${prev} ${transcript}`.trim());
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+    };
+
+    recognitionRef.current = recognition;
   }, []);
 
-  /* AUTO TEXTAREA HEIGHT */
+  /* ---------------- Auto Textarea Height ---------------- */
 
   useEffect(() => {
     const textarea = textareaRef.current;
+
     if (!textarea) return;
+
     textarea.style.height = 'auto';
+
     const maxHeight = 120;
     const scrollHeight = textarea.scrollHeight;
+
     if (scrollHeight <= maxHeight) {
-      textarea.style.height = scrollHeight + 'px';
+      textarea.style.height = `${scrollHeight}px`;
       textarea.style.overflowY = 'hidden';
     } else {
-      textarea.style.height = maxHeight + 'px';
+      textarea.style.height = `${maxHeight}px`;
       textarea.style.overflowY = 'auto';
     }
   }, [text]);
 
-  /* MIC */
+  /* ---------------- Close Attachment Menu ---------------- */
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target)
+      ) {
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () =>
+      document.removeEventListener(
+        'mousedown',
+        handleClickOutside
+      );
+  }, []);
+
+  /* ---------------- Microphone ---------------- */
 
   const handleMicClick = () => {
     if (!hasActiveChat) return;
 
     if (!recognitionRef.current) {
-      alert('Speech Recognition not supported in this browser.');
-
+      alert('Speech Recognition is not supported in this browser.');
       return;
     }
 
     if (isRecording) {
       recognitionRef.current.stop();
-
       setIsRecording(false);
     } else {
       recognitionRef.current.start();
-
       setIsRecording(true);
     }
   };
 
-  /* FILE VALIDATION */
-
-  const allowedTypes = {
-    image: ['image/jpeg', 'image/png'],
-    audio: ['audio/mpeg', 'audio/mp3', 'audio/wav']
-  };
-
-  /* FILE CHANGE */
+  /* ---------------- File Upload ---------------- */
 
   const handleFileChange = (event, type) => {
     if (!hasActiveChat) return;
 
     const file = event.target.files[0];
+
     if (!file) return;
 
-    const maxSizeMB = 10;
-    const maxSizeBytes = maxSizeMB * 1024 * 1024;
-
-    if (file.size > maxSizeBytes) {
-      alert(`File size exceeds ${maxSizeMB}MB limit.`);
-
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      alert(`File size exceeds ${MAX_FILE_SIZE_MB}MB.`);
       event.target.value = '';
       return;
     }
 
-    if (!allowedTypes[type].includes(file.type)) {
-      alert(`Invalid ${type} file type.`);
+    if (!ALLOWED_TYPES[type].includes(file.type)) {
+      alert(`Invalid ${type} file.`);
       event.target.value = '';
       return;
     }
-
-    /* ADD MULTPLE FILES */
 
     setPendingFiles((prev) => [
       ...prev,
@@ -122,34 +160,21 @@ const MessageInput = ({ sendMessage, activeChat }) => {
     setShowMenu(false);
   };
 
-  /* SEND */
+  /* ---------------- Send ---------------- */
 
   const handleSend = () => {
     if (!hasActiveChat) return;
+
     if (!text.trim() && pendingFiles.length === 0) return;
-    const messagePayload = {
+
+    sendMessage({
       text: text.trim(),
       files: pendingFiles
-    };
+    });
 
-    sendMessage(messagePayload);
     setText('');
     setPendingFiles([]);
   };
-
-  /* CLOSE ATTACHMENT MENU */
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setShowMenu(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   if (!activeChat) {
     return null;
@@ -158,30 +183,40 @@ const MessageInput = ({ sendMessage, activeChat }) => {
   return (
     <div className="message-input-container">
       <div className="message-input">
-        {/* WARNING */}
 
         {!hasActiveChat && (
-          <div className="disabled-chat-warning">Please create a new chat to start messaging.</div>
+          <div className="disabled-chat-warning">
+            Please create a new chat to start messaging.
+          </div>
         )}
-
-        {/* FILE PREVIEW */}
 
         {pendingFiles.length > 0 && hasActiveChat && (
           <div className="pending-files">
             {pendingFiles.map((fileItem) => (
-              <div className="pending-file" key={fileItem.id}>
+              <div
+                className="pending-file"
+                key={fileItem.id}
+              >
                 <div className="pending-file-left">
+
                   {fileItem.fileType === 'image' && <FiImage />}
 
                   {fileItem.fileType === 'audio' && <FiMusic />}
 
-                  <span className="pending-file-name">{fileItem.fileName}</span>
+                  <span className="pending-file-name">
+                    {fileItem.fileName}
+                  </span>
+
                 </div>
 
                 <FiX
                   className="remove-file"
                   onClick={() =>
-                    setPendingFiles((prev) => prev.filter((f) => f.id !== fileItem.id))
+                    setPendingFiles((prev) =>
+                      prev.filter(
+                        (f) => f.id !== fileItem.id
+                      )
+                    )
                   }
                 />
               </div>
@@ -190,69 +225,98 @@ const MessageInput = ({ sendMessage, activeChat }) => {
         )}
 
         <div className="input-row">
-          {/* ATTACHMENT */}
 
-          <div className="attachment-wrapper" ref={menuRef}>
+          <div
+            className="attachment-wrapper"
+            ref={menuRef}
+          >
             <FiPaperclip
-              className={`attachment-icon ${!hasActiveChat ? 'disabled-icon' : ''}`}
-              onClick={() => hasActiveChat && setShowMenu((prev) => !prev)}
-              title={!hasActiveChat ? 'Create a chat to attach files' : 'Attach files'}
+              className={`attachment-icon ${
+                !hasActiveChat ? 'disabled-icon' : ''
+              }`}
+              onClick={() =>
+                hasActiveChat &&
+                setShowMenu((prev) => !prev)
+              }
+              title={
+                !hasActiveChat
+                  ? 'Create a chat to attach files'
+                  : 'Attach files'
+              }
             />
 
             {showMenu && hasActiveChat && (
               <div className="attachment-menu">
-                {/* IMAGE */}
 
-                <div className="attachment-item" onClick={() => imageInputRef.current.click()}>
+                <div
+                  className="attachment-item"
+                  onClick={() =>
+                    imageInputRef.current.click()
+                  }
+                >
                   <FiImage className="attachment-item-icon" />
 
                   <div>
                     <div>Image</div>
-                    <small>JPG, PNG • Max 50MB</small>
+                    <small>
+                      JPG, PNG • Max {MAX_FILE_SIZE_MB}MB
+                    </small>
                   </div>
                 </div>
 
-                {/* AUDIO */}
-
-                <div className="attachment-item" onClick={() => audioInputRef.current.click()}>
+                <div
+                  className="attachment-item"
+                  onClick={() =>
+                    audioInputRef.current.click()
+                  }
+                >
                   <FiMusic className="attachment-item-icon" />
 
                   <div>
                     <div>Audio</div>
-                    <small>MP3, WAV • Max 50MB</small>
+                    <small>
+                      MP3, WAV • Max {MAX_FILE_SIZE_MB}MB
+                    </small>
                   </div>
                 </div>
+
               </div>
             )}
 
-            {/* IMAGE INPUT */}
-
             <input
-              type="file"
               ref={imageInputRef}
+              type="file"
               hidden
               accept=".jpg,.jpeg,.png"
-              onChange={(e) => handleFileChange(e, 'image')}
+              onChange={(e) =>
+                handleFileChange(e, 'image')
+              }
             />
-            {/* AUDIO INPUT */}
 
             <input
-              type="file"
               ref={audioInputRef}
+              type="file"
               hidden
               accept=".mp3,.wav"
-              onChange={(e) => handleFileChange(e, 'audio')}
+              onChange={(e) =>
+                handleFileChange(e, 'audio')
+              }
             />
           </div>
-
-          {/* TEXTAREA */}
 
           <textarea
             ref={textareaRef}
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            rows={1}
+            className="auto-textarea"
+            disabled={!hasActiveChat}
             placeholder={
-              hasActiveChat ? 'Message ReMIND...' : 'Create a new chat to start typing...'
+              hasActiveChat
+                ? 'Message ReMIND...'
+                : 'Create a new chat to start typing...'
+            }
+            onChange={(e) =>
+              setText(e.target.value)
             }
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
@@ -260,32 +324,42 @@ const MessageInput = ({ sendMessage, activeChat }) => {
                 handleSend();
               }
             }}
-            disabled={!hasActiveChat}
-            rows={1}
-            className="auto-textarea"
           />
 
-          {/* MIC */}
-
           <button
-            className={`mic-btn ${isRecording ? 'recording' : ''}`}
+            className={`mic-btn ${
+              isRecording ? 'recording' : ''
+            }`}
             onClick={handleMicClick}
-            disabled={!hasActiveChat || !speechSupported}
-            title={!speechSupported ? 'Voice recognition unsupported in this browser' : ''}
+            disabled={
+              !hasActiveChat || !speechSupported
+            }
+            title={
+              !speechSupported
+                ? 'Voice recognition unsupported in this browser'
+                : ''
+            }
           >
             <FiMic />
           </button>
 
-          {/* SEND */}
-
           <button
             className="send-btn"
             onClick={handleSend}
-            disabled={!hasActiveChat || (!text.trim() && pendingFiles.length === 0)}
-            title={!hasActiveChat ? 'You should have some text or files to send' : 'Send Message'}
+            disabled={
+              !hasActiveChat &&
+              (!text.trim() &&
+                pendingFiles.length === 0)
+            }
+            title={
+              !hasActiveChat
+                ? 'Create a chat first'
+                : 'Send Message'
+            }
           >
             <FiSend />
           </button>
+
         </div>
       </div>
     </div>

@@ -7,13 +7,15 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/admin/login")
 
 
 def get_current_admin(token: str = Depends(oauth2_scheme)):
-
     try:
         payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+            token,
+            settings.ADMIN_SECRET_KEY,
+            algorithms=[settings.ALGORITHM],
         )
 
         role = payload.get("role")
+
         if role != "admin":
             raise HTTPException(status_code=403, detail="Admin access required")
 

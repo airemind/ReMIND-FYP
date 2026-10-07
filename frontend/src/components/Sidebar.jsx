@@ -14,7 +14,7 @@ import {
 import '../styles/Sidebar.css';
 
 const Sidebar = ({
-  chats,
+  chats = [],
   activeChatId,
   setActiveChatId,
   createNewChat,
@@ -25,7 +25,7 @@ const Sidebar = ({
   isCollapsed,
   toggleSidebar,
 
-  /* MOBILE */
+  // Mobile
   isMobileOpen = false,
   closeMobileSidebar = () => {},
   toggleMobileSidebar = () => {}
@@ -34,60 +34,79 @@ const Sidebar = ({
   const [tempTitle, setTempTitle] = useState('');
   const [chatToDelete, setChatToDelete] = useState(null);
 
+  const isMobile = window.innerWidth <= 768;
+
   const filteredChats = useMemo(() => {
-    const validChats = chats.filter((chat) => chat && typeof chat === 'object');
-    if (!searchTerm) return validChats;
+    const validChats = chats.filter(
+      (chat) => chat && typeof chat === 'object'
+    );
+
+    if (!searchTerm.trim()) {
+      return validChats;
+    }
+
     return validChats.filter((chat) =>
-      (chat.title || '').toLowerCase().includes(searchTerm.toLowerCase())
+      (chat.title || '')
+        .toLowerCase()
+        .includes(searchTerm.trim().toLowerCase())
     );
   }, [chats, searchTerm]);
 
   const handleRename = (id) => {
     if (!tempTitle.trim()) return;
+
     renameChat(id, tempTitle.trim());
+
     setEditingId(null);
   };
 
   const handleChatSelect = (chatId) => {
     setActiveChatId(chatId);
-    if (window.innerWidth <= 768) {
+
+    if (isMobile) {
       closeMobileSidebar();
     }
   };
 
   const handleCreateChat = () => {
     createNewChat();
-    if (window.innerWidth <= 768) {
+
+    if (isMobile) {
       closeMobileSidebar();
     }
   };
 
   return (
     <>
-      {/* MOBILE OVERLAY */}
+      {/* Mobile Overlay */}
 
-      {isMobileOpen && window.innerWidth <= 768 && (
-        <div className="sidebar-mobile-overlay" onClick={closeMobileSidebar} />
+      {isMobileOpen && isMobile && (
+        <div
+          className="sidebar-mobile-overlay"
+          onClick={closeMobileSidebar}
+        />
       )}
 
-      {/* SIDEBAR */}
+      {/* Sidebar */}
 
       <div
-        className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isMobileOpen ? 'mobile-open' : ''}`}
+        className={`sidebar ${
+          isCollapsed ? 'collapsed' : ''
+        } ${isMobileOpen ? 'mobile-open' : ''}`}
       >
-        {/* TOGGLE BUTTON */}
+        {/* Toggle */}
 
         <div
           className="sidebar-toggle"
           onClick={() => {
-            if (window.innerWidth <= 768) {
+            if (isMobile) {
               toggleMobileSidebar();
             } else {
               toggleSidebar();
             }
           }}
         >
-          {window.innerWidth <= 768 ? (
+          {isMobile ? (
             isMobileOpen ? (
               <FiX />
             ) : (
@@ -100,53 +119,66 @@ const Sidebar = ({
           )}
         </div>
 
-        {/* COLLAPSED MODE */}
+        {/* Collapsed */}
 
-        {isCollapsed && window.innerWidth > 768 ? (
+        {isCollapsed && !isMobile ? (
           <div className="sidebar-collapsed-icons">
-            <div className="sidebar-icon tooltip-wrapper" onClick={handleCreateChat}>
+            <div
+              className="sidebar-icon tooltip-wrapper"
+              onClick={handleCreateChat}
+            >
               <FiPlus />
             </div>
           </div>
         ) : (
           <>
-            {/* HEADER */}
-
-            <div className="sidebar-header">ReMIND</div>
-
-            {/* SEARCH */}
+            <div className="sidebar-header">
+              ReMIND
+            </div>
 
             <div className="search-box">
               <FiSearch />
+
               <input
                 placeholder="Search chats"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) =>
+                  setSearchTerm(e.target.value)
+                }
               />
             </div>
 
-            {/* NEW CHAT */}
-
-            <button className="new-chat-btn" onClick={handleCreateChat}>
+            <button
+              className="new-chat-btn"
+              onClick={handleCreateChat}
+            >
               <FiPlus />
               <span>New Chat</span>
             </button>
-
-            {/* CHAT LIST */}
 
             <div className="chat-list">
               {filteredChats.map((chat) => (
                 <div
                   key={chat.id}
-                  className={`chat-item ${activeChatId === chat.id ? 'active' : ''}`}
-                  onClick={() => handleChatSelect(chat.id)}
+                  className={`chat-item ${
+                    activeChatId === chat.id
+                      ? 'active'
+                      : ''
+                  }`}
+                  onClick={() =>
+                    handleChatSelect(chat.id)
+                  }
                 >
                   {editingId === chat.id ? (
                     <input
-                      value={tempTitle}
                       autoFocus
-                      onChange={(e) => setTempTitle(e.target.value)}
-                      onBlur={() => handleRename(chat.id)}
+                      value={tempTitle}
+                      onChange={(e) =>
+                        setTempTitle(e.target.value)
+                      }
+                      onBlur={() =>
+                        handleRename(chat.id)
+                      }
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           handleRename(chat.id);
@@ -155,15 +187,22 @@ const Sidebar = ({
                     />
                   ) : (
                     <>
-                      <span className="chat-title">{chat.title || 'New Chat'}</span>
+                      <span className="chat-title">
+                        {chat.title || 'New Chat'}
+                      </span>
+
                       <div className="chat-actions">
                         <FiEdit2
                           onClick={(e) => {
                             e.stopPropagation();
+
                             setEditingId(chat.id);
-                            setTempTitle(chat.title);
+                            setTempTitle(
+                              chat.title || ''
+                            );
                           }}
                         />
+
                         <FiTrash2
                           className="delete-icon"
                           onClick={(e) => {
@@ -181,22 +220,46 @@ const Sidebar = ({
         )}
       </div>
 
-      {/* DELETE MODAL */}
+      {/* Delete Modal */}
 
       {chatToDelete && (
-        <div className="delete-modal-overlay" onClick={() => setChatToDelete(null)}>
-          <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="delete-modal-overlay"
+          onClick={() =>
+            setChatToDelete(null)
+          }
+        >
+          <div
+            className="delete-modal"
+            onClick={(e) =>
+              e.stopPropagation()
+            }
+          >
             <div className="delete-modal-header">
               <h3>Delete Chat</h3>
             </div>
+
             <div className="delete-modal-body">
-              <p>Are you sure you want to delete this chat?</p>
-              <span className="delete-warning">This action cannot be undone.</span>
+              <p>
+                Are you sure you want to delete
+                this chat?
+              </p>
+
+              <span className="delete-warning">
+                This action cannot be undone.
+              </span>
             </div>
+
             <div className="delete-modal-actions">
-              <button className="cancel-btn" onClick={() => setChatToDelete(null)}>
+              <button
+                className="cancel-btn"
+                onClick={() =>
+                  setChatToDelete(null)
+                }
+              >
                 Cancel
               </button>
+
               <button
                 className="confirm-delete-btn"
                 onClick={() => {
@@ -213,4 +276,5 @@ const Sidebar = ({
     </>
   );
 };
+
 export default Sidebar;

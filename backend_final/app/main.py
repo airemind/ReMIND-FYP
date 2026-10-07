@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
+from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException
+from pathlib import Path
+
 from app.config.settings import settings
 
 from app.core.exceptions import (
@@ -8,7 +11,9 @@ from app.core.exceptions import (
     validation_exception_handler,
     global_exception_handler,
 )
+
 from app.tasks.scheduler import start_scheduler
+
 from app.api.routes.auth_routes import router as auth_router
 from app.api.routes.user_routes import router as user_router
 from app.api.routes.admin_routes import router as admin_router
@@ -27,18 +32,70 @@ from app.middleware.request_middleware import RequestLoggingMiddleware
 from app.middleware.security_middleware import SecurityHeadersMiddleware
 from app.middleware.cors_middleware import setup_cors
 
+from image_ai.config import TEMP_DIR
+
+
 app = FastAPI(title=settings.APP_NAME)
 
+
+# Static directories
+STATIC_DIR = Path("static")
+
+STATIC_DIR.mkdir(exist_ok=True)
+(STATIC_DIR / "images").mkdir(exist_ok=True)
+(STATIC_DIR / "audio").mkdir(exist_ok=True)
+(STATIC_DIR / "memory_images").mkdir(exist_ok=True)
+
+
+# Application static files
+app.mount(
+    "/static",
+    StaticFiles(directory=str(STATIC_DIR)),
+    name="static",
+)
+
+
+# Image AI files
+IMAGE_AI_DIR = Path(TEMP_DIR).resolve()
+
+app.mount(
+    "/image-ai-static",
+    StaticFiles(directory=str(IMAGE_AI_DIR)),
+    name="image-ai-static",
+)
+
+
+# Setup
 setup_cors(app)
+
 start_scheduler()
 
 request_logger.info("ReMIND backend started successfully")
 
+
+# Middleware
 app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(RequestLoggingMiddleware)
-app.add_exception_handler(HTTPException, http_exception_handler)
-app.add_exception_handler(RequestValidationError, validation_exception_handler)
-app.add_exception_handler(Exception, global_exception_handler)
+
+
+# Exception handlers
+app.add_exception_handler(
+    HTTPException,
+    http_exception_handler
+)
+
+app.add_exception_handler(
+    RequestValidationError,
+    validation_exception_handler
+)
+
+app.add_exception_handler(
+    Exception,
+    global_exception_handler
+)
+
+
+# Routes
 app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(admin_router)
@@ -52,7 +109,9 @@ app.include_router(voice_processing_router)
 app.include_router(memory_router)
 
 
+# Root
 @app.get("/")
 def root():
-
-    return {"message": "ReMIND Backend Running"}
+    return {
+        "message": "ReMIND Backend Running"
+    }

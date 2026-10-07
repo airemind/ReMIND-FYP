@@ -5,12 +5,16 @@ import sys
 
 def run_gfpgan(input_folder="inputs", output_folder="results"):
 
-    # Absolute path to GFPGAN directory
+    # GFPGAN location
     BASE_DIR = os.path.abspath(
         os.path.join(os.path.dirname(__file__), "../../ai_models/gfpgan")
     )
 
     script_path = os.path.join(BASE_DIR, "inference_gfpgan.py")
+
+    input_folder = os.path.abspath(input_folder)
+
+    output_folder = os.path.abspath(output_folder)
 
     command = [
         sys.executable,
@@ -26,14 +30,20 @@ def run_gfpgan(input_folder="inputs", output_folder="results"):
     ]
 
     try:
-        print("Running GFPGAN (Face Enhancement)...")
+
+        print("Running GFPGAN...")
+
         subprocess.run(command, cwd=BASE_DIR, check=True)
-        print("Face Enhancement Completed")
+
+        print("GFPGAN completed")
 
     except subprocess.CalledProcessError as e:
+
         print("Error running GFPGAN:", e)
+
         raise Exception("GFPGAN enhancement failed")
 
 
 if __name__ == "__main__":
+
     run_gfpgan()

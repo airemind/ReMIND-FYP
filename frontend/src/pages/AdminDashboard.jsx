@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   FiChevronDown,
@@ -13,17 +13,17 @@ import {
 } from 'react-icons/fi';
 
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  Legend,
-  Pie,
-  PieChart,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
   Tooltip,
+  BarChart,
+  Bar,
+  CartesianGrid,
   XAxis,
-  YAxis
+  YAxis,
+  Legend
 } from 'recharts';
 
 import { useTheme } from '../context/ThemeContext';
@@ -43,12 +43,20 @@ import {
   getSystemData,
   updateUser
 } from '../middleware/adminMiddleware';
+
 import '../styles/AdminDashboard.css';
 
+const COLORS = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981'];
+
 const AdminDashboard = () => {
-  const adminData = JSON.parse(localStorage.getItem('admin_data'));
   const { theme, toggleTheme } = useTheme();
+
+  const adminData = JSON.parse(localStorage.getItem('admin_data'));
+
+  const [loading, setLoading] = useState(false);
+
   const [showMoreGraphs, setShowMoreGraphs] = useState(false);
+
   const [openSection, setOpenSection] = useState({
     users: true,
     memories: false,
@@ -56,15 +64,29 @@ const AdminDashboard = () => {
     data: false
   });
 
-  /* BACKEND DATA */
+  /* Dashboard Data */
+
   const [analyticsData, setAnalyticsData] = useState(null);
+
   const [userData, setUserData] = useState([]);
+
   const [memoryData, setMemoryData] = useState([]);
+
   const [mediaData, setMediaData] = useState([]);
+
   const [dataControls, setDataControls] = useState([]);
 
-  /* LOADING */
-  const [loading, setLoading] = useState(false);
+  /* Edit User */
+
+  const [editingUserId, setEditingUserId] = useState(null);
+
+  const [editForm, setEditForm] = useState({
+    username: '',
+    email: ''
+  });
+
+  /* Toggle Accordion */
+
   const toggleSection = (section) => {
     setOpenSection((prev) => ({
       ...prev,
@@ -72,77 +94,86 @@ const AdminDashboard = () => {
     }));
   };
 
-  /* FETCH ANALYTICS */
-  const fetchAnalytics = async () => {
+  /* Fetch Analytics */
+
+  const fetchAnalytics = useCallback(async () => {
     try {
       const response = await getAdminAnalytics();
+
       setAnalyticsData(response);
     } catch (error) {
-      console.error(error);
+      console.error('Analytics Error:', error);
     }
-  };
+  }, []);
 
-  /* FETCH USERS */
-  const fetchUsers = async () => {
+  /* Fetch Users */
+
+  const fetchUsers = useCallback(async () => {
     try {
       const response = await getAllUsers();
-      setUserData(response?.users || []);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  /* FETCH MEMORIES */
-  const fetchMemories = async () => {
+      setUserData(response?.users ?? []);
+    } catch (error) {
+      console.error('Users Error:', error);
+    }
+  }, []);
+
+  /* Fetch Memories */
+
+  const fetchMemories = useCallback(async () => {
     try {
       const response = await getAllMemories();
-      setMemoryData(response?.memories || []);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  /*edit user*/
-  const [editingUserId, setEditingUserId] = useState(null);
-  const [editForm, setEditForm] = useState({
-    username: '',
-    email: ''
-  });
+      setMemoryData(response?.memories ?? []);
+    } catch (error) {
+      console.error('Memories Error:', error);
+    }
+  }, []);
+
+  /* Fetch Media */
+
+  const fetchMedia = useCallback(async () => {
+    try {
+      const response = await getAllMedia();
+
+      setMediaData(response?.media ?? []);
+    } catch (error) {
+      console.error('Media Error:', error);
+    }
+  }, []);
+
+  /* Fetch System Data */
+
+  const fetchSystemData = useCallback(async () => {
+    try {
+      const response = await getSystemData();
+
+      setDataControls(response?.data_controls ?? []);
+    } catch (error) {
+      console.error('System Error:', error);
+    }
+  }, []);
+
+  /* Update User */
 
   const handleUpdateUser = async (userId) => {
     try {
       await updateUser(userId, editForm);
+
       setEditingUserId(null);
-      fetchUsers();
+
+      await fetchUsers();
     } catch (error) {
       console.error(error);
     }
   };
 
-  /* FETCH MEDIA */
-  const fetchMedia = async () => {
+  /* Initial Load */
+
+  const loadDashboard = useCallback(async () => {
     try {
-      const response = await getAllMedia();
-      setMediaData(response?.media || []);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  /* FETCH SYSTEM DATA */
-  const fetchSystemData = async () => {
-    try {
-      const response = await getSystemData();
-      setDataControls(response?.data_controls || []);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  /* INITIAL LOAD + AUTO REFRESH */
-  useEffect(() => {
-    const loadDashboard = async () => {
       setLoading(true);
+
       await Promise.all([
         fetchAnalytics(),
         fetchUsers(),
@@ -150,66 +181,80 @@ const AdminDashboard = () => {
         fetchMedia(),
         fetchSystemData()
       ]);
+    } finally {
       setLoading(false);
-    };
+    }
+  }, [fetchAnalytics, fetchUsers, fetchMemories, fetchMedia, fetchSystemData]);
+
+  useEffect(() => {
     loadDashboard();
-    const interval = setInterval(() => {
-      loadDashboard();
-    }, 60000);
+
+    const interval = setInterval(loadDashboard, 60000);
+
     return () => clearInterval(interval);
-  }, []);
+  }, [loadDashboard]);
 
-  /* GRAPH DATA */
-  const userGraphData = analyticsData
-    ? analyticsData.user_analytics.graph_data.labels.map((label, index) => ({
-        name: label,
-        value: analyticsData.user_analytics.graph_data.values[index]
-      }))
-    : [];
+  /* Graph Data */
 
-  const voiceGraphData = analyticsData
-    ? analyticsData.ai_metrics.voice_ai.graph_data.labels.map((label, index) => ({
-        name: label,
-        value: analyticsData.ai_metrics.voice_ai.graph_data.values[index]
-      }))
-    : [];
+  const userGraphData = useMemo(() => {
+    if (!analyticsData) return [];
 
-  const textGraphData = analyticsData
-    ? analyticsData.ai_metrics.text_ai.graph_data.labels.map((label, index) => ({
-        name: label,
-        value: analyticsData.ai_metrics.text_ai.graph_data.values[index]
-      }))
-    : [];
+    return analyticsData.user_analytics.graph_data.labels.map((label, index) => ({
+      name: label,
+      value: analyticsData.user_analytics.graph_data.values[index]
+    }));
+  }, [analyticsData]);
 
-  const imageGraphData = analyticsData
-    ? analyticsData.ai_metrics.image_ai.graph_data.labels.map((label, index) => ({
-        name: label,
-        value: analyticsData.ai_metrics.image_ai.graph_data.values[index]
-      }))
-    : [];
+  const voiceGraphData = useMemo(() => {
+    if (!analyticsData) return [];
 
-  const systemMetricsData = analyticsData
-    ? [
-        {
-          name: 'CPU',
-          value: analyticsData.system_metrics.cpu_usage_percent
-        },
-        {
-          name: 'Memory',
-          value: analyticsData.system_metrics.memory_usage_percent
-        },
-        {
-          name: 'Disk',
-          value: analyticsData.system_metrics.disk_usage_percent
-        },
-        {
-          name: 'Uptime (sec)',
-          value: analyticsData.system_metrics.backend_uptime_seconds
-        }
-      ]
-    : [];
+    return analyticsData.ai_metrics.voice_ai.graph_data.labels.map((label, index) => ({
+      name: label,
+      value: analyticsData.ai_metrics.voice_ai.graph_data.values[index]
+    }));
+  }, [analyticsData]);
 
-  const COLORS = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981'];
+  const textGraphData = useMemo(() => {
+    if (!analyticsData) return [];
+
+    return analyticsData.ai_metrics.text_ai.graph_data.labels.map((label, index) => ({
+      name: label,
+      value: analyticsData.ai_metrics.text_ai.graph_data.values[index]
+    }));
+  }, [analyticsData]);
+
+  const imageGraphData = useMemo(() => {
+    if (!analyticsData) return [];
+
+    return analyticsData.ai_metrics.image_ai.graph_data.labels.map((label, index) => ({
+      name: label,
+      value: analyticsData.ai_metrics.image_ai.graph_data.values[index]
+    }));
+  }, [analyticsData]);
+
+  const systemMetricsData = useMemo(() => {
+    if (!analyticsData) return [];
+
+    return [
+      {
+        name: 'CPU',
+        value: analyticsData.system_metrics.cpu_usage_percent
+      },
+      {
+        name: 'Memory',
+        value: analyticsData.system_metrics.memory_usage_percent
+      },
+      {
+        name: 'Disk',
+        value: analyticsData.system_metrics.disk_usage_percent
+      },
+      {
+        name: 'Uptime (sec)',
+        value: analyticsData.system_metrics.backend_uptime_seconds
+      }
+    ];
+  }, [analyticsData]);
+
   if (loading) {
     return (
       <div className="admin-dashboard">
@@ -219,9 +264,11 @@ const AdminDashboard = () => {
       </div>
     );
   }
+
   return (
     <div className="admin-dashboard">
       {/* THEME TOGGLE */}
+
       <div className="admin-theme-toggle" onClick={toggleTheme}>
         {theme === 'light' ? (
           <FiMoon className="admin-theme-icon" />
@@ -231,6 +278,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* HEADER */}
+
       <div className="admin-header">
         <h1>Welcome Back! {adminData?.name || 'Admin'}</h1>
 
@@ -238,12 +286,15 @@ const AdminDashboard = () => {
       </div>
 
       {/* ANALYTICS */}
+
       <div className="admin-section-title">Analytics</div>
 
       <div className="analytics-grid">
         {/* USER ANALYTICS */}
+
         <div className="analytics-card">
           <h3>User Analytics</h3>
+
           <div
             style={{
               width: '100%',
@@ -252,14 +303,7 @@ const AdminDashboard = () => {
           >
             <ResponsiveContainer>
               <PieChart>
-                <Pie
-                  data={userGraphData}
-                  dataKey="value"
-                  nameKey="name"
-                  outerRadius={90}
-                  fill="#6366f1"
-                  label
-                >
+                <Pie data={userGraphData} dataKey="value" nameKey="name" outerRadius={90} label>
                   {userGraphData.map((entry, index) => (
                     <Cell key={index} fill={COLORS[index % COLORS.length]} />
                   ))}
@@ -269,6 +313,7 @@ const AdminDashboard = () => {
               </PieChart>
             </ResponsiveContainer>
           </div>
+
           <p
             style={{
               fontSize: '13px',
@@ -277,11 +322,12 @@ const AdminDashboard = () => {
               marginBottom: '10px'
             }}
           >
-            Total Users: {analyticsData?.user_analytics?.total_users || 0}
+            Total Users: {analyticsData?.user_analytics?.total_users ?? 0}
           </p>
         </div>
 
         {/* SYSTEM METRICS */}
+
         <div className="analytics-card">
           <h3>System Metrics</h3>
 
@@ -294,10 +340,15 @@ const AdminDashboard = () => {
             <ResponsiveContainer>
               <BarChart data={systemMetricsData}>
                 <CartesianGrid strokeDasharray="3 3" />
+
                 <XAxis dataKey="name" />
+
                 <YAxis />
+
                 <Tooltip />
+
                 <Legend />
+
                 <Bar dataKey="value" fill="#6366f1" />
               </BarChart>
             </ResponsiveContainer>
@@ -305,11 +356,14 @@ const AdminDashboard = () => {
         </div>
 
         {/* EXTRA AI GRAPHS */}
+
         {showMoreGraphs && (
           <>
             {/* VOICE AI */}
+
             <div className="analytics-card">
               <h3>Voice AI Metrics</h3>
+
               <div
                 style={{
                   width: '100%',
@@ -319,10 +373,15 @@ const AdminDashboard = () => {
                 <ResponsiveContainer>
                   <BarChart data={voiceGraphData}>
                     <CartesianGrid strokeDasharray="3 3" />
+
                     <XAxis dataKey="name" />
+
                     <YAxis />
+
                     <Tooltip />
+
                     <Legend />
+
                     <Bar dataKey="value" fill="#8b5cf6" />
                   </BarChart>
                 </ResponsiveContainer>
@@ -330,6 +389,7 @@ const AdminDashboard = () => {
             </div>
 
             {/* TEXT AI */}
+
             <div className="analytics-card">
               <h3>Text AI Metrics</h3>
 
@@ -342,10 +402,15 @@ const AdminDashboard = () => {
                 <ResponsiveContainer>
                   <BarChart data={textGraphData}>
                     <CartesianGrid strokeDasharray="3 3" />
+
                     <XAxis dataKey="name" />
+
                     <YAxis />
+
                     <Tooltip />
+
                     <Legend />
+
                     <Bar dataKey="value" fill="#06b6d4" />
                   </BarChart>
                 </ResponsiveContainer>
@@ -353,8 +418,10 @@ const AdminDashboard = () => {
             </div>
 
             {/* IMAGE AI */}
+
             <div className="analytics-card">
               <h3>Image AI Metrics</h3>
+
               <div
                 style={{
                   width: '100%',
@@ -364,10 +431,15 @@ const AdminDashboard = () => {
                 <ResponsiveContainer>
                   <BarChart data={imageGraphData}>
                     <CartesianGrid strokeDasharray="3 3" />
+
                     <XAxis dataKey="name" />
+
                     <YAxis />
+
                     <Tooltip />
+
                     <Legend />
+
                     <Bar dataKey="value" fill="#10b981" />
                   </BarChart>
                 </ResponsiveContainer>
@@ -378,22 +450,27 @@ const AdminDashboard = () => {
       </div>
 
       {/* VIEW MORE */}
-      <button className="view-more-btn" onClick={() => setShowMoreGraphs(!showMoreGraphs)}>
+
+      <button className="view-more-btn" onClick={() => setShowMoreGraphs((prev) => !prev)}>
         {showMoreGraphs ? 'View Less' : 'View More'}
       </button>
 
       {/* USER PANEL */}
+
       <div className="admin-section-title">User Panel</div>
 
       {/* USER CONTROLS */}
+
       <div className="panel-card">
         <div className="panel-header" onClick={() => toggleSection('users')}>
           <div className="panel-title">
             <FiUsers size={20} />
             User Controls
           </div>
+
           {openSection.users ? <FiChevronUp /> : <FiChevronDown />}
         </div>
+
         {openSection.users && (
           <div className="table-wrapper">
             <table>
@@ -408,39 +485,45 @@ const AdminDashboard = () => {
                   <th>CONTROL</th>
                 </tr>
               </thead>
+
               <tbody>
                 {[...userData]
-                  .sort((a, b) => a.user_id - b.user_id)
-                  .map((user, index) => (
-                    <tr key={index}>
+                  .sort((a, b) => (a.user_id ?? 0) - (b.user_id ?? 0))
+                  .map((user) => (
+                    <tr key={user.user_id}>
+                      {/* USER ID */}
+
                       <td>{user.user_id}</td>
 
                       {/* USERNAME */}
+
                       <td>
                         {editingUserId === user.user_id ? (
                           <input
+                            autoFocus
                             value={editForm.username}
                             onChange={(e) =>
-                              setEditForm({
-                                ...editForm,
+                              setEditForm((prev) => ({
+                                ...prev,
                                 username: e.target.value
-                              })
+                              }))
                             }
                             onKeyDown={(e) => {
                               if (e.key === 'Enter') {
                                 handleUpdateUser(user.user_id);
                               }
                             }}
-                            autoFocus
                           />
                         ) : (
                           <>
                             {user.username}
+
                             <FiEdit
                               size={15}
                               className="edit-icon"
                               onClick={() => {
                                 setEditingUserId(user.user_id);
+
                                 setEditForm({
                                   username: user.username,
                                   email: user.email
@@ -452,15 +535,16 @@ const AdminDashboard = () => {
                       </td>
 
                       {/* EMAIL */}
+
                       <td>
                         {editingUserId === user.user_id ? (
                           <input
                             value={editForm.email}
                             onChange={(e) =>
-                              setEditForm({
-                                ...editForm,
+                              setEditForm((prev) => ({
+                                ...prev,
                                 email: e.target.value
-                              })
+                              }))
                             }
                             onKeyDown={(e) => {
                               if (e.key === 'Enter') {
@@ -471,6 +555,7 @@ const AdminDashboard = () => {
                         ) : (
                           <>
                             {user.email}
+
                             <FiEdit
                               size={15}
                               className="edit-icon"
@@ -486,6 +571,9 @@ const AdminDashboard = () => {
                           </>
                         )}
                       </td>
+
+                      {/* STATUS */}
+
                       <td>
                         <span
                           className={user.status === 'active' ? 'status-active' : 'status-inactive'}
@@ -493,8 +581,17 @@ const AdminDashboard = () => {
                           {user.status}
                         </span>
                       </td>
+
+                      {/* STATE */}
+
                       <td>{user.state}</td>
+
+                      {/* UPTIME */}
+
                       <td>{user.uptime}</td>
+
+                      {/* CONTROL */}
+
                       <td>
                         <button
                           className={
@@ -507,6 +604,7 @@ const AdminDashboard = () => {
                               } else {
                                 await disableUser(user.user_id);
                               }
+
                               await fetchUsers();
                               await fetchAnalytics();
                             } catch (error) {
@@ -526,14 +624,17 @@ const AdminDashboard = () => {
       </div>
 
       {/* MEMORY CONTROLS */}
+
       <div className="panel-card">
         <div className="panel-header" onClick={() => toggleSection('memories')}>
           <div className="panel-title">
             <FiDatabase size={20} />
             Memory Controls
           </div>
+
           {openSection.memories ? <FiChevronUp /> : <FiChevronDown />}
         </div>
+
         {openSection.memories && (
           <div className="table-wrapper">
             <table>
@@ -551,13 +652,17 @@ const AdminDashboard = () => {
                   <th>Control</th>
                 </tr>
               </thead>
+
               <tbody>
                 {[...memoryData]
+
                   .filter(
                     (memory) => memory.message_id && memory.chat_id && memory.message_count > 0
                   )
-                  .sort((a, b) => (a.message_id || 0) - (b.message_id || 0))
-                  .map((memory, index) => {
+
+                  .sort((a, b) => (a.message_id ?? 0) - (b.message_id ?? 0))
+
+                  .map((memory) => {
                     const renderValue = (value) => {
                       if (value === null || value === undefined || value === '') {
                         return '-';
@@ -571,17 +676,21 @@ const AdminDashboard = () => {
                     };
 
                     return (
-                      <tr key={index}>
+                      <tr key={memory.message_id}>
                         {/* MESSAGE ID */}
+
                         <td>{renderValue(memory.message_id)}</td>
 
                         {/* CHAT ID */}
+
                         <td>{renderValue(memory.chat_id)}</td>
 
                         {/* MESSAGE COUNT */}
+
                         <td>{renderValue(memory.message_count)}</td>
 
                         {/* MEDIA ATTACHED */}
+
                         <td>
                           {memory.media_attached === true
                             ? 'True'
@@ -591,21 +700,27 @@ const AdminDashboard = () => {
                         </td>
 
                         {/* MEDIA ID */}
+
                         <td>{renderValue(memory.media_id)}</td>
 
                         {/* PIPELINE */}
+
                         <td>{renderValue(memory.pipeline_used)}</td>
 
                         {/* LATENCY */}
+
                         <td>{renderValue(memory.latency)}</td>
 
                         {/* COST */}
+
                         <td>{renderValue(memory.cost)}</td>
 
                         {/* PING */}
+
                         <td>{renderValue(memory.ping)}</td>
 
                         {/* DELETE */}
+
                         <td>
                           <button
                             className="delete-btn"
@@ -614,7 +729,7 @@ const AdminDashboard = () => {
                               try {
                                 await deleteChatAdmin(memory.chat_id);
 
-                                fetchMemories();
+                                await fetchMemories();
                               } catch (error) {
                                 console.error(error);
 
@@ -635,14 +750,17 @@ const AdminDashboard = () => {
       </div>
 
       {/* MEDIA CONTROLS */}
+
       <div className="panel-card">
         <div className="panel-header" onClick={() => toggleSection('media')}>
           <div className="panel-title">
             <FiImage size={20} />
             Media Controls
           </div>
+
           {openSection.media ? <FiChevronUp /> : <FiChevronDown />}
         </div>
+
         {openSection.media && (
           <div className="table-wrapper">
             <table>
@@ -656,28 +774,47 @@ const AdminDashboard = () => {
                   <th>Control</th>
                 </tr>
               </thead>
+
               <tbody>
-                {mediaData.map((media, index) => (
-                  <tr key={index}>
+                {mediaData.map((media) => (
+                  <tr key={media.media_id}>
+                    {/* MEDIA ID */}
+
                     <td>{media.media_id}</td>
+
+                    {/* CHAT ID */}
+
                     <td>{media.attached_chat_id}</td>
+
+                    {/* MEDIA TYPE */}
+
                     <td>{media.media_type}</td>
+
+                    {/* MEDIA FORMAT */}
+
                     <td>{media.media_format}</td>
+
+                    {/* PROCESSED */}
+
                     <td>{media.processed ? 'True' : 'False'}</td>
+
+                    {/* DELETE */}
+
                     <td>
                       <button
                         className="delete-btn"
                         onClick={async () => {
                           try {
                             await deleteMedia(media.media_id);
-                            fetchMedia();
+
+                            await fetchMedia();
                           } catch (error) {
                             console.error(error);
                           }
                         }}
                       >
                         Delete
-                      </button>{' '}
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -688,14 +825,17 @@ const AdminDashboard = () => {
       </div>
 
       {/* DATA CONTROLS */}
+
       <div className="panel-card">
         <div className="panel-header" onClick={() => toggleSection('data')}>
           <div className="panel-title">
             <FiFileText size={20} />
             Data Controls
           </div>
+
           {openSection.data ? <FiChevronUp /> : <FiChevronDown />}
         </div>
+
         {openSection.data && (
           <div className="table-wrapper">
             <table>
@@ -707,28 +847,36 @@ const AdminDashboard = () => {
                   <th>Log Control</th>
                 </tr>
               </thead>
+
               <tbody>
                 {[...dataControls]
-                  .sort((a, b) => a.log_id - b.log_id)
-                  .map((data, index) => (
-                    <tr key={index}>
+
+                  .sort((a, b) => (a.log_id ?? 0) - (b.log_id ?? 0))
+
+                  .map((data) => (
+                    <tr key={data.log_id}>
                       {/* LOG ID */}
+
                       <td>{data.log_id}</td>
 
                       {/* LOG INFO */}
+
                       <td>{data.log_info}</td>
 
-                      {/* CACHE HIT */}
+                      {/* CACHE */}
+
                       <td>{data.cache_hit ? 'True' : 'False'}</td>
 
-                      {/* DELETE LOG */}
+                      {/* DELETE */}
+
                       <td>
                         <button
                           className="delete-btn"
                           onClick={async () => {
                             try {
                               await deleteLog(data.log_id);
-                              fetchSystemData();
+
+                              await fetchSystemData();
                             } catch (error) {
                               console.error(error);
                             }
@@ -746,16 +894,20 @@ const AdminDashboard = () => {
       </div>
 
       {/* BOTTOM BUTTONS */}
+
       <div className="admin-bottom-buttons">
         {/* CLEAR CACHE */}
+
         <button
           className="cache-btn"
           onClick={async () => {
             try {
               await clearCache();
+
               alert('Cache cleared successfully.');
             } catch (error) {
               console.error(error);
+
               alert('Failed to clear cache.');
             }
           }}
@@ -764,13 +916,17 @@ const AdminDashboard = () => {
         </button>
 
         {/* LOGOUT */}
+
         <button
           className="logout-btn"
           onClick={async () => {
             try {
               await adminLogout();
+
               localStorage.removeItem('admin_token');
+
               localStorage.removeItem('admin_data');
+
               window.location.href = '/admin-portal';
             } catch (error) {
               console.error(error);

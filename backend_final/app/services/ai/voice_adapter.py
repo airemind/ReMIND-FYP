@@ -1,16 +1,20 @@
-import os
+from pathlib import Path
 import sys
-from app.config.settings import settings
 
-AI_VOICE_PATH = settings.AI_VOICE_PATH
-PROJECT_ROOT = os.path.dirname(AI_VOICE_PATH)
-sys.path.append(PROJECT_ROOT)
+# Project root (ReMIND-FYP)
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
+
+# Allow importing voice_ai package
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from voice_ai.orchestration.voice_pipeline import run_voice_pipeline
 
 
 def process_voice(
-    audio_path: str, response_text: str = None, force_refresh: bool = False
+    audio_path: str,
+    response_text: str = None,
+    force_refresh: bool = False,
 ):
     return run_voice_pipeline(
         input_audio_path=audio_path,

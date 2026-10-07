@@ -1,7 +1,8 @@
 import axiosInstance from './axiosInstance';
 
-// CURRENT USER
+/* USER */
+
 export const getCurrentUser = async () => {
-  const response = await axiosInstance.get('/users/me');
-  return response.data;
+  const { data } = await axiosInstance.get('/users/me');
+  return data;
 };

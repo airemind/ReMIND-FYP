@@ -19,6 +19,7 @@ class MessageResponse(BaseModel):
     message_type: str
     created_at: datetime
     caption: Optional[str] = None
+    original_image: str | None = None
     enhanced_image: Optional[str] = None
     generated_audio: Optional[str] = None
     transcript: Optional[str] = None

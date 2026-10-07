@@ -3,12 +3,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.core.dependencies import get_db, get_current_user
 from app.models.user import User
-from app.schemas.patient_profile_schema import (
-    PatientProfileSchema,
-    PatientProfileResponseSchema,
-)
 from app.services.profile.profile_service import create_patient_profile
-from app.models.user import User
+from app.schemas.patient_profile_schema import PatientProfileSchema
 
 router = APIRouter(prefix="/profiles", tags=["Patient Profiles"])
 
