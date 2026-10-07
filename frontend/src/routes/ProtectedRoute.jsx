@@ -7,17 +7,13 @@ const ProtectedRoute = ({ children }) => {
 
   const location = useLocation();
 
-  /* -----------------------------
-      LOADING
-  ------------------------------ */
+  /* LOADING */
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  /* -----------------------------
-      ADMIN ROUTES
-  ------------------------------ */
+  /* ADMIN ROUTES */
 
   const isAdminRoute = location.pathname.startsWith('/admin');
 
@@ -31,9 +27,7 @@ const ProtectedRoute = ({ children }) => {
     return children;
   }
 
-  /* -----------------------------
-      USER ROUTES
-  ------------------------------ */
+  /* USER ROUTES */
 
   if (!user) {
     return <Navigate to="/login" replace />;

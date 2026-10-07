@@ -5,17 +5,17 @@ class Settings(BaseSettings):
     APP_NAME: str = "ReMIND"
     DEBUG: bool = True
 
-    DATABASE_URL: str
-    SECRET_KEY: str
-    ADMIN_SECRET_KEY: str
+    DATABASE_URL: str = "sqlite:///./re_mind.db"
+    SECRET_KEY: str = ""
+    ADMIN_SECRET_KEY: str = ""
 
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
-    REDIS_URL: str
+    REDIS_URL: str = ""
 
-    REACT_BASE_URL: str
-    REACT_BASE_URL_ALTERNATIVE: str
+    REACT_BASE_URL: str = ""
+    REACT_BASE_URL_ALTERNATIVE: str = ""
 
     # LOCAL PROJECT PATHS
     AI_IMAGE_PATH: str = ""

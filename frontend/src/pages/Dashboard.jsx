@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import { createChat, deleteChatById, getChats, renameChatById } from '../middleware/chatMiddleware';
 import { getMessages } from '../middleware/messageMiddleware';
 import { processMemory } from '../middleware/memoryMiddleware';
-import { enhanceImage } from '../middleware/imageEnhancementMiddleware';
+
 import '../styles/Dashboard.css';
 
 const Dashboard = () => {
@@ -26,17 +26,13 @@ const Dashboard = () => {
   const [error, setError] = useState('');
   const [isThinking, setIsThinking] = useState(false);
 
-  /* -----------------------------
-      SIDEBAR
-  ------------------------------ */
+  /* SIDEBAR */
 
   const toggleMobileSidebar = () => {
     setIsMobileSidebarOpen((prev) => !prev);
   };
 
-  /* -----------------------------
-      HELPERS
-  ------------------------------ */
+  /* HELPERS */
 
   const normalizeChat = (chat) => ({
     ...chat,
@@ -69,16 +65,10 @@ const Dashboard = () => {
 
     tones: message?.tones ?? [],
 
-    retrievedContext: message?.retrieved_context ?? [],
-
-    isEnhanced: !!message?.enhanced_image,
-
-    enhancedDownloadUrl: message?.enhanced_image ?? null
+    retrievedContext: message?.retrieved_context ?? []
   });
 
-  /* -----------------------------
-      LOAD CHATS
-  ------------------------------ */
+  /* LOAD CHATS */
 
   const fetchChats = useCallback(async () => {
     try {
@@ -114,9 +104,7 @@ const Dashboard = () => {
     fetchChats();
   }, [fetchChats]);
 
-  /* -----------------------------
-      ROUTE CHANGE
-  ------------------------------ */
+  /* ROUTE CHANGE */
 
   useEffect(() => {
     if (routeChatId && routeChatId !== activeChatId) {
@@ -124,9 +112,7 @@ const Dashboard = () => {
     }
   }, [routeChatId, activeChatId]);
 
-  /* -----------------------------
-      LOAD MESSAGES
-  ------------------------------ */
+  /* LOAD MESSAGES */
 
   useEffect(() => {
     const loadMessages = async () => {
@@ -157,9 +143,7 @@ const Dashboard = () => {
     loadMessages();
   }, [activeChatId, chatsLoaded]);
 
-  /* -----------------------------
-      CREATE CHAT
-  ------------------------------ */
+  /* CREATE CHAT */
 
   const createNewChat = async () => {
     try {
@@ -187,9 +171,7 @@ const Dashboard = () => {
     }
   };
 
-  /* -----------------------------
-      DELETE CHAT
-  ------------------------------ */
+  /* DELETE CHAT */
 
   const deleteChat = async (id) => {
     try {
@@ -221,9 +203,7 @@ const Dashboard = () => {
     }
   };
 
-  /* -----------------------------
-      RENAME CHAT
-  ------------------------------ */
+  /* RENAME CHAT */
 
   const renameChat = async (id, newTitle) => {
     try {
@@ -251,9 +231,7 @@ const Dashboard = () => {
       alert('Failed to rename chat.');
     }
   };
-  /* -----------------------------
-      SEND MESSAGE
-  ------------------------------ */
+  /* SEND MESSAGE */
 
   const sendMessage = async (payload) => {
     try {
@@ -276,19 +254,7 @@ const Dashboard = () => {
       /* IMAGE */
 
       if (imageAttachment) {
-        const previewUrl = URL.createObjectURL(imageAttachment.file);
-
-        userMessage.enhancedImage = previewUrl;
-
-        userMessage.originalImageUrl = previewUrl;
-
-        userMessage.originalImageFile = imageAttachment.file;
-
-        userMessage.isEnhancing = false;
-
-        userMessage.isEnhanced = false;
-
-        userMessage.enhancedDownloadUrl = null;
+        userMessage.enhancedImage = URL.createObjectURL(imageAttachment.file);
       }
 
       /* AUDIO */
@@ -334,21 +300,7 @@ const Dashboard = () => {
           response?.text_ai?.response ||
           'Memory reconstructed successfully.',
 
-        /* IMAGE */
-
         caption: response?.image_ai?.caption || '',
-
-        enhancedImage: response?.image_ai?.enhanced_url || response?.image_ai?.original_url || '',
-
-        originalImageUrl: response?.image_ai?.original_url || '',
-
-        originalImageFile: imageAttachment?.file ?? null,
-
-        isEnhancing: false,
-
-        isEnhanced: false,
-
-        enhancedDownloadUrl: null,
 
         /* AUDIO */
 
@@ -395,99 +347,7 @@ const Dashboard = () => {
     }
   };
 
-  /* -----------------------------
-      ENHANCE IMAGE
-  ------------------------------ */
-
-  const handleEnhanceImage = async (messageId) => {
-    try {
-      /* SHOW LOADING */
-
-      setChats((prevChats) =>
-        prevChats.map((chat) => ({
-          ...chat,
-          messages: chat.messages.map((message) =>
-            message.id === messageId
-              ? {
-                  ...message,
-                  isEnhancing: true
-                }
-              : message
-          )
-        }))
-      );
-
-      /* FIND CURRENT CHAT */
-
-      const currentChat = chats.find((chat) => Number(chat.id) === Number(activeChatId));
-
-      if (!currentChat) {
-        throw new Error('Chat not found.');
-      }
-
-      /* FIND TARGET MESSAGE */
-
-      const targetMessage = currentChat.messages.find((message) => message.id === messageId);
-
-      if (!targetMessage || !targetMessage.originalImageFile) {
-        throw new Error('Original image not found.');
-      }
-
-      /* CALL IMAGE API */
-
-      const response = await enhanceImage(targetMessage.originalImageFile);
-
-      /* UPDATE MESSAGE */
-
-      setChats((prevChats) =>
-        prevChats.map((chat) => ({
-          ...chat,
-          messages: chat.messages.map((message) => {
-            if (message.id !== messageId) {
-              return message;
-            }
-
-            return {
-              ...message,
-
-              isEnhancing: false,
-
-              isEnhanced: true,
-
-              enhancedImage:
-                response?.enhanced_url || response?.enhanced_image || message.enhancedImage,
-
-              enhancedDownloadUrl: response?.enhanced_url || response?.enhanced_image || null
-            };
-          })
-        }))
-      );
-    } catch (error) {
-      console.error(error);
-
-      /* RESET LOADING */
-
-      setChats((prevChats) =>
-        prevChats.map((chat) => ({
-          ...chat,
-          messages: chat.messages.map((message) =>
-            message.id === messageId
-              ? {
-                  ...message,
-                  isEnhancing: false
-                }
-              : message
-          )
-        }))
-      );
-
-      alert('Image enhancement failed.');
-    }
-  };
-
-  /* -----------------------------
-      SELECT CHAT
-  ------------------------------ */
+  /* SELECT CHAT */
 
   const handleChatSelect = (chatId) => {
     if (chatId !== activeChatId) {
@@ -515,9 +375,7 @@ const Dashboard = () => {
     return <div className="dashboard-error">{error}</div>;
   }
 
-  /* -----------------------------
-      MAIN UI
-  ------------------------------ */
+  /* MAIN UI */
 
   return (
     <div className="dashboard">
@@ -543,7 +401,6 @@ const Dashboard = () => {
         <ChatArea
           activeChat={activeChat}
           isThinking={isThinking}
-          handleEnhanceImage={handleEnhanceImage}
         />
 
         <MessageInput sendMessage={sendMessage} activeChat={activeChat} />

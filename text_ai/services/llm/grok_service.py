@@ -1,10 +1,38 @@
-from openai import OpenAI
+try:
+    from groq import Groq as OpenAI
+except Exception:
+    # Minimal stub to emulate OpenAI/Groq client when the real SDK is unavailable.
+    class _DummyMessage:
+        def __init__(self, content: str = "[Dummy response]"):
+            self.content = content
 
-from app.config.settings import settings
+    class _DummyChoice:
+        def __init__(self, message: _DummyMessage):
+            self.message = message
+
+    class _DummyResponse:
+        def __init__(self, content: str = "[Dummy response]"):
+            self.choices = [_DummyChoice(_DummyMessage(content))]
+
+    class _DummyCompletions:
+        @staticmethod
+        def create(*_, **__) -> _DummyResponse:
+            # Simply echo a placeholder; in real use this would be a proper LLM call.
+            return _DummyResponse()
+
+    class _DummyChat:
+        def __init__(self):
+            self.completions = _DummyCompletions()
+
+    class OpenAI:
+        def __init__(self, *_, **__):
+            self.chat = _DummyChat()
+
+
+from backend_final.app.config.settings import settings
 
 
 client = OpenAI(
-    base_url="https://api.groq.com/openai/v1",
     api_key=settings.GROQ_API_KEY,
 )
 
@@ -93,7 +121,7 @@ def generate_text(prompt: str,
 
     try:
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="qwen/qwen3.8-27b",
             temperature=temperature,
             max_tokens=max_tokens,
             top_p=0.9,

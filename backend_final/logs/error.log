@@ -465,3 +465,31 @@ LINE 1: ...(chat_id, sender, content, message_type, caption, original_i...
 [SQL: INSERT INTO messages (chat_id, sender, content, message_type, caption, original_image, enhanced_image, generated_audio, transcript, emotion) VALUES (%(chat_id)s, %(sender)s, %(content)s, %(message_type)s, %(caption)s, %(original_image)s, %(enhanced_image)s, %(generated_audio)s, %(transcript)s, %(emotion)s) RETURNING messages.id, messages.created_at]
 [parameters: {'chat_id': 4, 'sender': 'user', 'content': 'he', 'message_type': 'memory', 'caption': None, 'original_image': None, 'enhanced_image': None, 'generated_audio': None, 'transcript': None, 'emotion': None}]
 (Background on this error at: https://sqlalche.me/e/20/f405)
+2026-10-07 17:34:12,572 | ERROR | ERROR | POST /auth/login ERROR=(sqlite3.OperationalError) no such table: users
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.hashed_password AS users_hashed_password, users.role AS users_role, users.oauth_provider AS users_oauth_provider, users.google_id AS users_google_id, users.is_active AS users_is_active, users.is_verified AS users_is_verified, users.is_logged_in AS users_is_logged_in, users.last_login AS users_last_login, users.created_at AS users_created_at 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('testuser123@gmail.com', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-10-07 17:34:17,823 | ERROR | ERROR | POST /auth/login ERROR=(sqlite3.OperationalError) no such table: users
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.hashed_password AS users_hashed_password, users.role AS users_role, users.oauth_provider AS users_oauth_provider, users.google_id AS users_google_id, users.is_active AS users_is_active, users.is_verified AS users_is_verified, users.is_logged_in AS users_is_logged_in, users.last_login AS users_last_login, users.created_at AS users_created_at 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('testuser123@gmail.com', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-10-07 17:34:18,359 | ERROR | ERROR | POST /auth/login ERROR=(sqlite3.OperationalError) no such table: users
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.hashed_password AS users_hashed_password, users.role AS users_role, users.oauth_provider AS users_oauth_provider, users.google_id AS users_google_id, users.is_active AS users_is_active, users.is_verified AS users_is_verified, users.is_logged_in AS users_is_logged_in, users.last_login AS users_last_login, users.created_at AS users_created_at 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('testuser123@gmail.com', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-10-07 17:46:24,630 | ERROR | ERROR | POST /auth/login ERROR=(sqlite3.OperationalError) no such table: users
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.hashed_password AS users_hashed_password, users.role AS users_role, users.oauth_provider AS users_oauth_provider, users.google_id AS users_google_id, users.is_active AS users_is_active, users.is_verified AS users_is_verified, users.is_logged_in AS users_is_logged_in, users.last_login AS users_last_login, users.created_at AS users_created_at 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('testuser123@gmail.com', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)

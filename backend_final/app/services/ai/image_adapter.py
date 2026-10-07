@@ -10,7 +10,6 @@ if str(PROJECT_ROOT) not in sys.path:
 
 # Local AI pipelines
 from image_ai.pipeline.caption_pipeline import caption_image
-from image_ai.pipeline.enhancement_pipeline import enhance_image
 
 
 def process_image(image_path: str):
@@ -18,10 +17,3 @@ def process_image(image_path: str):
     Generate an image caption using the local BLIP pipeline.
     """
     return caption_image(image_path)
-
-
-def enhance_uploaded_image(image_path: str):
-    """
-    Enhance an uploaded image using the local GFPGAN + RealESRGAN pipeline.
-    """
-    return enhance_image(image_path)

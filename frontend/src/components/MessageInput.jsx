@@ -33,7 +33,7 @@ const MessageInput = ({ sendMessage, activeChat }) => {
   const imageInputRef = useRef(null);
   const audioInputRef = useRef(null);
 
-  /* ---------------- Speech Recognition ---------------- */
+  /* Speech Recognition */
 
   useEffect(() => {
     const SpeechRecognition =
@@ -64,7 +64,7 @@ const MessageInput = ({ sendMessage, activeChat }) => {
     recognitionRef.current = recognition;
   }, []);
 
-  /* ---------------- Auto Textarea Height ---------------- */
+  /* Auto Textarea Height */
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -85,7 +85,7 @@ const MessageInput = ({ sendMessage, activeChat }) => {
     }
   }, [text]);
 
-  /* ---------------- Close Attachment Menu ---------------- */
+  /* Close Attachment Menu */
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -106,7 +106,7 @@ const MessageInput = ({ sendMessage, activeChat }) => {
       );
   }, []);
 
-  /* ---------------- Microphone ---------------- */
+  /* Microphone */
 
   const handleMicClick = () => {
     if (!hasActiveChat) return;
@@ -125,7 +125,7 @@ const MessageInput = ({ sendMessage, activeChat }) => {
     }
   };
 
-  /* ---------------- File Upload ---------------- */
+  /* File Upload */
 
   const handleFileChange = (event, type) => {
     if (!hasActiveChat) return;
@@ -160,7 +160,7 @@ const MessageInput = ({ sendMessage, activeChat }) => {
     setShowMenu(false);
   };
 
-  /* ---------------- Send ---------------- */
+  /* Send */
 
   const handleSend = () => {
     if (!hasActiveChat) return;

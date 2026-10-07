@@ -23,9 +23,7 @@ const Login = () => {
 
   const [error, setError] = useState('');
 
-  /* -----------------------------
-      NORMAL LOGIN
-  ------------------------------ */
+  /* NORMAL LOGIN */
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -54,9 +52,7 @@ const Login = () => {
     }
   };
 
-  /* -----------------------------
-      GOOGLE LOGIN
-  ------------------------------ */
+  /* GOOGLE LOGIN */
 
   const handleGoogleLogin = async (credentialResponse) => {
     try {

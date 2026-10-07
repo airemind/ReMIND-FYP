@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  /* ---------------- Load Current User ---------------- */
+  /* Load Current User */
 
   const loadUser = useCallback(async () => {
     const token = localStorage.getItem('token');
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   }, [loadUser]);
 
-  /* ---------------- Login ---------------- */
+  /* Login */
 
   const login = useCallback(async (credentials) => {
     try {
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  /* ---------------- Google Login ---------------- */
+  /* Google Login */
 
   const loginWithGoogle = useCallback(async (googleData) => {
     try {
@@ -102,7 +102,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  /* ---------------- Logout ---------------- */
+  /* Logout */
 
   const logout = useCallback(async () => {
     try {

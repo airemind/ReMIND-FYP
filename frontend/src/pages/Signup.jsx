@@ -1,46 +1,29 @@
 import { useState } from 'react';
 import { FiEye, FiEyeOff, FiMoon, FiSun } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-
 import ProfileSetup from '../components/ProfileSetup';
-
 import logo from '../assets/images/logo-light.png';
-
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-
 import { signupUser } from '../middleware/authMiddleware';
-
 import { saveProfileSetup } from '../middleware/profileMiddleware';
-
 import '../styles/Signup.css';
 
 const Signup = () => {
   const navigate = useNavigate();
 
   const { theme, toggleTheme } = useTheme();
-
   const { login } = useAuth();
-
   const [pendingPatientData, setPendingPatientData] = useState(null);
-
   const [showProfileSetup, setShowProfileSetup] = useState(false);
-
   const [username, setUsername] = useState('');
-
   const [email, setEmail] = useState('');
-
   const [password, setPassword] = useState('');
-
   const [showPassword, setShowPassword] = useState(false);
-
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState('');
 
-  /* -----------------------------
-      SIGN UP
-  ------------------------------ */
+  /* SIGN UP */
 
   const handleSignup = async (event) => {
     event.preventDefault();
@@ -87,9 +70,7 @@ const Signup = () => {
     }
   };
 
-  /* -----------------------------
-      COMPLETE PROFILE
-  ------------------------------ */
+  /* COMPLETE PROFILE */
 
   const handleProfileComplete = async (profileData) => {
     try {
@@ -124,9 +105,7 @@ const Signup = () => {
     }
   };
 
-  /* -----------------------------
-      CLOSE PROFILE POPUP
-  ------------------------------ */
+  /* CLOSE PROFILE POPUP */
 
   const handleProfileClose = () => {
     localStorage.removeItem('token');

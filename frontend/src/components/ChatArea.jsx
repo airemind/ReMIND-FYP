@@ -6,7 +6,7 @@ import logoLight from '../assets/images/logo-light.png';
 
 import '../styles/ChatArea.css';
 
-const ChatArea = ({ activeChat, isThinking, handleEnhanceImage }) => {
+const ChatArea = ({ activeChat, isThinking }) => {
   const { theme } = useTheme();
   const logo = theme === 'dark' ? logoDark : logoLight;
 
@@ -98,34 +98,9 @@ const ChatArea = ({ activeChat, isThinking, handleEnhanceImage }) => {
               <div className="memory-card">
                 {msg.content && <div className="memory-response">{msg.content}</div>}
 
-                {msg.enhancedImage && (
+                {msg.role === 'user' && msg.enhancedImage && (
                   <div className="memory-image">
-                    <img src={msg.enhancedImage} alt="Memory" className="memory-preview-image" />
-
-                    {msg.role === 'assistant' && (
-                      <div className="image-actions">
-                        {!msg.isEnhanced && (
-                          <button
-                            className="image-action-btn"
-                            disabled={msg.isEnhancing}
-                            title="Enhance image quality"
-                            onClick={() => handleEnhanceImage(msg.id)}
-                          >
-                            {msg.isEnhancing ? 'Enhancing...' : 'Enhance Image'}
-                          </button>
-                        )}
-
-                        {msg.isEnhanced && msg.enhancedDownloadUrl && (
-                          <a
-                            href={msg.enhancedDownloadUrl}
-                            download="enhanced-image"
-                            className="image-action-btn"
-                          >
-                            Download Enhanced
-                          </a>
-                        )}
-                      </div>
-                    )}
+                    <img src={msg.enhancedImage} alt="Uploaded preview" className="memory-preview-image" />
                   </div>
                 )}
 

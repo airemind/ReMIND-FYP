@@ -123,42 +123,114 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.chat-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+}
+
+.pin-badge {
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+/* Pinned chat highlight */
+.chat-item.pinned {
+  border-left: 3px solid #6366f1;
+  padding-left: 11px;
+}
+
+/* Three-dot button container */
+.chat-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
   opacity: 0;
   transition: opacity 0.2s ease;
+  flex-shrink: 0;
 }
 
 .chat-item:hover .chat-actions {
   opacity: 1;
 }
 
-.chat-actions svg {
-  font-size: 18px;
+/* The ⋮ button itself */
+.chat-menu-btn {
+  background: none;
+  border: none;
   cursor: pointer;
-  padding: 8px;
+  padding: 4px 6px;
   border-radius: 8px;
-  min-width: 34px;
-  min-height: 34px;
-  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  transition: background 0.15s ease, color 0.15s ease;
+  line-height: 1;
 }
 
-.chat-actions svg:hover {
+.chat-menu-btn:hover {
   background: rgba(0, 0, 0, 0.08);
+  color: #111827;
 }
 
-.delete-icon {
+.chat-menu-btn svg {
+  font-size: 17px;
+  display: block;
+}
+
+/* Dropdown panel — rendered via portal, positioned with fixed + inline style */
+.chat-dropdown {
+  position: fixed;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  min-width: 148px;
+  padding: 6px 0;
+  animation: dropIn 0.15s ease;
+}
+
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chat-dropdown-item {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 9px 14px;
+  font-size: 13.5px;
+  text-align: left;
+  cursor: pointer;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.chat-dropdown-item:hover {
+  background: #f3f4f6;
+}
+
+.chat-dropdown-item.danger {
   color: #ef4444;
 }
 
-.delete-icon:hover {
-  transform: scale(1.1);
+.chat-dropdown-item.danger:hover {
+  background: #fef2f2;
 }
 
+/* Rename inline input */
 .chat-item input {
   width: 100%;
   border: none;
@@ -167,6 +239,7 @@
   font-size: 14px;
   color: #000;
 }
+
 
 .sidebar-collapsed-icons {
   display: flex;
@@ -303,6 +376,7 @@
     z-index: 1100;
   }
 
+  /* Always show the three-dot button on mobile */
   .chat-actions {
     opacity: 1;
   }
