@@ -158,15 +158,14 @@ The ReMIND team hopes that researchers, developers, healthcare professionals, an
 
 ## Voice Processing
 
-- Whisper
-- ElevenLabs
+- ElevenLabs Speech-to-Text
 - Google Text-to-Speech
 
 ## Image Processing
 
 - Real-ESRGAN
 - GFPGAN
-- ViT-GPT2
+- BLIP Lightweight
 
 ## Storage
 
@@ -398,7 +397,7 @@ Email: [zulkifl.hassan@ucp.edu.pk](mailto:zulkifl.hassan@ucp.edu.pk)
 - System Integration
 
 LinkedIn:
-https://www.linkedin.com/in/muhammad-hassan-a-0389a4363/
+[https://www.linkedin.com/in/muhammad-hassan-a-0389a4363/](https://www.linkedin.com/in/muhammad-hassan-ashraf0086/)
 
 ---
 
