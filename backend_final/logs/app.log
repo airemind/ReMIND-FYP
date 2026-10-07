@@ -6022,3 +6022,8 @@
 
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
 2026-10-08 03:56:38,055 | INFO | REQUEST | ReMIND backend started successfully
+2026-10-08 04:12:45,279 | WARNING | REQUEST | Database table verification skipped/failed: (psycopg2.OperationalError) connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-10-08 04:12:45,283 | INFO | REQUEST | ReMIND backend started successfully

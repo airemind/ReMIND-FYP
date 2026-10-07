@@ -2,9 +2,7 @@ from text_ai.services.rag.embedding_service import get_embedding
 
 
 def retrieve_context(vector_store, query: str):
-
-    if not query:
-
+    if not query or not vector_store or len(getattr(vector_store, "texts", [])) == 0:
         return []
 
     embedding = get_embedding(query)

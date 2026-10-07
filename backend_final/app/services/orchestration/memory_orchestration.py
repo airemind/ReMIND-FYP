@@ -44,10 +44,14 @@ def process_multimodal_memory(
             },
         )
 
-        # Image AI
+        # Image AI (skip internal text_ai call since memory_orchestration handles it below)
         if image_path:
             image_result = process_and_store_image(
-                image_path=image_path, db=db, user_id=user_id, chat_id=chat_id
+                image_path=image_path,
+                db=db,
+                user_id=user_id,
+                chat_id=chat_id,
+                skip_text_ai=True,
             )
             if image_result["success"]:
                 image_caption = image_result["caption"]
@@ -122,3 +126,6 @@ def process_multimodal_memory(
     except Exception as e:
         error_logger.error(f"Multimodal orchestration failed: {str(e)}")
         return {"success": False, "error": str(e)}
+    finally:
+        from app.core.memory_utils import release_system_memory
+        release_system_memory()

@@ -32,6 +32,9 @@ MEMORY_IMAGE_DIR = os.path.join(
 os.makedirs(MEMORY_IMAGE_DIR, exist_ok=True)
 
 
+from app.core.memory_utils import release_system_memory
+
+
 def process_and_store_image(
     image_path: str,
     db: Session,
@@ -40,6 +43,7 @@ def process_and_store_image(
     profile=None,
     patient_profile=None,
     session_id: str = "unknown",
+    skip_text_ai: bool = False,
 ):
     try:
         ai_logger.info("Image orchestration started")
@@ -62,19 +66,26 @@ def process_and_store_image(
         if not image_result["success"]:
             return image_result
 
-        # Text AI
-        text_result = process_text(
-            user_input=image_result["caption"],
-            image={
-                "caption": image_result["caption"],
-            },
-            profile=profile,
-        )
-
-        memory_response = text_result.get(
-            "response",
-            image_result["caption"],
-        )
+        # Text AI (skipped when called from multimodal memory orchestration to save memory)
+        if skip_text_ai:
+            memory_response = image_result["caption"]
+            text_result = {
+                "intent": "memory",
+                "entities": {"names": [], "places": [], "dates": [], "events": []},
+                "retrieved_context": [],
+            }
+        else:
+            text_result = process_text(
+                user_input=image_result["caption"],
+                image={
+                    "caption": image_result["caption"],
+                },
+                profile=profile,
+            )
+            memory_response = text_result.get(
+                "response",
+                image_result["caption"],
+            )
 
         # Copy original image to persistent storage
         filename = os.path.basename(image_path)
@@ -176,3 +187,5 @@ def process_and_store_image(
             "success": False,
             "error": str(e),
         }
+    finally:
+        release_system_memory()

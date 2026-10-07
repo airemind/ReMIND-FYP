@@ -1,4 +1,6 @@
 import base64
+import ctypes
+import gc
 import io
 import mimetypes
 import os
@@ -10,9 +12,18 @@ except ImportError:
     Groq = None
 
 
-def encode_image(image_path: str, max_size: int = 1024) -> tuple[str, str]:
+def release_memory():
+    gc.collect()
+    try:
+        libc = ctypes.CDLL("libc.so.6")
+        libc.malloc_trim(0)
+    except Exception:
+        pass
+
+
+def encode_image(image_path: str, max_size: int = 512) -> tuple[str, str]:
     """
-    Open image, resize to reasonable dimensions for API, and return base64 + mime_type.
+    Open image, downscale to max 512px, compress to keep RAM footprint < 1MB.
     """
     mime_type, _ = mimetypes.guess_type(image_path)
     if not mime_type or not mime_type.startswith("image/"):
@@ -23,8 +34,9 @@ def encode_image(image_path: str, max_size: int = 1024) -> tuple[str, str]:
             img = img.convert("RGB")
             img.thumbnail((max_size, max_size), Image.Resampling.LANCZOS)
             buffer = io.BytesIO()
-            img.save(buffer, format="JPEG", quality=85)
+            img.save(buffer, format="JPEG", quality=75, optimize=True)
             encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
+            buffer.close()
             return encoded, "image/jpeg"
     except Exception:
         with open(image_path, "rb") as f:
@@ -35,12 +47,13 @@ def encode_image(image_path: str, max_size: int = 1024) -> tuple[str, str]:
 def generate_caption(image_path: str) -> str:
     """
     Generate an image caption using Groq Cloud Vision (zero RAM overhead)
-    with resilient fallbacks.
+    with resilient fallbacks and immediate memory reclamation.
     """
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key or not Groq:
         return "A personal photograph from the user's memories."
 
+    caption = None
     try:
         encoded_img, mime = encode_image(image_path)
         client = Groq(api_key=api_key)
@@ -68,40 +81,40 @@ def generate_caption(image_path: str) -> str:
             temperature=0.4,
         )
         caption = response.choices[0].message.content.strip()
-        if caption:
-            return caption
     except Exception as e:
         print(f"Primary Groq Vision failed: {e}")
 
-    try:
-        encoded_img, mime = encode_image(image_path)
-        client = Groq(api_key=api_key)
-        response = client.chat.completions.create(
-            model="llama-3.2-90b-vision-preview",
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": "Describe this photo concisely in 1-2 sentences:",
-                        },
-                        {
-                            "type": "image_url",
-                            "image_url": {
-                                "url": f"data:{mime};base64,{encoded_img}",
+    if not caption:
+        try:
+            encoded_img, mime = encode_image(image_path)
+            client = Groq(api_key=api_key)
+            response = client.chat.completions.create(
+                model="llama-3.2-90b-vision-preview",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "Describe this photo concisely in 1-2 sentences:",
                             },
-                        },
-                    ],
-                }
-            ],
-            max_tokens=150,
-            temperature=0.4,
-        )
-        caption = response.choices[0].message.content.strip()
-        if caption:
-            return caption
-    except Exception as e2:
-        print(f"Secondary Groq Vision failed: {e2}")
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:{mime};base64,{encoded_img}",
+                                },
+                            },
+                        ],
+                    }
+                ],
+                max_tokens=150,
+                temperature=0.4,
+            )
+            caption = response.choices[0].message.content.strip()
+        except Exception as e2:
+            print(f"Secondary Groq Vision failed: {e2}")
 
-    return "A personal photograph containing people and familiar surroundings."
+    # Immediately release image buffers from memory
+    release_memory()
+
+    return caption or "A personal photograph containing people and familiar surroundings."
