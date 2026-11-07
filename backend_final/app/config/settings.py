@@ -42,7 +42,7 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "uploads/"
 
     model_config = SettingsConfigDict(
-        env_file=(".env", ".env.local", "../.env.local", "../../.env.local"),
+        env_file=(".env", ".env.local", "backend_final/.env", "../.env.local", "../../.env.local"),
         extra="ignore"
     )
 
