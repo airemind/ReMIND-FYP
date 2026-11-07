@@ -11,6 +11,53 @@ import { processMemory } from '../middleware/memoryMiddleware';
 
 import '../styles/Dashboard.css';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+
+const formatMediaUrl = (url) => {
+  if (!url) return '';
+  if (
+    url.startsWith('http://') ||
+    url.startsWith('https://') ||
+    url.startsWith('blob:') ||
+    url.startsWith('data:')
+  ) {
+    return url;
+  }
+  const cleanBase = API_BASE_URL.replace(/\/+$/, '');
+  const cleanPath = url.startsWith('/') ? url : `/${url}`;
+  return `${cleanBase}${cleanPath}`;
+};
+
+const normalizeChat = (chat) => ({
+  ...chat,
+  id: chat?.id ?? chat?.chat_id ?? chat?._id,
+  messages: Array.isArray(chat?.messages) ? chat.messages : []
+});
+
+const normalizeMessage = (message) => {
+  let cleanContent = message?.content ?? '';
+  cleanContent = cleanContent
+    .replace(/\[Image Uploaded\]/gi, '')
+    .replace(/\[Audio Uploaded\]/gi, '')
+    .trim();
+
+  return {
+    ...message,
+    id: message?.id ?? message?.message_id ?? message?._id,
+    content: cleanContent,
+    sender: message?.sender ?? 'user',
+    role: message?.sender ?? 'user',
+    type: message?.message_type ?? 'text',
+    caption: message?.caption ?? '',
+    enhancedImage: formatMediaUrl(message?.enhanced_image ?? ''),
+    generatedAudio: formatMediaUrl(message?.generated_audio ?? ''),
+    transcript: message?.transcript ?? '',
+    emotion: message?.emotion ?? '',
+    tones: message?.tones ?? [],
+    retrievedContext: message?.retrieved_context ?? []
+  };
+};
+
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -31,42 +78,6 @@ const Dashboard = () => {
   const toggleMobileSidebar = () => {
     setIsMobileSidebarOpen((prev) => !prev);
   };
-
-  /* HELPERS */
-
-  const normalizeChat = (chat) => ({
-    ...chat,
-    id: chat?.id ?? chat?.chat_id ?? chat?._id,
-    messages: Array.isArray(chat?.messages) ? chat.messages : []
-  });
-
-  const normalizeMessage = (message) => ({
-    ...message,
-
-    id: message?.id ?? message?.message_id ?? message?._id,
-
-    content: message?.content ?? '',
-
-    sender: message?.sender ?? 'user',
-
-    role: message?.sender ?? 'user',
-
-    type: message?.message_type ?? 'text',
-
-    caption: message?.caption ?? '',
-
-    enhancedImage: message?.enhanced_image ?? '',
-
-    generatedAudio: message?.generated_audio ?? '',
-
-    transcript: message?.transcript ?? '',
-
-    emotion: message?.emotion ?? '',
-
-    tones: message?.tones ?? [],
-
-    retrievedContext: message?.retrieved_context ?? []
-  });
 
   /* LOAD CHATS */
 

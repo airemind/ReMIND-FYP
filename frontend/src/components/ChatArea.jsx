@@ -1,15 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
-
 import logoDark from '../assets/images/logo-dark.png';
 import logoLight from '../assets/images/logo-light.png';
-
 import '../styles/ChatArea.css';
 
 const ChatArea = ({ activeChat, isThinking }) => {
   const { theme } = useTheme();
   const logo = theme === 'dark' ? logoDark : logoLight;
-
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -21,7 +18,6 @@ const ChatArea = ({ activeChat, isThinking }) => {
   const handleFileDownload = async (fileId, fileName) => {
     try {
       const token = localStorage.getItem('token');
-
       const response = await fetch(
         `${process.env.REACT_APP_API_BASE_URL}/files/${fileId}/download`,
         {
@@ -43,20 +39,15 @@ const ChatArea = ({ activeChat, isThinking }) => {
       if (!response.ok) {
         throw new Error('Download failed');
       }
-
       const blob = await response.blob();
-
       const url = window.URL.createObjectURL(blob);
-
       const a = document.createElement('a');
 
       a.href = url;
       a.download = fileName || 'download';
-
       document.body.appendChild(a);
 
       a.click();
-
       a.remove();
 
       window.URL.revokeObjectURL(url);
@@ -71,9 +62,7 @@ const ChatArea = ({ activeChat, isThinking }) => {
       <div className="chat-area">
         <div className="chat-center">
           <img src={logo} alt="ReMIND Logo" className="chat-logo" />
-
           <h2>Hi! I am ReMIND, How can I help You?</h2>
-
           <p>
             ReMIND helps you preserve memories, recall important moments, manage conversations, and
             stay connected through intelligent AI assistance via text, images, and audio. Start a
@@ -92,15 +81,45 @@ const ChatArea = ({ activeChat, isThinking }) => {
             key={msg.id || index}
             className={`message-bubble ${msg.role === 'user' ? 'user' : 'assistant'}`}
           >
-            {msg.type === 'text' && <div className="message-text">{msg.content}</div>}
+            {msg.type === 'text' && (
+              <div className="message-text">
+                {msg.content}
+                {msg.role === 'user' && msg.enhancedImage && (
+                  <div className="memory-image" style={{ marginTop: '8px' }}>
+                    <img
+                      src={msg.enhancedImage}
+                      alt="Uploaded preview"
+                      className="memory-preview-image"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
 
             {msg.type === 'memory' && (
               <div className="memory-card">
-                {msg.content && <div className="memory-response">{msg.content}</div>}
+                {msg.content && msg.content.trim() && (
+                  <div className="memory-response">
+                    {msg.content
+                      .replace(/\[Image Uploaded\]/gi, '')
+                      .replace(/\[Audio Uploaded\]/gi, '')
+                      .trim()}
+                  </div>
+                )}
 
                 {msg.role === 'user' && msg.enhancedImage && (
                   <div className="memory-image">
-                    <img src={msg.enhancedImage} alt="Uploaded preview" className="memory-preview-image" />
+                    <img
+                      src={msg.enhancedImage}
+                      alt="Uploaded preview"
+                      className="memory-preview-image"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
                   </div>
                 )}
 
@@ -183,5 +202,4 @@ const ChatArea = ({ activeChat, isThinking }) => {
     </div>
   );
 };
-
 export default ChatArea;

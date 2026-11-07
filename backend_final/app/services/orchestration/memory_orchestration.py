@@ -23,28 +23,10 @@ def process_multimodal_memory(
         image_caption = None
         audio_transcript = None
 
-        # Save User Message
-        user_message_parts = []
-        if user_prompt:
-            user_message_parts.append(user_prompt)
-        if image_path:
-            user_message_parts.append("[Image Uploaded]")
-        if audio_path:
-            user_message_parts.append("[Audio Uploaded]")
+        user_image_url = None
+        user_audio_url = None
 
-        user_message_content = "\n".join(user_message_parts)
-
-        create_message(
-            db,
-            {
-                "chat_id": chat_id,
-                "sender": "user",
-                "content": user_message_content,
-                "message_type": "memory",
-            },
-        )
-
-        # Image AI (skip internal text_ai call since memory_orchestration handles it below)
+        # Image AI (process and store image first)
         if image_path:
             image_result = process_and_store_image(
                 image_path=image_path,
@@ -53,16 +35,33 @@ def process_multimodal_memory(
                 chat_id=chat_id,
                 skip_text_ai=True,
             )
-            if image_result["success"]:
-                image_caption = image_result["caption"]
+            if image_result and image_result.get("success"):
+                image_caption = image_result.get("caption")
+                user_image_url = image_result.get("original_url") or image_result.get("enhanced_url")
 
-        # Voice AI
+        # Voice AI (process and store voice first)
         if audio_path:
             voice_result = process_and_store_voice(
                 audio_path=audio_path, db=db, user_id=user_id, chat_id=chat_id
             )
-            if voice_result["success"]:
-                audio_transcript = voice_result["transcript"]
+            if voice_result and voice_result.get("success"):
+                audio_transcript = voice_result.get("transcript")
+                user_audio_url = voice_result.get("generated_audio_url")
+
+        # Save User Message with clean text and actual media URLs
+        user_message_content = user_prompt.strip() if user_prompt else ""
+
+        create_message(
+            db,
+            {
+                "chat_id": chat_id,
+                "sender": "user",
+                "content": user_message_content,
+                "message_type": "memory",
+                "enhanced_image": user_image_url,
+                "generated_audio": user_audio_url,
+            },
+        )
 
         # Build Multimodal Input
         combined_input = []
