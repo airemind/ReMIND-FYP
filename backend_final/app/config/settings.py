@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     DEBUG: bool = True
 
     DATABASE_URL: str = "sqlite:///./re_mind.db"
+    DATABASE_URL_UNPOOLED: str = ""
     SECRET_KEY: str = ""
     ADMIN_SECRET_KEY: str = ""
 
@@ -41,7 +42,7 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "uploads/"
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=(".env", ".env.local", "../.env.local", "../../.env.local"),
         extra="ignore"
     )
 

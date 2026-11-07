@@ -43,6 +43,7 @@ remind/backend_final/app/core/constants.py
 
 # Node.js
 node_modules/
+.npm-global/
 
 # Build Artifacts
 build/
@@ -76,8 +77,25 @@ htmlcov/
 # Generic Temporary Files
 remind/temp/
 remind/tmp/
+temp_uploads/
+temp_audio_uploads/
+uploads/
+backend_final/temp_uploads/
+backend_final/uploads/
 
-#logs, cache and results
+# User Uploaded Static Files
+static/memory_images/
+static/images/
+static/audio/
+
+# Logs, Cache and Results
 remind/logs/
 remind/cache/
 remind/results/
+logs/
+*.log
+
+# Neon & Agent Local Artifacts
+.neon
+.agents/
+skills-lock.json

@@ -17,10 +17,10 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Override sqlalchemy.url with application settings
+# Override sqlalchemy.url with application settings (prefer unpooled direct connection for migrations)
 from app.config.settings import settings
 
-db_url = settings.DATABASE_URL
+db_url = settings.DATABASE_URL_UNPOOLED or settings.DATABASE_URL
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
 

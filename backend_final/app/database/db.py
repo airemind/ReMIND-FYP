@@ -5,7 +5,12 @@ db_url = settings.DATABASE_URL
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
 
-engine = create_engine(db_url)
+# Configure engine with pool_pre_ping & recycle to gracefully handle Neon serverless auto-suspend
+engine_kwargs = {"pool_pre_ping": True}
+if not db_url.startswith("sqlite"):
+    engine_kwargs["pool_recycle"] = 300
+
+engine = create_engine(db_url, **engine_kwargs)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

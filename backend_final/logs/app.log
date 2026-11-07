@@ -6027,3 +6027,10 @@
 
 (Background on this error at: https://sqlalche.me/e/20/e3q8)
 2026-10-08 04:12:45,283 | INFO | REQUEST | ReMIND backend started successfully
+2026-11-07 14:55:54,342 | INFO | REQUEST | Database tables verified/created successfully
+2026-11-07 14:55:54,348 | INFO | REQUEST | ReMIND backend started successfully
+2026-11-07 14:56:20,138 | INFO | REQUEST | Database tables verified/created successfully
+2026-11-07 14:56:20,141 | INFO | REQUEST | ReMIND backend started successfully
+2026-11-07 14:56:20,206 | INFO | REQUEST | GET / STATUS=200 TIME=0.002s
+2026-11-07 14:56:21,662 | INFO | REQUEST | POST /auth/register STATUS=200 TIME=1.451s
+2026-11-07 14:56:23,036 | INFO | REQUEST | POST /auth/login STATUS=200 TIME=1.27s
