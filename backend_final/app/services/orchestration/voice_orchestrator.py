@@ -3,22 +3,15 @@ import uuid
 import hashlib
 from datetime import datetime, timezone
 from sqlalchemy.orm import Session
-
 from app.models.chat import Chat
 from app.models.media import Media
-
 from app.services.ai.voice_adapter import process_voice
 from app.services.ai.text_adapter import process_text
-
 from app.logs.ai_logger import ai_logger
 from app.logs.error_logger import error_logger
-
 from app.cache.redis_cache import get_cache, set_cache
-
 from app.utils.file_cleanup import delete_file, delete_directory
-
 from voice_ai.synthesis.google_tts import generate_speech
-
 from app.services.admin.metric_logger_service import store_metric
 
 
@@ -70,9 +63,10 @@ def process_and_store_voice(
             generated_audio_path,
         )
 
-        # Local paths
-        original_audio = voice_result["audio_path"]
-        generated_audio = generated_audio_path
+        # Persistent audio storage (Cloudinary CDN with local fallback)
+        from app.services.storage.cloudinary_service import upload_audio
+        original_audio = upload_audio(voice_result["audio_path"], folder="remind/voice_uploads")["url"]
+        generated_audio = upload_audio(generated_audio_path, folder="remind/voice_generated")["url"]
 
         # Save media
         media = Media(

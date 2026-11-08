@@ -3,20 +3,14 @@ import shutil
 import hashlib
 from datetime import datetime, timezone
 from sqlalchemy.orm import Session
-
 from app.models.chat import Chat
 from app.models.media import Media
-
 from app.services.ai.image_adapter import process_image
 from app.services.ai.text_adapter import process_text
-
 from app.logs.ai_logger import ai_logger
 from app.logs.error_logger import error_logger
-
 from app.cache.redis_cache import get_cache, set_cache
-
 from app.services.admin.metric_logger_service import store_metric
-
 
 # Persistent directory for uploaded memory images
 BASE_DIR = os.path.abspath(
@@ -87,20 +81,10 @@ def process_and_store_image(
                 image_result["caption"],
             )
 
-        # Copy original image to persistent storage
-        filename = os.path.basename(image_path)
-
-        persistent_path = os.path.join(
-            MEMORY_IMAGE_DIR,
-            filename
-        )
-
-        shutil.copy2(
-            image_path,
-            persistent_path
-        )
-
-        original_url = f"/static/memory_images/{filename}"
+        # Upload image to persistent storage (Cloudinary CDN with local fallback)
+        from app.services.storage.cloudinary_service import upload_image
+        upload_res = upload_image(image_path, folder="remind/memory_images")
+        original_url = upload_res["url"]
 
         # No enhancement during initial upload
         enhanced_path = None

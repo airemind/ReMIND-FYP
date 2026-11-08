@@ -32,13 +32,13 @@ services:
       - key: GROQ_API_KEY
         value: ""          # Add your Groq API key
       - key: CLOUDINARY_URL
-        value: ""
+        sync: false
       - key: CLOUDINARY_CLOUD_NAME
-        value: ""
+        sync: false
       - key: CLOUDINARY_API_KEY
-        value: ""
+        sync: false
       - key: CLOUDINARY_API_SECRET
-        value: ""
+        sync: false
       - key: ELEVENLABS_API_KEY
         value: ""          # Add your ElevenLabs key
       - key: AI_IMAGE_PATH

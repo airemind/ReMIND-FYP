@@ -91,7 +91,9 @@ const ChatArea = ({ activeChat, isThinking }) => {
                       alt="Uploaded preview"
                       className="memory-preview-image"
                       onError={(e) => {
-                        e.target.style.display = 'none';
+                        if (e.target.parentElement) {
+                          e.target.parentElement.style.display = 'none';
+                        }
                       }}
                     />
                   </div>
@@ -117,7 +119,9 @@ const ChatArea = ({ activeChat, isThinking }) => {
                       alt="Uploaded preview"
                       className="memory-preview-image"
                       onError={(e) => {
-                        e.target.style.display = 'none';
+                        if (e.target.parentElement) {
+                          e.target.parentElement.style.display = 'none';
+                        }
                       }}
                     />
                   </div>
