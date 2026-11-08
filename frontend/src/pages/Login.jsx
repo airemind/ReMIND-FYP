@@ -2,25 +2,17 @@ import { GoogleLogin } from '@react-oauth/google';
 import { useState } from 'react';
 import { FiMoon, FiSun, FiUser } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-
 import '../styles/Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
-
   const { login, loginWithGoogle } = useAuth();
-
   const { theme, toggleTheme } = useTheme();
-
   const [email, setEmail] = useState('');
-
   const [password, setPassword] = useState('');
-
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState('');
 
   /* NORMAL LOGIN */
@@ -36,7 +28,6 @@ const Login = () => {
     try {
       setLoading(true);
       setError('');
-
       await login({
         username: email.trim(),
         password: password.trim()
@@ -46,7 +37,11 @@ const Login = () => {
     } catch (error) {
       console.error(error);
 
-      setError(error.message || 'Login failed.');
+      if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+        setError('Server took too long to respond. The free-tier server was likely asleep—please click Login again now.');
+      } else {
+        setError(error?.response?.data?.detail || error.message || 'Login failed.');
+      }
     } finally {
       setLoading(false);
     }
@@ -130,6 +125,12 @@ const Login = () => {
           <button type="submit" className="login-primary-btn" disabled={loading}>
             {loading ? 'Logging in...' : 'Login'}
           </button>
+
+          {loading && (
+            <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '10px', textAlign: 'center' }}>
+              Free-tier servers sleep after inactivity. Waking up may take ~45–60s...
+            </p>
+          )}
         </form>
 
         {/* DIVIDER */}

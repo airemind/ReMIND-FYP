@@ -9,6 +9,7 @@ if db_url.startswith("postgres://"):
 engine_kwargs = {"pool_pre_ping": True}
 if not db_url.startswith("sqlite"):
     engine_kwargs["pool_recycle"] = 300
+    engine_kwargs["connect_args"] = {"connect_timeout": 15}
 
 engine = create_engine(db_url, **engine_kwargs)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
