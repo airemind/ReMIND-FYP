@@ -169,7 +169,8 @@ The ReMIND team hopes that researchers, developers, healthcare professionals, an
 
 ## Storage
 
-- Cloudinary
+- Cloudinary (Images)
+- Neon (Database)
 
 ---
 

@@ -14,7 +14,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 async def save_upload(db: Session, file: UploadFile, message_id: int = None):
     content = await file.read()
     file_size = len(content)
-    valid = validate_file(file.content_type, file_size)
+    valid = validate_file(file.content_type, file_size, filename=file.filename)
 
     if not valid:
         return None
@@ -25,10 +25,13 @@ async def save_upload(db: Session, file: UploadFile, message_id: int = None):
     with open(local_path, "wb") as f:
         f.write(content)
 
-    if "image" in file.content_type:
+    is_image = "image" in (file.content_type or "") or (
+        file.filename and file.filename.lower().endswith((".jpg", ".jpeg", ".png", ".webp"))
+    )
+
+    if is_image:
         cloud_result = upload_image(local_path)
         media_type = "image"
-
     else:
         cloud_result = upload_audio(local_path)
         media_type = "audio"

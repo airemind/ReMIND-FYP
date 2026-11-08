@@ -15,7 +15,17 @@ const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 const ALLOWED_TYPES = {
   image: ['image/jpeg', 'image/png'],
-  audio: ['audio/mpeg', 'audio/mp3', 'audio/wav']
+  audio: [
+    'audio/mpeg',
+    'audio/mp3',
+    'audio/wav',
+    'audio/x-wav',
+    'audio/ogg',
+    'audio/opus',
+    'audio/x-ogg',
+    'audio/webm',
+    'application/ogg'
+  ]
 };
 
 const MessageInput = ({ sendMessage, activeChat }) => {
@@ -140,8 +150,20 @@ const MessageInput = ({ sendMessage, activeChat }) => {
       return;
     }
 
-    if (!ALLOWED_TYPES[type].includes(file.type)) {
-      alert(`Invalid ${type} file.`);
+    const fileName = (file.name || '').toLowerCase();
+    const isExtensionMatch =
+      type === 'audio'
+        ? fileName.endsWith('.ogg') ||
+          fileName.endsWith('.opus') ||
+          fileName.endsWith('.mp3') ||
+          fileName.endsWith('.wav')
+        : fileName.endsWith('.jpg') ||
+          fileName.endsWith('.jpeg') ||
+          fileName.endsWith('.png') ||
+          fileName.endsWith('.webp');
+
+    if (!ALLOWED_TYPES[type].includes(file.type) && !isExtensionMatch) {
+      alert(`Invalid ${type} file. Supported: ${type === 'audio' ? 'MP3, WAV, OGG' : 'JPG, PNG'}`);
       event.target.value = '';
       return;
     }
@@ -275,7 +297,7 @@ const MessageInput = ({ sendMessage, activeChat }) => {
                   <div>
                     <div>Audio</div>
                     <small>
-                      MP3, WAV • Max {MAX_FILE_SIZE_MB}MB
+                      MP3, WAV, OGG • Max {MAX_FILE_SIZE_MB}MB
                     </small>
                   </div>
                 </div>
@@ -287,7 +309,7 @@ const MessageInput = ({ sendMessage, activeChat }) => {
               ref={imageInputRef}
               type="file"
               hidden
-              accept=".jpg,.jpeg,.png"
+              accept=".jpg,.jpeg,.png,.webp"
               onChange={(e) =>
                 handleFileChange(e, 'image')
               }
@@ -297,7 +319,7 @@ const MessageInput = ({ sendMessage, activeChat }) => {
               ref={audioInputRef}
               type="file"
               hidden
-              accept=".mp3,.wav"
+              accept=".mp3,.wav,.ogg,.opus,audio/ogg,audio/opus,audio/mp3,audio/wav,audio/mpeg"
               onChange={(e) =>
                 handleFileChange(e, 'audio')
               }
