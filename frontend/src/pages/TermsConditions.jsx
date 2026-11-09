@@ -57,7 +57,7 @@ const TermsConditions = () => {
           </ol>
           <div className="terms-warning">
             By using our product, you hereby accept our above mentioned
-            <span className="highlight">Terms & Conditions</span>.
+            <span className="highlight"> Terms & Conditions</span>.
           </div>
           <button className="login-button bottom-login" onClick={handleAccept}>
             Continue to Login
@@ -103,22 +103,32 @@ const TermsConditions = () => {
               <h4>How to use ReMIND AI?</h4>
               <ul>
                 <li>
-                  <strong>Supported Images:</strong> You can upload photographs in <strong>JPG, JPEG, PNG, or WebP</strong> format. ReMIND analyzes visual cues, people, clothing, and surroundings to help reconstruct forgotten moments.
+                  <strong>Supported Images:</strong> You can upload photographs in{' '}
+                  <strong>JPG, JPEG, PNG, or WebP</strong> format. ReMIND analyzes visual cues,
+                  people, clothing, and surroundings to help reconstruct forgotten moments.
                 </li>
                 <li>
-                  <strong>Supported Audio & Voice Notes:</strong> You can upload voice notes and audio clips in <strong>MP3, WAV, or OGG</strong> format (including standard WhatsApp voice notes). The AI transcribes your words and detects emotional tones.
+                  <strong>Supported Audio & Voice Notes:</strong> You can upload voice notes and
+                  audio clips in <strong>MP3, WAV, or OGG</strong> format (including standard
+                  WhatsApp voice notes). The AI transcribes your words and detects emotional tones.
                 </li>
                 <li>
-                  <strong>Document Uploads:</strong> Please note that <strong>PDF documents are not supported yet</strong>.
+                  <strong>Document Uploads:</strong> Please note that{' '}
+                  <strong>PDF documents are not supported yet</strong>.
                 </li>
                 <li>
-                  <strong>Interactive Memory Prompts:</strong> Combine your uploads with specific questions (e.g., <em>"What do you see in this photo?"</em> or <em>"Remind me where this was taken"</em>) to guide memory reconstruction.
+                  <strong>Interactive Memory Prompts:</strong> Combine your uploads with specific
+                  questions (e.g., <em>"What do you see in this photo?"</em> or{' '}
+                  <em>"Remind me where this was taken"</em>) to guide memory reconstruction.
                 </li>
                 <li>
-                  <strong>Personalized Context:</strong> Set up your patient profile with familiar places, loved ones, and routines to help ReMIND provide accurate, context-aware memory assistance.
+                  <strong>Personalized Context:</strong> Set up your patient profile with familiar
+                  places, loved ones, and routines to help ReMIND provide accurate, context-aware
+                  memory assistance.
                 </li>
                 <li>
-                  <strong>Memory Timelines:</strong> Access your past conversations, media previews, and AI-generated reflections anytime from your dashboard.
+                  <strong>Memory Timelines:</strong> Access your past conversations, media previews,
+                  and AI-generated reflections anytime from your dashboard.
                 </li>
               </ul>
               <h4>Need Assistance?</h4>
