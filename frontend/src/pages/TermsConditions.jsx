@@ -4,7 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import '../styles/TermsConditions.css';
 import logoLight from '../assets/images/logo-light.png';
 import logoDark from '../assets/images/logo-dark.png';
-import { FiMoon, FiSun } from 'react-icons/fi';
+import { FiMoon, FiSun, FiHelpCircle } from 'react-icons/fi';
 
 const TermsConditions = () => {
   const { theme, toggleTheme } = useTheme();
@@ -48,7 +48,7 @@ const TermsConditions = () => {
                 <u>
                   <b>Get Started</b>
                 </u>
-              </span>{' '}
+              </span>
               here.
             </li>
             <li>We apologize in advance if you face any inconvenience, as this is beta version.</li>
@@ -56,7 +56,7 @@ const TermsConditions = () => {
             <li>AI can make mistakes, please double check before reaching any final conclusion.</li>
           </ol>
           <div className="terms-warning">
-            By using our product, you hereby accept our above mentioned{' '}
+            By using our product, you hereby accept our above mentioned
             <span className="highlight">Terms & Conditions</span>.
           </div>
           <button className="login-button bottom-login" onClick={handleAccept}>
@@ -64,7 +64,8 @@ const TermsConditions = () => {
           </button>
         </main>
         <div className="help-button" onClick={() => setShowHelp(true)}>
-          ?
+          <FiHelpCircle size={18} />
+          <span>Need Help?</span>
         </div>
       </div>
       {showHelp && (
@@ -97,6 +98,27 @@ const TermsConditions = () => {
                 <li>
                   Use the platform responsibly and verify important information before making
                   decisions.
+                </li>
+              </ul>
+              <h4>How to use ReMIND AI?</h4>
+              <ul>
+                <li>
+                  <strong>Supported Images:</strong> You can upload photographs in <strong>JPG, JPEG, PNG, or WebP</strong> format. ReMIND analyzes visual cues, people, clothing, and surroundings to help reconstruct forgotten moments.
+                </li>
+                <li>
+                  <strong>Supported Audio & Voice Notes:</strong> You can upload voice notes and audio clips in <strong>MP3, WAV, or OGG</strong> format (including standard WhatsApp voice notes). The AI transcribes your words and detects emotional tones.
+                </li>
+                <li>
+                  <strong>Document Uploads:</strong> Please note that <strong>PDF documents are not supported yet</strong>.
+                </li>
+                <li>
+                  <strong>Interactive Memory Prompts:</strong> Combine your uploads with specific questions (e.g., <em>"What do you see in this photo?"</em> or <em>"Remind me where this was taken"</em>) to guide memory reconstruction.
+                </li>
+                <li>
+                  <strong>Personalized Context:</strong> Set up your patient profile with familiar places, loved ones, and routines to help ReMIND provide accurate, context-aware memory assistance.
+                </li>
+                <li>
+                  <strong>Memory Timelines:</strong> Access your past conversations, media previews, and AI-generated reflections anytime from your dashboard.
                 </li>
               </ul>
               <h4>Need Assistance?</h4>
