@@ -46,7 +46,7 @@ const TermsConditions = () => {
               Please cooperate what you are required to perform. If you are new{' '}
               <span className="link" onClick={() => navigate('/signup')}>
                 <u>
-                  <b>Get Started</b>
+                  <b>Get Started </b>
                 </u>
               </span>
               here.
