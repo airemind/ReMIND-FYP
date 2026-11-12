@@ -61,6 +61,8 @@ services:
     envVars:
       - key: REACT_APP_API_BASE_URL
         value: ""          # Fill in after backend deploys (https://remind-backend.onrender.com)
+      - key: REACT_APP_GOOGLE_CLIENT_ID
+        sync: false        # Set in Render Dashboard with your Google Client ID
     routes:
       - type: rewrite
         source: /*
