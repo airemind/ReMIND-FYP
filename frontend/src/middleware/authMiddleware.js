@@ -17,6 +17,13 @@ export const loginUser = async (credentials) => {
   return data;
 };
 
+/* CHECK AVAILABILITY */
+
+export const checkAvailability = async (payload) => {
+  const { data } = await axiosInstance.post('/auth/check-availability', payload);
+  return data;
+};
+
 /* SIGNUP */
 
 export const signupUser = async (payload) => {

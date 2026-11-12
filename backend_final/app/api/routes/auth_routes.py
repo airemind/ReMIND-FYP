@@ -14,8 +14,16 @@ from app.auth.oauth_manager import google_authenticate
 from app.auth.session_manager import invalidate_session
 from app.core.dependencies import oauth2_scheme
 from fastapi.security import OAuth2PasswordRequestForm
+from app.repositories.user_repo import get_user_by_email, get_user_by_username
+from pydantic import BaseModel
+from typing import Optional
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
+
+
+class AvailabilityCheck(BaseModel):
+    email: Optional[str] = None
+    username: Optional[str] = None
 
 
 def get_db():
@@ -24,6 +32,22 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+# CHECK AVAILABILITY
+@router.post("/check-availability")
+def check_availability(data: AvailabilityCheck, db: Session = Depends(get_db)):
+    if data.email:
+        existing_email = get_user_by_email(db, data.email.strip().lower())
+        if existing_email:
+            raise HTTPException(status_code=409, detail="Email already exists")
+
+    if data.username:
+        existing_username = get_user_by_username(db, data.username.strip())
+        if existing_username:
+            raise HTTPException(status_code=409, detail="Username already exists")
+
+    return {"available": True}
 
 
 # REGISTER

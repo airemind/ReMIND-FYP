@@ -5,7 +5,7 @@ import ProfileSetup from '../components/ProfileSetup';
 import logo from '../assets/images/logo-light.png';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { signupUser } from '../middleware/authMiddleware';
+import { checkAvailability, signupUser } from '../middleware/authMiddleware';
 import { saveProfileSetup } from '../middleware/profileMiddleware';
 import '../styles/Signup.css';
 
@@ -14,6 +14,7 @@ const Signup = () => {
 
   const { theme, toggleTheme } = useTheme();
   const { login } = useAuth();
+  const [pendingPatientData, setPendingPatientData] = useState(null);
   const [showProfileSetup, setShowProfileSetup] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -52,16 +53,14 @@ const Signup = () => {
         role: 'patient'
       };
 
-      // 1. Check & register user on backend first
-      await signupUser(userData);
-
-      // 2. Authenticate session
-      await login({
-        username: userData.email,
-        password: userData.password
+      // 1. Verify email & username availability on backend BEFORE showing profile
+      await checkAvailability({
+        email: userData.email,
+        username: userData.username
       });
 
-      // 3. Only open profile setup questions after checks & registration pass
+      // 2. Security & availability checks passed -> show profile setup questions
+      setPendingPatientData(userData);
       setShowProfileSetup(true);
     } catch (error) {
       console.error(error);
@@ -70,7 +69,7 @@ const Signup = () => {
         error?.response?.data?.error ||
           error?.response?.data?.detail ||
           error?.message ||
-          'Signup failed.'
+          'Signup validation failed.'
       );
     } finally {
       setLoading(false);
@@ -83,9 +82,20 @@ const Signup = () => {
     try {
       setLoading(true);
 
+      // 1. Create account
+      await signupUser(pendingPatientData);
+
+      // 2. Log in
+      await login({
+        username: pendingPatientData.email,
+        password: pendingPatientData.password
+      });
+
+      // 3. Save patient profile
       await saveProfileSetup(profileData);
 
       setShowProfileSetup(false);
+      setPendingPatientData(null);
 
       navigate('/dashboard', {
         replace: true
@@ -97,7 +107,7 @@ const Signup = () => {
         error?.response?.data?.error ||
           error?.response?.data?.detail ||
           error?.message ||
-          'Failed to save profile.'
+          'Failed to complete profile.'
       );
     } finally {
       setLoading(false);
@@ -108,10 +118,7 @@ const Signup = () => {
 
   const handleProfileClose = () => {
     setShowProfileSetup(false);
-
-    navigate('/dashboard', {
-      replace: true
-    });
+    setPendingPatientData(null);
   };
 
   return (
