@@ -4,7 +4,7 @@ import logoDark from '../assets/images/logo-dark.png';
 import logoLight from '../assets/images/logo-light.png';
 import '../styles/ChatArea.css';
 
-const ChatArea = ({ activeChat, isThinking }) => {
+const ChatArea = ({ activeChat, isThinking, onSuggestionClick }) => {
   const { theme } = useTheme();
   const logo = theme === 'dark' ? logoDark : logoLight;
   const messagesEndRef = useRef(null);
@@ -57,17 +57,79 @@ const ChatArea = ({ activeChat, isThinking }) => {
     }
   };
 
-  if (!activeChat && !isThinking) {
+  const hasMessages = Boolean(
+    activeChat &&
+      Array.isArray(activeChat.messages) &&
+      activeChat.messages.length > 0
+  );
+
+  if (!hasMessages && !isThinking) {
     return (
-      <div className="chat-area">
-        <div className="chat-center">
+      <div className="chat-area empty-chat-view">
+        <div className="chat-center empty-state-container">
           <img src={logo} alt="ReMIND Logo" className="chat-logo" />
-          <h2>Hi! I am ReMIND, How can I help You?</h2>
-          <p>
-            ReMIND helps you preserve memories, recall important moments, manage conversations, and
-            stay connected through intelligent AI assistance via text, images, and audio. Start a
-            new chat.
+          <h2 className="chat-title-center">What memory would you like to explore?</h2>
+          <p className="chat-welcome-subtitle">
+            ReMIND is your personal memory companion. Share an old photograph, record a voice note, or describe a moment to begin reconstructing your memories.
           </p>
+
+          <div className="suggestion-grid">
+            <button
+              type="button"
+              className="suggestion-card"
+              onClick={() => onSuggestionClick?.('Can you help me remember a past family event or celebration?')}
+            >
+              <div className="suggestion-icon">👨‍👩‍👧‍👦</div>
+              <div className="suggestion-text">
+                <span className="suggestion-title">Recall Family Moments</span>
+                <span className="suggestion-desc">Discuss past family gatherings, birthdays, or celebrations</span>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              className="suggestion-card"
+              onClick={() => onSuggestionClick?.("I would like to share a photo and talk about what's in it.")}
+            >
+              <div className="suggestion-icon">🖼️</div>
+              <div className="suggestion-text">
+                <span className="suggestion-title">Explore Photographs</span>
+                <span className="suggestion-desc">Attach a memory photo to enhance details and identify familiar faces</span>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              className="suggestion-card"
+              onClick={() => onSuggestionClick?.('I want to record a voice note about something I remembered.')}
+            >
+              <div className="suggestion-icon">🎙️</div>
+              <div className="suggestion-text">
+                <span className="suggestion-title">Voice Memories</span>
+                <span className="suggestion-desc">Speak or upload an audio note to preserve spoken stories</span>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              className="suggestion-card"
+              onClick={() => onSuggestionClick?.('What memories or details have we discussed so far?')}
+            >
+              <div className="suggestion-icon">💡</div>
+              <div className="suggestion-text">
+                <span className="suggestion-title">Review Saved Memories</span>
+                <span className="suggestion-desc">Revisit and connect details preserved across past conversations</span>
+              </div>
+            </button>
+          </div>
+
+          <div className="empty-features-hint">
+            <span>✨ Multimodal (Text, Photos & Audio)</span>
+            <span>•</span>
+            <span>🔒 Private & Secure</span>
+            <span>•</span>
+            <span>🤝 Empathetic Recall</span>
+          </div>
         </div>
       </div>
     );

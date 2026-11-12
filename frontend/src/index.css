@@ -186,6 +186,42 @@ body.dark .dropdown-item:hover {
 
 /* DARK MODE FOR ChatArea.jsx */
 
+body.dark .chat-title-center {
+  color: #f3f4f6;
+}
+
+body.dark .chat-welcome-subtitle {
+  color: #9ca3af;
+}
+
+body.dark .suggestion-card {
+  background: #2a2a2a;
+  border-color: #383838;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+body.dark .suggestion-card:hover {
+  background: #323232;
+  border-color: #818cf8;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .suggestion-icon {
+  background: #1f1f1f;
+}
+
+body.dark .suggestion-title {
+  color: #f3f4f6;
+}
+
+body.dark .suggestion-desc {
+  color: #9ca3af;
+}
+
+body.dark .empty-features-hint {
+  color: #6b7280;
+}
+
 body.dark .message-bubble.assistant {
   background: #2a2a2a;
   color: white;

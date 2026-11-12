@@ -412,6 +412,11 @@ const Dashboard = () => {
         <ChatArea
           activeChat={activeChat}
           isThinking={isThinking}
+          onSuggestionClick={(promptText) => {
+            if (activeChatId) {
+              sendMessage({ text: promptText });
+            }
+          }}
         />
 
         <MessageInput sendMessage={sendMessage} activeChat={activeChat} />
