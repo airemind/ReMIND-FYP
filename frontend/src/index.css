@@ -198,16 +198,36 @@ body.dark .suggestion-card {
   background: #2a2a2a;
   border-color: #383838;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  cursor: default;
 }
 
 body.dark .suggestion-card:hover {
-  background: #323232;
-  border-color: #818cf8;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+  border-color: #4b5563;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
-body.dark .suggestion-icon {
-  background: #1f1f1f;
+body.dark .suggestion-icon.icon-users {
+  background: rgba(99, 102, 241, 0.2);
+  color: #818cf8;
+}
+
+body.dark .suggestion-icon.icon-image {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+body.dark .suggestion-icon.icon-mic {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+body.dark .suggestion-icon.icon-clock {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+}
+
+body.dark .hint-icon {
+  color: #818cf8;
 }
 
 body.dark .suggestion-title {
