@@ -1,45 +1,20 @@
 """
 emotion_detector.py
 
-Advanced emotion detection for ReMIND.
-
-Features:
-- Multi-emotion detection
-- Long transcript support
-- Confidence scoring
-- Emotion ranking
-- Robust error handling
+Zero-RAM Emotion Detector for ReMIND.
+Uses cloud API / zero-RAM analyzer to prevent memory exhaustion on Render Free Tier (512MB).
 """
 
-from transformers import pipeline
+from voice_ai.analysis.zero_ram_analyzer import analyze_speech_sentiment
 from voice_ai.utils.logger import get_logger
 
 logger = get_logger("EmotionDetector")
 
-emotion_pipeline = None
 
-
-def get_emotion_pipeline():
-    global emotion_pipeline
-    if emotion_pipeline is None:
-        try:
-            emotion_pipeline = pipeline(
-                "text-classification",
-                model="j-hartmann/emotion-english-distilroberta-base",
-                top_k=None,
-            )
-        except Exception as e:
-            logger.warning(f"Could not load emotion model: {e}")
-            return None
-    return emotion_pipeline
-
-
-# Config
-MAX_TEXT_LENGTH = 512
-
-
-# Detect emotion
 def detect_emotion(text: str) -> dict:
+    """
+    Detect emotion from text with 0 MB server RAM overhead.
+    """
     try:
         if not text or not text.strip():
             return {
@@ -48,41 +23,13 @@ def detect_emotion(text: str) -> dict:
                 "top_emotions": [{"label": "neutral", "confidence": 0.0}],
             }
 
-        text = text.strip()
-
-        # Limit very long transcripts
-        if len(text) > MAX_TEXT_LENGTH:
-            text = text[:MAX_TEXT_LENGTH]
-
-        pipe = get_emotion_pipeline()
-        if pipe is None:
-            return {
-                "emotion": "neutral",
-                "emotion_confidence": 0.0,
-                "top_emotions": [{"label": "neutral", "confidence": 0.0}],
-            }
-
-        predictions = pipe(text)[0]
-        predictions = sorted(predictions, key=lambda x: x["score"], reverse=True)
-
-        primary = predictions[0]
-        top_emotions = []
-
-        for item in predictions[:3]:
-            top_emotions.append(
-                {
-                    "label": item["label"].lower(),
-                    "confidence": round(float(item["score"]), 2),
-                }
-            )
+        data = analyze_speech_sentiment(text)
         result = {
-            "emotion": primary["label"].lower(),
-            "emotion_confidence": round(float(primary["score"]), 2),
-            "top_emotions": top_emotions,
+            "emotion": data.get("emotion", "neutral"),
+            "emotion_confidence": data.get("emotion_confidence", 0.85),
+            "top_emotions": data.get("top_emotions", [{"label": "neutral", "confidence": 0.85}]),
         }
-        logger.info(
-            f"Emotion detected: {result['emotion']} ({result['emotion_confidence']})"
-        )
+        logger.info(f"Emotion detected: {result['emotion']} ({result['emotion_confidence']})")
         return result
     except Exception as e:
         logger.error(f"Emotion detection failed: {str(e)}")

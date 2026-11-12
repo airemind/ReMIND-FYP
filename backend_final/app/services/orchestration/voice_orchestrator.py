@@ -13,6 +13,7 @@ from app.cache.redis_cache import get_cache, set_cache
 from app.utils.file_cleanup import delete_file, delete_directory
 from voice_ai.synthesis.google_tts import generate_speech
 from app.services.admin.metric_logger_service import store_metric
+from app.core.memory_utils import release_system_memory
 
 
 def process_and_store_voice(
@@ -21,7 +22,9 @@ def process_and_store_voice(
     user_id: int,
     chat_id: int = None,
     session_id: str = "unknown",
+    skip_text_ai: bool = False,
 ):
+    generated_audio_path = None
     try:
         ai_logger.info("Voice orchestration started")
 
@@ -38,35 +41,45 @@ def process_and_store_voice(
             ai_logger.info("Voice cache hit")
             return cached_response
 
-        # Voice AI
+        # Voice AI (Transcribe + Zero-RAM Emotion & Tone analysis)
         voice_result = process_voice(audio_path, force_refresh=True)
 
         transcript = voice_result["transcript"]
 
-        # Text AI
-        text_result = process_text(
-            user_input=transcript,
-            audio={
-                "transcript": transcript,
-                "emotion": voice_result["emotion"],
-                "tones": voice_result["tones"],
-            },
-        )
-
-        memory_response = text_result["response"]
-
-        # Generate local TTS audio
-        generated_audio_path = f"/tmp/{uuid.uuid4()}.mp3"
-
-        generate_speech(
-            memory_response,
-            generated_audio_path,
-        )
-
         # Persistent audio storage (Cloudinary CDN with local fallback)
         from app.services.storage.cloudinary_service import upload_audio
         original_audio = upload_audio(voice_result["audio_path"], folder="remind/voice_uploads")["url"]
-        generated_audio = upload_audio(generated_audio_path, folder="remind/voice_generated")["url"]
+
+        if skip_text_ai:
+            memory_response = transcript
+            generated_audio = original_audio
+            text_result = {
+                "intent": "memory",
+                "entities": {"names": [], "places": [], "dates": [], "events": []},
+                "retrieved_context": [],
+            }
+        else:
+            # Text AI
+            text_result = process_text(
+                user_input=transcript,
+                audio={
+                    "transcript": transcript,
+                    "emotion": voice_result["emotion"],
+                    "tones": voice_result["tones"],
+                },
+            )
+
+            memory_response = text_result.get("response", transcript)
+
+            # Generate local TTS audio
+            generated_audio_path = f"/tmp/{uuid.uuid4()}.mp3"
+
+            generate_speech(
+                memory_response,
+                generated_audio_path,
+            )
+
+            generated_audio = upload_audio(generated_audio_path, folder="remind/voice_generated")["url"]
 
         # Save media
         media = Media(
@@ -113,7 +126,7 @@ def process_and_store_voice(
             "quality_metrics": voice_result["quality_metrics"],
             "original_audio_url": original_audio,
             "generated_audio_url": generated_audio,
-            "pipeline_used": ["VOICE_AI", "TEXT_AI"],
+            "pipeline_used": ["VOICE_AI", "TEXT_AI"] if not skip_text_ai else ["VOICE_AI"],
             "cache_used": False,
         }
 
@@ -123,7 +136,7 @@ def process_and_store_voice(
             user_id=user_id,
             session_id=session_id,
             ai_module="VOICE_AI",
-            pipeline_used="VOICE_AI,TEXT_AI",
+            pipeline_used="VOICE_AI,TEXT_AI" if not skip_text_ai else "VOICE_AI",
             latency=voice_result["latency_sec"],
             estimated_cost=voice_result["estimated_cost_usd"],
             cache_used=result["cache_used"],
@@ -139,7 +152,8 @@ def process_and_store_voice(
         # Cleanup
         delete_file(audio_path)
         delete_file(voice_result.get("audio_path"))
-        delete_file(generated_audio_path)
+        if generated_audio_path:
+            delete_file(generated_audio_path)
 
         processed_dir = os.path.dirname(voice_result.get("audio_path"))
         delete_directory(processed_dir)
@@ -155,3 +169,5 @@ def process_and_store_voice(
             "success": False,
             "error": str(e),
         }
+    finally:
+        release_system_memory()

@@ -36,6 +36,14 @@ def run_voice_pipeline(
     clean_audio(formatted_audio, cleaned_audio)
     trim_silence(cleaned_audio, final_audio)
 
+    # Immediately delete intermediate preprocessed files to save disk & RAM
+    for temp_file in (formatted_audio, cleaned_audio):
+        try:
+            if os.path.exists(temp_file):
+                os.remove(temp_file)
+        except Exception:
+            pass
+
     logger.info("Preprocessing complete. Starting transcription")
     logger.info(f"Force refresh: {force_refresh}")
 

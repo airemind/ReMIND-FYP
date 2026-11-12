@@ -42,11 +42,15 @@ def process_multimodal_memory(
         # Voice AI (process and store voice first)
         if audio_path:
             voice_result = process_and_store_voice(
-                audio_path=audio_path, db=db, user_id=user_id, chat_id=chat_id
+                audio_path=audio_path,
+                db=db,
+                user_id=user_id,
+                chat_id=chat_id,
+                skip_text_ai=True,
             )
             if voice_result and voice_result.get("success"):
                 audio_transcript = voice_result.get("transcript")
-                user_audio_url = voice_result.get("generated_audio_url")
+                user_audio_url = voice_result.get("original_audio_url") or voice_result.get("generated_audio_url")
 
         # Save User Message with clean text and actual media URLs
         user_message_content = user_prompt.strip() if user_prompt else ""
