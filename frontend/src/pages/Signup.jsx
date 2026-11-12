@@ -14,7 +14,6 @@ const Signup = () => {
 
   const { theme, toggleTheme } = useTheme();
   const { login } = useAuth();
-  const [pendingPatientData, setPendingPatientData] = useState(null);
   const [showProfileSetup, setShowProfileSetup] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -53,8 +52,16 @@ const Signup = () => {
         role: 'patient'
       };
 
-      setPendingPatientData(userData);
+      // 1. Check & register user on backend first
+      await signupUser(userData);
 
+      // 2. Authenticate session
+      await login({
+        username: userData.email,
+        password: userData.password
+      });
+
+      // 3. Only open profile setup questions after checks & registration pass
       setShowProfileSetup(true);
     } catch (error) {
       console.error(error);
@@ -76,17 +83,9 @@ const Signup = () => {
     try {
       setLoading(true);
 
-      await signupUser(pendingPatientData);
-
-      await login({
-        username: pendingPatientData.email,
-        password: pendingPatientData.password
-      });
-
       await saveProfileSetup(profileData);
 
       setShowProfileSetup(false);
-      setPendingPatientData(null);
 
       navigate('/dashboard', {
         replace: true
@@ -98,7 +97,7 @@ const Signup = () => {
         error?.response?.data?.error ||
           error?.response?.data?.detail ||
           error?.message ||
-          'Failed to create account.'
+          'Failed to save profile.'
       );
     } finally {
       setLoading(false);
@@ -108,10 +107,11 @@ const Signup = () => {
   /* CLOSE PROFILE POPUP */
 
   const handleProfileClose = () => {
-    localStorage.removeItem('token');
-
     setShowProfileSetup(false);
-    setPendingPatientData(null);
+
+    navigate('/dashboard', {
+      replace: true
+    });
   };
 
   return (
