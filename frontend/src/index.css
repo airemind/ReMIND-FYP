@@ -116,7 +116,7 @@ body.dark .help-modal-header {
 }
 
 body.dark .help-modal-header h3,
-.dark .help-modal-content {
+body.dark .help-modal-content {
   color: #f3f4f6;
 }
 
@@ -165,6 +165,28 @@ body.dark .sidebar-toggle {
 
 body.dark .new-chat-btn {
   border: none;
+}
+
+body.dark .chat-dropdown {
+  background: #2a2a2a;
+  border: 1px solid #383838;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+body.dark .chat-dropdown-item {
+  color: #e5e7eb;
+}
+
+body.dark .chat-dropdown-item:hover {
+  background: #333333;
+}
+
+body.dark .chat-dropdown-item.danger {
+  color: #f87171;
+}
+
+body.dark .chat-dropdown-item.danger:hover {
+  background: rgba(239, 68, 68, 0.15);
 }
 
 /* DARK MODE FOR Topbar.jsx */
@@ -260,6 +282,24 @@ body.dark .thinking-indicator {
   color: rgb(219, 214, 214);
 }
 
+body.dark .memory-section {
+  background: #232323;
+  border: 1px solid #383838;
+}
+
+body.dark .memory-section p,
+body.dark .retrieved-context-list li {
+  color: #e5e7eb;
+}
+
+body.dark .memory-section h4 {
+  color: #818cf8;
+}
+
+body.dark .dashboard-disclaimer {
+  color: #9ca3af;
+}
+
 /* DARK MODE FOR MessageInput.jsx */
 
 body.dark .message-input {
@@ -268,20 +308,67 @@ body.dark .message-input {
 }
 
 body.dark .message-input-container {
-  border-color: #444;
+  border-color: #383838;
 }
 
 body.dark .attachment-menu {
   background: #2a2a2a;
+  border: 1px solid #383838;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+}
+
+body.dark .attachment-item {
+  color: #f3f4f6;
+}
+
+body.dark .attachment-item-icon {
+  color: #f3f4f6;
+}
+
+body.dark .attachment-item small {
+  color: #9ca3af;
+}
+
+/* Hover over Image and Audio in dark mode turns text and react icons black */
+body.dark .attachment-item:hover {
+  background: #f3f4f6;
+  color: #000000;
+}
+
+body.dark .attachment-item:hover .attachment-item-icon,
+body.dark .attachment-item:hover div,
+body.dark .attachment-item:hover small {
+  color: #000000;
+}
+
+body.dark .attachment-icon {
+  color: #e5e7eb;
 }
 
 body.dark .attachment-icon:hover {
-  background-color: #444;
+  background-color: #3a3a3a;
 }
 
 body.dark .pending-file {
-  background: #3a3a3a;
-  color: white;
+  background: #333333;
+  border: 1px solid #444444;
+  color: #ffffff;
+}
+
+body.dark .pending-file:hover {
+  background: #3d3d3d;
+}
+
+body.dark .pending-file-name {
+  color: #ffffff !important;
+}
+
+body.dark .pending-file-left svg {
+  color: #ffffff;
+}
+
+body.dark .disabled-chat-warning {
+  color: #9ca3af;
 }
 
 body.dark .auto-textarea {

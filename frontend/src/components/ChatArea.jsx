@@ -1,13 +1,5 @@
 import { useEffect, useRef } from 'react';
-import {
-  FiClock,
-  FiHeart,
-  FiImage,
-  FiLayers,
-  FiMic,
-  FiShield,
-  FiUsers
-} from 'react-icons/fi';
+import { FiClock, FiHeart, FiImage, FiLayers, FiMic, FiShield, FiUsers } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 import logoDark from '../assets/images/logo-dark.png';
 import logoLight from '../assets/images/logo-light.png';
@@ -67,9 +59,7 @@ const ChatArea = ({ activeChat, isThinking }) => {
   };
 
   const hasMessages = Boolean(
-    activeChat &&
-      Array.isArray(activeChat.messages) &&
-      activeChat.messages.length > 0
+    activeChat && Array.isArray(activeChat.messages) && activeChat.messages.length > 0
   );
 
   if (!hasMessages && !isThinking) {
@@ -79,7 +69,8 @@ const ChatArea = ({ activeChat, isThinking }) => {
           <img src={logo} alt="ReMIND Logo" className="chat-logo" />
           <h2 className="chat-title-center">What memory would you like to explore?</h2>
           <p className="chat-welcome-subtitle">
-            ReMIND is your personal memory companion. Share an old photograph, record a voice note, or describe a moment to begin reconstructing your memories.
+            ReMIND is your personal memory companion. Share an old photograph, record a voice note,
+            or describe a moment to begin reconstructing your memories.
           </p>
 
           <div className="suggestion-grid">
@@ -89,7 +80,9 @@ const ChatArea = ({ activeChat, isThinking }) => {
               </div>
               <div className="suggestion-text">
                 <span className="suggestion-title">Recall Family Moments</span>
-                <span className="suggestion-desc">Discuss past family gatherings, birthdays, or celebrations</span>
+                <span className="suggestion-desc">
+                  Discuss past family gatherings, birthdays, or celebrations
+                </span>
               </div>
             </div>
 
@@ -99,7 +92,9 @@ const ChatArea = ({ activeChat, isThinking }) => {
               </div>
               <div className="suggestion-text">
                 <span className="suggestion-title">Explore Photographs</span>
-                <span className="suggestion-desc">Attach a memory photo to enhance details and identify familiar faces</span>
+                <span className="suggestion-desc">
+                  Attach a memory photo to enhance details and identify familiar faces
+                </span>
               </div>
             </div>
 
@@ -109,7 +104,9 @@ const ChatArea = ({ activeChat, isThinking }) => {
               </div>
               <div className="suggestion-text">
                 <span className="suggestion-title">Voice Memories</span>
-                <span className="suggestion-desc">Speak or upload an audio note to preserve spoken stories</span>
+                <span className="suggestion-desc">
+                  Upload an audio note to preserve spoken stories
+                </span>
               </div>
             </div>
 
@@ -119,14 +116,16 @@ const ChatArea = ({ activeChat, isThinking }) => {
               </div>
               <div className="suggestion-text">
                 <span className="suggestion-title">Review Saved Memories</span>
-                <span className="suggestion-desc">Revisit and connect details preserved across past conversations</span>
+                <span className="suggestion-desc">
+                  Revisit and connect details preserved across past conversations
+                </span>
               </div>
             </div>
           </div>
 
           <div className="empty-features-hint">
             <span className="hint-pill">
-              <FiLayers className="hint-icon" /> Multimodal (Text, Photos & Audio)
+              <FiLayers className="hint-icon" /> Multimodal (Text, Image & Audio)
             </span>
             <span className="hint-dot">•</span>
             <span className="hint-pill">

@@ -43,12 +43,12 @@ const TermsConditions = () => {
           <ol className="terms-list centered-list">
             <li>User must login to start using the app.</li>
             <li>
-              Please cooperate what you are required to perform. If you are new{' '}
+              Please cooperate what you are required to perform. If you are new
               <span className="link" onClick={() => navigate('/signup')}>
                 <u>
-                  <b>Get Started </b>
+                  <b>Get Started</b>
                 </u>
-              </span>
+              </span>{' '}
               here.
             </li>
             <li>We apologize in advance if you face any inconvenience, as this is beta version.</li>
